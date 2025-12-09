@@ -9,16 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-select": "^2.2.6",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.87.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.556.0",
+    "next": "14.2.33",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.33"
+    "react-hook-form": "^7.68.0",
+    "zo": "^0.0.2"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
