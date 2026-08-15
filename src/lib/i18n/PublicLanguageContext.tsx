@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { publicTranslations } from './publicTranslations'
 
 type PublicLanguage = 'fr' | 'en'
@@ -13,8 +13,22 @@ interface PublicLanguageContextValue {
 
 const PublicLanguageContext = createContext<PublicLanguageContextValue | undefined>(undefined)
 
+const STORAGE_KEY = 'ftm_public_language'
+
 export function PublicLanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<PublicLanguage>('fr')
+  const [language, setLanguageState] = useState<PublicLanguage>('fr')
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'en') {
+      setLanguageState('en')
+    }
+  }, [])
+
+  const setLanguage = (lang: PublicLanguage) => {
+    setLanguageState(lang)
+    localStorage.setItem(STORAGE_KEY, lang)
+  }
 
   const t = (key: string): string => {
     const parts = key.split('.')

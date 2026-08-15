@@ -116,5 +116,74 @@ export const publicTranslations = {
     schoolYear: { fr: 'Année scolaire {annee}', en: 'School year {annee}' },
     ctaButton: { fr: "S'inscrire maintenant", en: 'Register now' },
     logoAlt: { fr: 'Logo FTM', en: 'FTM logo' }
+  },
+
+  contact: {
+    title: { fr: 'Confirmation finale', en: 'Final confirmation' },
+    recapTitle: { fr: 'Récapitulatif complet de votre inscription', en: 'Full summary of your registration' },
+
+    nameLabel: { fr: 'Nom', en: 'Last name' },
+    firstNameLabel: { fr: 'Prénom', en: 'First name' },
+    ageLabel: { fr: 'Âge', en: 'Age' },
+    ageYears: { fr: '{age} ans', en: '{age} years old' },
+    countryLabel: { fr: 'Pays de résidence', en: 'Country of residence' },
+    cityLabel: { fr: 'Ville de résidence', en: 'City of residence' },
+    emailLabel: { fr: 'Email', en: 'Email' },
+    phoneLabel: { fr: 'Téléphone', en: 'Phone' },
+
+    availabilityTitle: { fr: 'Disponibilités', en: 'Availability' },
+    daysLabel: { fr: 'Jours de préférence', en: 'Preferred days' },
+    timesLabel: { fr: 'Horaires souhaités', en: 'Preferred times' },
+    noDaySelected: { fr: 'Aucun jour sélectionné', en: 'No day selected' },
+    noTimeSelected: { fr: 'Aucun horaire sélectionné', en: 'No time slot selected' },
+    otherWithDetail: { fr: 'Autre: {detail}', en: 'Other: {detail}' },
+
+    reasonsLabel: { fr: "Raisons de l'inscription", en: 'Reasons for registering' },
+    expectationsLabel: { fr: 'Attentes de formation', en: 'Course expectations' },
+    howKnownLabel: { fr: 'Comment avez-vous connu cette formation', en: 'How did you hear about this course' },
+    remarksLabel: { fr: 'Remarques ou suggestions', en: 'Comments or suggestions' },
+    noReasonSelected: { fr: 'Aucune raison', en: 'No reason selected' },
+    notSpecified: { fr: 'Non spécifié', en: 'Not specified' },
+    maternalLanguageSummary: { fr: 'Langue maternelle', en: 'Native language' },
+    skillsSummary: { fr: 'Développement compétences', en: 'Skill development' },
+    acquaintancesSummary: { fr: 'Connaissances', en: 'Acquaintances' },
+    associationSummary: { fr: 'Association', en: 'Association' },
+    formerStudentSummary: { fr: 'Ancien élève', en: 'Former student' },
+    recommendationSummary: { fr: 'Recommandation', en: 'Recommendation' },
+
+    suggestedLevelLabel: { fr: 'Niveau suggéré (auto)', en: 'Suggested level (auto)' },
+    registrationFeeLabel: { fr: "Frais d'inscription", en: 'Registration fee' },
+    perYear: { fr: '{montant}€/an', en: '€{montant}/year' },
+    questionsAnsweredLabel: { fr: 'Questions répondues', en: 'Questions answered' },
+    questionsCount: { fr: '{n} / 105 questions', en: '{n} / 105 questions' },
+
+    finalNoticeLead: { fr: 'Vérifiez bien toutes vos informations.', en: 'Please double-check all your information.' },
+    finalNoticeRest: { fr: 'Une fois confirmé, vous recevrez un code étudiant par email. Vous pourrez modifier certaines informations plus tard en contactant l\'administration.', en: 'Once confirmed, you will receive a student code by email. You will be able to update some information later by contacting the administration.' },
+
+    editButton: { fr: '← Modifier', en: '← Edit' },
+    confirmButton: { fr: "Confirmer et finaliser l'inscription", en: 'Confirm and complete registration' }
+  },
+
+  confirmation: {
+    title: { fr: 'Inscription reçue et enregistrée', en: 'Registration received and saved' },
+    subtitle: { fr: 'Votre inscription a été enregistrée avec succès', en: 'Your registration has been successfully saved' },
+    studentCodeTitle: { fr: 'Votre code étudiant', en: 'Your student code' },
+    keepCodeHint: { fr: 'Conservez ce code pour toute communication', en: 'Keep this code for all future communication' },
+    paymentInstructionsTitle: { fr: 'Instructions de paiement', en: 'Payment instructions' },
+    paymentIntro: { fr: 'Pour finaliser votre inscription, effectuez le paiement de {montant}€ :', en: 'To complete your registration, please make a payment of €{montant}:' },
+    beneficiaryLabel: { fr: 'Bénéficiaire:', en: 'Beneficiary:' },
+    ribLabel: { fr: 'RIB/IBAN:', en: 'Bank details (IBAN):' },
+    amountLabel: { fr: 'Montant:', en: 'Amount:' },
+    referenceLabel: { fr: 'Référence:', en: 'Reference:' },
+    paymentConfirmationHint: { fr: 'Votre place sera confirmée après réception du paiement.', en: 'Your place will be confirmed once payment is received.' },
+    nextStepsTitle: { fr: 'Prochaines étapes', en: 'Next steps' },
+    nextStepPay: { fr: 'Effectuez le paiement de {montant}€', en: 'Make the payment of €{montant}' },
+    nextStepEmailConfirmation: { fr: 'Recevez une confirmation par email sous 48h', en: 'Receive an email confirmation within 48 hours' },
+    nextStepClassAssignment: { fr: 'Vous serez affecté à une classe selon votre niveau', en: 'You will be assigned to a class based on your level' },
+    nextStepZoomLink: { fr: 'Recevez le lien Zoom pour les cours', en: 'Receive the Zoom link for classes' },
+    contactLabel: { fr: 'Contact', en: 'Contact' },
+    contactQuestionHint: { fr: 'Pour toute question : {email}', en: 'For any questions: {email}' },
+    closeTabNotice: { fr: 'Vous pouvez fermer cet onglet.', en: 'You can now close this tab.' },
+    loading: { fr: 'Chargement...', en: 'Loading...' }
   }
 } as const
