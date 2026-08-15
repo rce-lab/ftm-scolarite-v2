@@ -129,29 +129,25 @@ export default function InscriptionPage() {
       console.log('Données à insérer:', dataToInsert)
       
       // 3. Insérer
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('inscriptions')
         .insert([dataToInsert])
-        .select()
-      
+
       if (error) {
         console.error('Erreur Supabase:', error)
         throw new Error(`Erreur: ${error.message}`)
       }
-      
-      console.log('✅ Insertion réussie:', data)
+
+      console.log('✅ Insertion réussie')
 
       // 4. Notifier par email (candidat + admin)
-      const nouvelleInscription = data?.[0]
-      if (nouvelleInscription) {
-        const destinataires = [config.email_communication]
-        if (config.email_responsable_scolarite) destinataires.push(config.email_responsable_scolarite)
-        if (config.email_responsable_administratif) destinataires.push(config.email_responsable_administratif)
+      const destinataires = [config.email_communication]
+      if (config.email_responsable_scolarite) destinataires.push(config.email_responsable_scolarite)
+      if (config.email_responsable_administratif) destinataires.push(config.email_responsable_administratif)
 
-        sendInscriptionNotificationAction(nouvelleInscription, destinataires).catch(
-          (err) => console.error('Erreur envoi email inscription:', err)
-        )
-      }
+      sendInscriptionNotificationAction(dataToInsert, destinataires).catch(
+        (err) => console.error('Erreur envoi email inscription:', err)
+      )
 
       // 5. Rediriger
       setSubmitted(true)
