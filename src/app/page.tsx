@@ -40,9 +40,8 @@ export default function HomePage() {
           Année scolaire {config.annee_scolaire_courante}
         </p>
 
-        {/* Adresse en dur pour l'instant — viendra de la table `configuration` à terme */}
         <p className="text-sm text-gray-500 mt-1">
-          Foyer Universitaire Malagasy - CACHAN
+          {config.adresse_association}
         </p>
 
         <Link

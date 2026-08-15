@@ -142,7 +142,7 @@ export default function InscriptionDetailPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -153,9 +153,9 @@ export default function InscriptionDetailPage() {
         <div className="text-gray-400 text-4xl mb-4">❌</div>
         <h3 className="text-lg font-medium text-gray-900 mb-1">Inscription non trouvée</h3>
         <p className="text-gray-500 mb-6">Le code étudiant {params.code} n'existe pas.</p>
-        <Link 
+        <Link
           href="/admin/inscriptions"
-          className="text-blue-600 hover:text-blue-800 font-medium"
+          className="text-[#689e4e] hover:text-[#527d3e] font-medium"
         >
           ← Retour à la liste
         </Link>
@@ -239,9 +239,9 @@ export default function InscriptionDetailPage() {
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Niveau suggéré (auto)</label>
-                <div className="p-3 bg-blue-50 rounded border border-blue-200">
-                  <div className="text-2xl font-bold text-blue-600">{inscription.niveau_suggere}</div>
-                  <div className="text-sm text-blue-800">Calculé automatiquement</div>
+                <div className="p-3 bg-[#689e4e]/10 rounded border border-[#689e4e]/30">
+                  <div className="text-2xl font-bold text-[#689e4e]">{inscription.niveau_suggere}</div>
+                  <div className="text-sm text-[#527d3e]">Calculé automatiquement</div>
                 </div>
               </div>
               <div>
@@ -249,7 +249,7 @@ export default function InscriptionDetailPage() {
                 <select 
                   value={niveauFinal} 
                   onChange={(e) => setNiveauFinal(e.target.value)}
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
                 >
                   {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(n => (
                     <option key={n} value={n}>{n}</option>
@@ -261,7 +261,7 @@ export default function InscriptionDetailPage() {
                 <select
                   value={classeId}
                   onChange={(e) => handleClasseChange(e.target.value)}
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
                 >
                   <option value="">— Aucune classe —</option>
                   {classesList.map((c) => (
@@ -282,7 +282,7 @@ export default function InscriptionDetailPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
                 placeholder="Notes internes pour cette inscription..."
               />
             </div>
@@ -290,7 +290,7 @@ export default function InscriptionDetailPage() {
             <div className="flex justify-end space-x-3">
               <button
                 onClick={handleSave}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium"
               >
                 Enregistrer les modifications
               </button>
@@ -325,8 +325,8 @@ export default function InscriptionDetailPage() {
                         </td>
                         <td className="px-4 py-3">
                           <div className="w-full bg-gray-200 rounded-full h-2.5">
-                            <div 
-                              className="bg-blue-600 h-2.5 rounded-full" 
+                            <div
+                              className="bg-[#689e4e] h-2.5 rounded-full"
                               style={{ width: `${Math.min(data.pourcentageScore, 100)}%` }}
                             ></div>
                           </div>
@@ -401,7 +401,7 @@ export default function InscriptionDetailPage() {
               </button>
               <button
                 onClick={() => router.push(`/admin/inscriptions/${inscription.student_code}/email`)}
-                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-left"
+                className="w-full p-3 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium text-left"
               >
                   📧 Envoyer un email
               </button>

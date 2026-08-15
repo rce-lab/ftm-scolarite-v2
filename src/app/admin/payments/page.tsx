@@ -108,7 +108,7 @@ export default function PaymentsPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -121,13 +121,13 @@ export default function PaymentsPage() {
       <div className="flex space-x-2">
         <button
           onClick={() => setTab('attente')}
-          className={`px-4 py-2 rounded ${tab === 'attente' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+          className={`px-4 py-2 rounded ${tab === 'attente' ? 'bg-[#689e4e] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
           En attente ({enAttente.length})
         </button>
         <button
           onClick={() => setTab('historique')}
-          className={`px-4 py-2 rounded ${tab === 'historique' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+          className={`px-4 py-2 rounded ${tab === 'historique' ? 'bg-[#689e4e] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
           Historique des paiements
         </button>

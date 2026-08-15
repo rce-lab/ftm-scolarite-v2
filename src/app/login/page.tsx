@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import logo from '../public/logo FTM officiel 2024.jpeg'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -30,8 +32,11 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow">
-        <h1 className="text-2xl font-bold mb-6 text-center">FTM - Connexion</h1>
+      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow border-t-4 border-[#b03c2d]">
+        <div className="flex justify-center mb-4">
+          <Image src={logo} alt="Logo FTM" className="h-20 w-auto" priority />
+        </div>
+        <h1 className="text-2xl font-bold mb-6 text-center text-[#689e4e]">FTM - Connexion</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block mb-2 text-sm">Email</label>
@@ -39,7 +44,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
               placeholder="admin@ftm.local"
               required
             />
@@ -50,7 +55,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
               placeholder="Admin123!"
               required
             />
@@ -58,7 +63,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="w-full bg-[#689e4e] text-white p-2 rounded hover:opacity-90 disabled:opacity-50"
           >
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>

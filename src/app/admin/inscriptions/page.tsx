@@ -41,7 +41,7 @@ function InscriptionsListContent() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -50,9 +50,9 @@ function InscriptionsListContent() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Gestion des inscriptions</h1>
-        <Link 
+        <Link
           href="/public/inscription"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-[#689e4e] text-white px-4 py-2 rounded hover:bg-[#527d3e]"
         >
           + Nouvelle inscription
         </Link>
@@ -70,7 +70,7 @@ function InscriptionsListContent() {
           <Link
             key={filtre.value}
             href={`/admin/inscriptions?filter=${filtre.value}`}
-            className={`px-4 py-2 rounded ${filter === filtre.value ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+            className={`px-4 py-2 rounded ${filter === filtre.value ? 'bg-[#689e4e] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
           >
             {filtre.label} ({filtre.count})
           </Link>
@@ -100,7 +100,7 @@ function InscriptionsListContent() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{inscription.email_contact}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">
+                  <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e]">
                     {inscription.niveau_suggere}
                   </span>
                 </td>
@@ -118,9 +118,9 @@ function InscriptionsListContent() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <Link 
+                  <Link
                     href={`/admin/inscriptions/${inscription.student_code}`}
-                    className="text-blue-600 hover:text-blue-900 text-sm"
+                    className="text-[#689e4e] hover:text-[#527d3e] text-sm"
                   >
                     Voir →
                   </Link>
@@ -138,7 +138,7 @@ export default function InscriptionsListPage() {
   return (
     <Suspense fallback={
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     }>
       <InscriptionsListContent />

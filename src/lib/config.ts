@@ -9,6 +9,7 @@ export interface Config {
   beneficiaire: string
   email_responsable_scolarite?: string
   email_responsable_administratif?: string
+  adresse_association?: string
   [key: string]: string | number | boolean | undefined
 }
 
@@ -23,7 +24,8 @@ function getDefaultConfig(): Config {
     rib_banque: 'ERREUR CONFIGURATION — contactez scolarite_ftm@gmail.com',
     beneficiaire: 'ERREUR CONFIGURATION — contactez scolarite_ftm@gmail.com',
     email_responsable_scolarite: '',
-    email_responsable_administratif: ''
+    email_responsable_administratif: '',
+    adresse_association: ''
   }
 }
 

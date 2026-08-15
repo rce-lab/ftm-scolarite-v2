@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
+import logo from '../app/public/logo FTM officiel 2024.jpeg'
 
 interface NavEntry {
   label: string
@@ -57,22 +59,23 @@ export default function InternalNav() {
   const estActif = (entry: NavEntry) => !entry.roles || (role !== null && entry.roles.includes(role))
 
   return (
-    <nav className="bg-blue-800 text-white px-4 py-3">
+    <nav className="bg-[#689e4e] text-white px-4 py-3">
       <div className="container mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap items-center gap-1">
+          <Image src={logo} alt="Logo FTM" className="h-7 w-auto mr-2" />
           {NAV_ENTRIES.map((entry) => (
             estActif(entry) ? (
               <Link
                 key={entry.href}
                 href={entry.href}
-                className="px-3 py-1.5 rounded text-sm hover:bg-blue-700"
+                className="px-3 py-1.5 rounded text-sm hover:bg-white/10"
               >
                 {entry.label}
               </Link>
             ) : (
               <span
                 key={entry.href}
-                className="px-3 py-1.5 rounded text-sm text-blue-300 cursor-not-allowed"
+                className="px-3 py-1.5 rounded text-sm text-white/40 cursor-not-allowed"
                 title="Accès non autorisé pour votre rôle"
               >
                 {entry.label}
@@ -82,12 +85,12 @@ export default function InternalNav() {
         </div>
 
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-blue-200">
+          <span className="text-white/80">
             {email || '...'} {role && `(${role})`}
           </span>
           <button
             onClick={handleLogout}
-            className="px-3 py-1.5 rounded bg-blue-900 hover:bg-blue-950 text-sm"
+            className="px-3 py-1.5 rounded bg-[#527d3e] hover:bg-[#42642f] text-sm"
           >
             Déconnexion
           </button>

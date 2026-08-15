@@ -90,7 +90,7 @@ function DeliberationContent() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -135,7 +135,7 @@ function DeliberationContent() {
                 {inscriptions.map((inscription) => (
                   <tr 
                     key={inscription.id} 
-                    className={`hover:bg-gray-50 cursor-pointer ${selectedInscription?.id === inscription.id ? 'bg-blue-50' : ''}`}
+                    className={`hover:bg-gray-50 cursor-pointer ${selectedInscription?.id === inscription.id ? 'bg-[#689e4e]/10' : ''}`}
                     onClick={() => setSelectedInscription(inscription)}
                   >
                     <td className="px-6 py-4">
@@ -143,7 +143,7 @@ function DeliberationContent() {
                       <div className="text-sm text-gray-500">{inscription.email_contact}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800 font-bold">
+                      <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e] font-bold">
                         {inscription.niveau_suggere}
                       </span>
                     </td>
@@ -166,7 +166,7 @@ function DeliberationContent() {
                           e.stopPropagation()
                           setSelectedInscription(inscription)
                         }}
-                        className="text-blue-600 hover:text-blue-900 text-sm"
+                        className="text-[#689e4e] hover:text-[#527d3e] text-sm"
                       >
                         Délibérer →
                       </button>
@@ -192,8 +192,8 @@ function DeliberationContent() {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">Niveau suggéré (auto)</label>
-                  <div className="p-2 bg-blue-50 rounded border border-blue-200 text-center">
-                    <span className="text-xl font-bold text-blue-700">{selectedInscription.niveau_suggere}</span>
+                  <div className="p-2 bg-[#689e4e]/10 rounded border border-[#689e4e]/30 text-center">
+                    <span className="text-xl font-bold text-[#527d3e]">{selectedInscription.niveau_suggere}</span>
                   </div>
                 </div>
 
@@ -244,9 +244,9 @@ function DeliberationContent() {
                 </div>
 
                 <div className="pt-4 border-t">
-                  <Link 
+                  <Link
                     href={`/admin/inscriptions/${selectedInscription.student_code}`}
-                    className="block text-center text-blue-600 hover:text-blue-800"
+                    className="block text-center text-[#689e4e] hover:text-[#527d3e]"
                   >
                     Voir tous les détails →
                   </Link>
@@ -297,7 +297,7 @@ export default function DeliberationPage() {
   return (
     <Suspense fallback={
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     }>
       <DeliberationContent />

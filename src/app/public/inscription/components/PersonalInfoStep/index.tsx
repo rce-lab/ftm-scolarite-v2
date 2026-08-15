@@ -68,10 +68,19 @@ export default function PersonalInfoStep({
     return value.replace(/[^\d\s\-]/g, '')
   }
 
+  // Casse de titre : première lettre de chaque mot en majuscule (mots séparés par espace ou tiret)
+  const toTitleCase = (value: string): string => {
+    return value
+      .toLowerCase()
+      .split(/([\s\-])/)
+      .map(part => (part === ' ' || part === '-') ? part : part.charAt(0).toUpperCase() + part.slice(1))
+      .join('')
+  }
+
   // Gestionnaire de changement
   const handleNameChange = (field: 'nom' | 'prenom', value: string) => {
     const cleaned = value.replace(/[^a-zA-ZÀ-ÿ\-\'\s]/g, '')
-    const cased = field === 'nom' ? cleaned.toUpperCase() : cleaned.toLowerCase()
+    const cased = field === 'nom' ? cleaned.toUpperCase() : toTitleCase(cleaned)
     updateFormData(field, cased)
 
     const error = validateName(cased, field)
@@ -115,9 +124,7 @@ export default function PersonalInfoStep({
   const handleGeneralChange = (field: keyof FormData, value: string) => {
     const processed = field === 'ville_residence'
       ? value.toUpperCase()
-      : field === 'adresse_postale'
-        ? value.toLowerCase()
-        : value
+      : value
     updateFormData(field, processed)
 
     if (field === 'pays_residence') {

@@ -132,7 +132,7 @@ export default function TeacherClassesPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -270,7 +270,7 @@ export default function TeacherClassesPage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
+              className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
             >
               {saving ? 'Création...' : 'Créer la classe'}
             </button>
@@ -298,7 +298,7 @@ export default function TeacherClassesPage() {
               <tr key={classe.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap font-medium">{classe.nom}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800 font-bold">
+                  <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e] font-bold">
                     {classe.niveau || '—'}
                   </span>
                 </td>

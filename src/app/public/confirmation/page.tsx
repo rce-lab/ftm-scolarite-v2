@@ -68,15 +68,9 @@ function ConfirmationContent() {
       </div>
 
       <div className="mt-8 text-center">
-        <button
-          onClick={() => window.close()}
-          className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700"
-        >
-          Quitter
-        </button>
-        <p className="text-sm text-gray-500 mt-2">
-          Vous pouvez fermer cet onglet.
-        </p>
+        <div className="inline-block bg-gray-100 border border-gray-300 rounded px-4 py-3">
+          <p className="text-gray-700 font-bold">Vous pouvez fermer cet onglet.</p>
+        </div>
       </div>
     </div>
   )

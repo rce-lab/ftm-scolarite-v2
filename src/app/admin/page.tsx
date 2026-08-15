@@ -74,7 +74,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -113,9 +113,9 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="mt-4">
-            <Link 
+            <Link
               href="/admin/inscriptions?filter=pending_review"
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="text-sm text-[#689e4e] hover:text-[#527d3e]"
             >
               Voir les inscriptions →
             </Link>
@@ -145,9 +145,9 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="mt-4">
-            <Link 
+            <Link
               href="/admin/inscriptions?filter=payment_pending"
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="text-sm text-[#689e4e] hover:text-[#527d3e]"
             >
               Gérer les paiements →
             </Link>
@@ -180,7 +180,7 @@ export default function AdminDashboard() {
                     {inscription.prenom} {inscription.nom}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">
+                    <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e]">
                       {inscription.niveau_suggere}
                     </span>
                   </td>
@@ -198,9 +198,9 @@ export default function AdminDashboard() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <Link 
+                    <Link
                       href={`/admin/inscriptions/${inscription.student_code}`}
-                      className="text-blue-600 hover:text-blue-900"
+                      className="text-[#689e4e] hover:text-[#527d3e]"
                     >
                       Voir →
                     </Link>
@@ -211,9 +211,9 @@ export default function AdminDashboard() {
           </table>
         </div>
         <div className="px-6 py-4 border-t border-gray-200">
-          <Link 
+          <Link
             href="/admin/inscriptions"
-            className="text-blue-600 hover:text-blue-800 font-medium"
+            className="text-[#689e4e] hover:text-[#527d3e] font-medium"
           >
             Voir toutes les inscriptions →
           </Link>
@@ -225,9 +225,9 @@ export default function AdminDashboard() {
         <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
           <h3 className="font-bold text-lg mb-4">Actions rapides</h3>
           <div className="space-y-3">
-            <Link 
+            <Link
               href="/admin/inscriptions?filter=pending_review"
-              className="block w-full text-left px-4 py-3 bg-blue-50 text-blue-700 rounded hover:bg-blue-100"
+              className="block w-full text-left px-4 py-3 bg-[#689e4e]/10 text-[#527d3e] rounded hover:bg-[#689e4e]/20"
             >
               ⏳ Valider les inscriptions en attente
             </Link>
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-3 gap-4">
             {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((niveau) => (
               <div key={niveau} className="text-center p-4 border rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">{niveau}</div>
+                <div className="text-2xl font-bold text-[#689e4e]">{niveau}</div>
                 <div className="text-sm text-gray-600 mt-1">Niveau</div>
                 <div className="mt-2 text-lg font-bold">0</div>
                 <div className="text-xs text-gray-500">étudiants</div>

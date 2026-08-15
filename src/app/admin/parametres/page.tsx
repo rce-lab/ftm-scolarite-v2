@@ -12,7 +12,8 @@ const CHAMPS_CONFIG = [
   { key: 'rib_banque', label: 'RIB bancaire', type: 'textarea' },
   { key: 'beneficiaire', label: 'Bénéficiaire (nom sur le compte)', type: 'text' },
   { key: 'email_responsable_scolarite', label: 'Email Responsable Scolarité', type: 'email' },
-  { key: 'email_responsable_administratif', label: 'Email Responsable Administratif', type: 'email' }
+  { key: 'email_responsable_administratif', label: 'Email Responsable Administratif', type: 'email' },
+  { key: 'adresse_association', label: "Adresse de l'association", type: 'text' }
 ] as const
 
 type FormState = Record<typeof CHAMPS_CONFIG[number]['key'], string>
@@ -25,7 +26,8 @@ const emptyForm: FormState = {
   rib_banque: '',
   beneficiaire: '',
   email_responsable_scolarite: '',
-  email_responsable_administratif: ''
+  email_responsable_administratif: '',
+  adresse_association: ''
 }
 
 export default function ParametresPage() {
@@ -94,7 +96,7 @@ export default function ParametresPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
       </div>
     )
   }
@@ -112,7 +114,7 @@ export default function ParametresPage() {
                 value={form[champ.key]}
                 onChange={(e) => updateField(champ.key, e.target.value)}
                 rows={3}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
               />
             ) : (
               <input
@@ -120,7 +122,7 @@ export default function ParametresPage() {
                 value={form[champ.key]}
                 onChange={(e) => updateField(champ.key, e.target.value)}
                 placeholder={'placeholder' in champ ? champ.placeholder : undefined}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
               />
             )}
           </div>
@@ -142,7 +144,7 @@ export default function ParametresPage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
+            className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
           >
             {saving ? 'Enregistrement...' : 'Enregistrer'}
           </button>
