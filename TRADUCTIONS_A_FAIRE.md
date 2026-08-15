@@ -35,10 +35,10 @@ Parcouru :
 | admin@ftm.local *(placeholder)* | admin@ftm.local | Exemple technique |
 | Mot de passe | Tenimiafina | |
 | Admin123! *(placeholder)* | Admin123! | Exemple technique |
-| Connexion... | Eo am-piditra... | |
+| Connexion... | Eo am-pidirana... | |
 | Se connecter | Hiditra | |
 | Erreur : {message} | Hadisoana : {message} | |
-| Logo FTM *(texte alternatif image)* | Sarin'ilay FTM | Texte alternatif d'accessibilité |
+| Logo FTM *(texte alternatif image)* | Sary famatarana ny FTM | Texte alternatif d'accessibilité |
 
 ---
 
@@ -46,15 +46,15 @@ Parcouru :
 
 | Texte français actuel | Traduction malgache (brouillon) | Notes |
 |---|---|---|
-| Tableau de bord | Tabilao fitantanana | |
+| Tableau de bord | Pejy fandravonana | |
 | Inscriptions | Fisoratana anarana | |
 | Délibération | Fifampidinihana | Incertain |
 | Classes | Kilasy | |
 | Paiements | Fandoavam-bola | |
-| Paramètres | Fandrindrana | |
-| Accès non autorisé pour votre rôle *(info-bulle sur item grisé)* | Tsy manana alalana ianao araka ny anjara asanao | |
-| Déconnexion | Fivoahana | |
-| Logo FTM *(texte alternatif image)* | Sarin'ilay FTM | |
+| Paramètres | Fanova | |
+| Accès non autorisé pour votre rôle *(info-bulle sur item grisé)* | Tsy manana alalana hiditra eto ianao raha ny anjara asanao | |
+| Déconnexion | Hiala | |
+| Logo FTM *(texte alternatif image)* | Sary famatarana FTM | |
 
 ---
 
@@ -62,12 +62,12 @@ Parcouru :
 
 | Texte français actuel | Traduction malgache (brouillon) | Notes |
 |---|---|---|
-| Tableau de bord | Tabilao fitantanana | |
-| Total inscriptions | Fitambaran'ny fisoratana anarana | |
-| En attente de validation | Miandry fanamarinana | |
+| Tableau de bord | Pejy fandravonana | |
+| Total inscriptions | Mpisoratra anarana rehetra| |
+| En attente de validation | Miandry fankatoavana | |
 | Voir les inscriptions → | Jereo ny fisoratana anarana → | |
-| Inscriptions validées | Fisoratana anarana voamarina | |
-| Paiements en attente | Fandoavam-bola miandry | |
+| Inscriptions validées | Fisoratana anarana efa nankatoavina | |
+| Paiements en attente | Mbola miandry ny fandoavam-bola | |
 | Gérer les paiements → | Mitantana ny fandoavam-bola → | |
 | Dernières inscriptions | Fisoratana anarana farany | |
 | Code | Kaody | En-tête de tableau |
@@ -78,14 +78,14 @@ Parcouru :
 | Action | Hetsika | En-tête de tableau |
 | Voir → | Jereo → | |
 | Voir toutes les inscriptions → | Jereo ny fisoratana anarana rehetra → | |
-| Actions rapides | Hetsika haingana | |
-| ⏳ Valider les inscriptions en attente | ⏳ Manamarina ny fisoratana anarana miandry | |
-| 👨‍🎓 Gérer les étudiants | 👨‍🎓 Mitantana ny mpianatra | |
+| Actions rapides | Rohy haingana | |
+| ⏳ Valider les inscriptions en attente | ⏳ Ankatoavy ny fisoratana anarana miandry | |
+| 👨‍🎓 Gérer les étudiants | 👨‍🎓 Fitantanana ny mpianatra | |
 | 💰 Suivi des paiements | 💰 Fanaraha-maso ny fandoavam-bola | |
-| ⚙️ Paramètres | ⚙️ Fandrindrana | |
+| ⚙️ Paramètres | ⚙️ Fanova | |
 | Statistiques par niveau | Antontan'isa araka ny ambaratonga | |
 | Niveau | Ambaratonga | Sous-libellé dans chaque tuile A1-C2 |
-| étudiants | mpianatra | |
+| étudiants | Mpianatra | |
 
 **Note technique (pas une chaîne à traduire à proprement parler) :** dans `admin/inscriptions/page.tsx`, le statut d'une inscription est actuellement affiché tel quel via `{inscription.status}` (valeurs techniques : `pending_review`, `approved`, `rejected`, `payment_pending`), sans libellé français traduit. Probablement un oubli côté code — signalé pour information, à corriger séparément avant de s'en préoccuper pour la traduction.
 
@@ -120,12 +120,12 @@ Parcouru :
 | Inscription non trouvée | Tsy hita ny fisoratana anarana | |
 | Le code étudiant {code} n'existe pas. | Tsy misy ny kaody mpianatra {code}. | |
 | ← Retour à la liste | ← Miverina any amin'ny lisitra | |
-| ⏳ En attente de validation | ⏳ Miandry fanamarinana | |
-| ✅ Inscription validée | ✅ Voamarina ny fisoratana anarana | |
-| ❌ Inscription rejetée | ❌ Nolavina ny fisoratana anarana | |
-| 💰 Paiement en attente | 💰 Miandry fandoavam-bola | |
-| Inscrit le {date} | Voasoratra tamin'ny {date} | |
-| Informations personnelles | Mombamomba manokana | |
+| ⏳ En attente de validation | ⏳ Miandry ny fankatoavana | |
+| ✅ Inscription validée | ✅ Ankatoavina ny fisoratana anarana | |
+| ❌ Inscription rejetée | ❌ Lavina ny fisoratana anarana | |
+| 💰 Paiement en attente | 💰 Miandry ny fandoavam-bola | |
+| Inscrit le {date} | Voasoratra tamin'ny {daty} | |
+| Informations personnelles | Mombamomba ny tena manokana | |
 | Nom | Anarana | |
 | Prénom | Fanampin'anarana | |
 | Âge | Taona | |
@@ -133,14 +133,14 @@ Parcouru :
 | Email | Mailaka | |
 | Téléphone | Laharan-tariby | |
 | Évaluation et décision | Fanombanana sy fanapahan-kevitra | |
-| Niveau suggéré (auto) | Ambaratonga voatolotra (ho azy) | |
+| Niveau suggéré (auto) | Ambaratonga voakajy araka ny valinteny | |
 | Calculé automatiquement | Voakajy ho azy | |
-| Niveau définitif | Ambaratonga farany | |
-| Classe attribuée | Kilasy nomena | |
+| Niveau définitif | Ambaratonga tazomina farany | |
+| Classe attribuée | Sokajiana ao @ kilasy | |
 | — Aucune classe — | — Tsy misy kilasy — | |
 | Notes administratives | Fanamarihana ara-pitantanana | |
-| Notes internes pour cette inscription... *(placeholder)* | Fanamarihana anatiny ho an'ity fisoratana anarana ity... | |
-| Enregistrer les modifications | Tahirizo ny fanovana | |
+| Notes internes pour cette inscription... *(placeholder)* | Fanamarihana manokana ho an'ity fisoratana anarana ity... | |
+| Enregistrer les modifications | Tahirizo ary ny fanovana | |
 | Statistiques détaillées | Antontan'isa amin'ny antsipiriany | |
 | Niveau | Ambaratonga | En-tête de tableau |
 | Score | Isa | En-tête de tableau |
@@ -151,15 +151,15 @@ Parcouru :
 | Atteint | Tratra | |
 | Non atteint | Tsy tratra | |
 | Actions | Hetsika | |
-| ✅ Valider l'inscription | ✅ Manamarina ny fisoratana anarana | |
-| 💰 Marquer comme "Paiement en attente" | 💰 Mariho hoe "Miandry fandoavam-bola" | |
-| ❌ Rejeter l'inscription | ❌ Mandà ny fisoratana anarana | |
-| 💰 Paiement en attente | 💰 Miandry fandoavam-bola | |
+| ✅ Valider l'inscription | ✅ ankatoavina ny fisoratana anarana | |
+| 💰 Marquer comme "Paiement en attente" | 💰 Mariho hoe "Miandry ny fandoavam-bola" | |
+| ❌ Rejeter l'inscription | ❌ Lavina ny fisoratana anarana | |
+| 💰 Paiement en attente | 💰 Miandry ny fandoavam-bola | |
 | ✅ Paiement confirmé | ✅ Voamarina ny fandoavam-bola | |
 | 🖨️ Imprimer cette page | 🖨️ Manonta ity pejy ity | |
 | 📧 Envoyer un email | 📧 Mandefa mailaka | Bouton pointant vers une route `/email` qui ne semble pas exister — signalé pour info, hors périmètre de la traduction |
 | Historique | Tantara | |
-| Création | Namorona | |
+| Création | noforonina t@ | |
 | Dernière modification | Fanovana farany | |
 | Résumé des réponses | Famintinana ny valiny | |
 | Total questions | Fitambaran'ny fanontaniana | |
@@ -167,10 +167,10 @@ Parcouru :
 | Réponses UN PEU | Valiny KELY | |
 | Réponses NON | Valiny TSIA | |
 | Modifications enregistrées avec succès | Voatahiry soa aman-tsara ny fanovana | Message d'alerte navigateur |
-| Erreur lors de l'enregistrement | Hadisoana teo am-pitahirizana | Message d'alerte navigateur |
+| Erreur lors de l'enregistrement | Hadisoana teo am-pitahirizana ny fanovana| Message d'alerte navigateur |
 | Voulez-vous vraiment changer le statut en "{status}" ? | Tena tianao hovana ho "{status}" ve ny sata ? | Message de confirmation navigateur |
-| Statut mis à jour avec succès | Voavaozina soa aman-tsara ny sata | Message d'alerte navigateur |
-| Erreur lors de la mise à jour | Hadisoana teo am-panavaozana | Message d'alerte navigateur |
+| Statut mis à jour avec succès | Voaova soa aman-tsara ny sata | Message d'alerte navigateur |
+| Erreur lors de la mise à jour | Hadisoana teo am-panovana | Message d'alerte navigateur |
 
 ---
 
@@ -180,14 +180,14 @@ Parcouru :
 |---|---|---|
 | Suivi des paiements | Fanaraha-maso ny fandoavam-bola | |
 | En attente ({n}) | Miandry ({n}) | Onglet |
-| Historique des paiements | Tantaran'ny fandoavam-bola | Onglet |
+| Historique des paiements | Fisesin'ny fandoavam-bola | Onglet |
 | Nom | Anarana | En-tête de tableau |
 | Code | Kaody | En-tête de tableau |
 | Classe | Kilasy | En-tête de tableau |
 | Email | Mailaka | En-tête de tableau |
 | Montant attendu | Vola andrasana | En-tête de tableau |
 | Action | Hetsika | En-tête de tableau |
-| Marquer payé | Mariho ho voaloa | Bouton |
+| Marquer payé | Mariho hoe efa voaloa | Bouton |
 | Aucun paiement en attente. | Tsy misy fandoavam-bola miandry. | |
 | Candidat | Mpandray anjara | En-tête de tableau |
 | Code | Kaody | En-tête de tableau |
@@ -219,11 +219,11 @@ Parcouru :
 | AAAA-AAAA *(placeholder)* | AAAA-AAAA | Format technique, à garder tel quel |
 | Préfixe des codes étudiants | Sombin-teny mialoha ny kaodin'ny mpianatra | Incertain |
 | RIB bancaire | RIB banky | |
-| Bénéficiaire (nom sur le compte) | Mpandray (anarana amin'ny kaonty) | |
-| Email Responsable Scolarité | Mailakan'ny Tompon'andraikitra Fianarana | |
-| Email Responsable Administratif | Mailakan'ny Tompon'andraikitra Fitantanana | |
+| Bénéficiaire (nom sur le compte) | Mpandray ny vola ao @ FTM (anarana amin'ny kaonty) | |
+| Email Responsable Scolarité | Mailakan'ny Tompon'andraikitra Fampianarana | |
+| Email Responsable Administratif | Mailakan'ny Tonia | |
 | Adresse de l'association | Adiresin'ny fikambanana | |
-| Paramètres enregistrés avec succès. | Voatahiry soa aman-tsara ny fandrindrana. | |
+| Paramètres enregistrés avec succès. | Voatahiry soa aman-tsara ny fanova. | |
 | Une erreur est survenue lors de la sauvegarde. | Nisy hadisoana teo am-pitahirizana. | |
 | Enregistrement... | Eo am-pitahirizana... | |
 | Enregistrer | Tahirizo | |
@@ -235,7 +235,7 @@ Parcouru :
 | Texte français actuel | Traduction malgache (brouillon) | Notes |
 |---|---|---|
 | Gestion des étudiants | Fitantanana ny mpianatra | |
-| Page en construction. Gestion des étudiants à venir. | Pejy mbola atao. Ho avy ny fitantanana ny mpianatra. | Écran encore une coquille vide (non développé) |
+| Page en construction. Gestion des étudiants à venir. | Pejy mbola eo am-pandrafetana. Ho avy tsy ho ela ny fitantanana ny mpianatra. | Écran encore une coquille vide (non développé) |
 
 ---
 
@@ -274,9 +274,9 @@ Parcouru :
 | En attente: | Miandry: | |
 | Validées: | Voamarina: | |
 | Rejetées: | Nolavina: | |
-| Statut mis à jour: {status} | Voavaozina ny sata: {status} | Message d'alerte navigateur |
-| Erreur lors de la mise à jour | Hadisoana teo am-panavaozana | Message d'alerte navigateur |
-| Niveau définitif mis à jour: {niveau} | Voavaozina ny ambaratonga farany: {niveau} | Message d'alerte navigateur |
+| Statut mis à jour: {status} | Voaova ny sata: {status} | Message d'alerte navigateur |
+| Erreur lors de la mise à jour | Hadisoana teo am-panovana | Message d'alerte navigateur |
+| Niveau définitif mis à jour: {niveau} | Voaova ny ambaratonga farany: {niveau} | Message d'alerte navigateur |
 
 ---
 
@@ -302,13 +302,13 @@ Parcouru :
 | Heure | Ora | |
 | Ex: 18:00 *(placeholder)* | Ohatra: 18:00 | |
 | Durée (minutes) | Faharetana (minitra) | |
-| Compte visio | Kaonty visio | |
+| Compte visio  | Kaonty Zoom iza sa jitsi | |
 | — Aucun — | — Tsy misy — | |
-| Lien visio | Rohy visio | |
+| Lien visio | Rohy Zoom na jitsi | |
 | https://... *(placeholder)* | https://... | Format technique |
 | Enseignants | Mpampianatra | |
 | Un nom par ligne, ou séparés par des virgules *(placeholder)* | Anarana iray isaky ny andalana, na sarahin'ny faingo | |
-| ⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu'il n'y a pas de conflit réel. | ⚠️ Efa ampiasain'ny kilasy {nom} amin'ity fotoana ity ity kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanoherana marina. | |
+| ⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu'il n'y a pas de conflit réel. | ⚠️ Efa ampiasain'ny kilasy {nom} amin'ity fotoana ity  kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanitsahana marina. | |
 | Création... | Eo am-pamoronana... | |
 | Créer la classe | Mamorona ny kilasy | |
 | Nom | Anarana | En-tête de tableau |
@@ -317,7 +317,7 @@ Parcouru :
 | Jour | Andro | En-tête de tableau |
 | Heure | Ora | En-tête de tableau |
 | Capacité | Fetra | En-tête de tableau |
-| Compte visio | Kaonty visio | En-tête de tableau |
+| Compte visio | Kaonty Zoom iza sa jitsi | En-tête de tableau |
 | Enseignants | Mpampianatra | En-tête de tableau |
 | Aucune classe créée pour le moment. | Tsy misy kilasy voaforona ankehitriny. | |
 | Erreur lors de la création : {message} | Hadisoana teo am-pamoronana : {message} | Message d'alerte navigateur |

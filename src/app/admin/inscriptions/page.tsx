@@ -4,10 +4,12 @@
 import { useState, useEffect, Suspense } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { getStatutLabel } from '@/lib/statuts'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
 function InscriptionsListContent() {
+  const { t } = useTranslation()
   const params = useSearchParams()
   const filter = params.get('filter') || 'all'
   const [inscriptions, setInscriptions] = useState<any[]>([])
@@ -50,23 +52,23 @@ function InscriptionsListContent() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gestion des inscriptions</h1>
+        <h1 className="text-2xl font-bold">{t('inscriptionsList.title')}</h1>
         <Link
           href="/public/inscription"
           className="bg-[#689e4e] text-white px-4 py-2 rounded hover:bg-[#527d3e]"
         >
-          + Nouvelle inscription
+          {t('inscriptionsList.newInscriptionButton')}
         </Link>
       </div>
 
       {/* Filtres */}
       <div className="flex space-x-2">
         {[
-          { value: 'all', label: 'Toutes', count: inscriptions.length },
-          { value: 'pending_review', label: 'En attente', count: inscriptions.filter(i => i.status === 'pending_review').length },
-          { value: 'approved', label: 'Validées', count: inscriptions.filter(i => i.status === 'approved').length },
-          { value: 'payment_pending', label: 'Paiements en attente', count: inscriptions.filter(i => i.status === 'payment_pending').length },
-          { value: 'rejected', label: 'Rejetées', count: inscriptions.filter(i => i.status === 'rejected').length }
+          { value: 'all', label: t('inscriptionsList.filterAll'), count: inscriptions.length },
+          { value: 'pending_review', label: t('inscriptionsList.filterPending'), count: inscriptions.filter(i => i.status === 'pending_review').length },
+          { value: 'approved', label: t('inscriptionsList.filterApproved'), count: inscriptions.filter(i => i.status === 'approved').length },
+          { value: 'payment_pending', label: t('inscriptionsList.filterPaymentPending'), count: inscriptions.filter(i => i.status === 'payment_pending').length },
+          { value: 'rejected', label: t('inscriptionsList.filterRejected'), count: inscriptions.filter(i => i.status === 'rejected').length }
         ].map((filtre) => (
           <Link
             key={filtre.value}
@@ -83,13 +85,13 @@ function InscriptionsListContent() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Niveau</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableCode')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableName')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableEmail')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableLevel')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableDate')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableStatus')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableActions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -123,7 +125,7 @@ function InscriptionsListContent() {
                     href={`/admin/inscriptions/${inscription.student_code}`}
                     className="text-[#689e4e] hover:text-[#527d3e] text-sm"
                   >
-                    Voir →
+                    {t('inscriptionsList.viewLink')}
                   </Link>
                 </td>
               </tr>

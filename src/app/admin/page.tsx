@@ -4,9 +4,11 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { getStatutLabel } from '@/lib/statuts'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 
 export default function AdminDashboard() {
+  const { t } = useTranslation()
   const [stats, setStats] = useState<{
     totalInscriptions: number
     pendingReview: number
@@ -83,7 +85,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('adminDashboard.title')}</h1>
         <div className="text-sm text-gray-500">
           {new Date().toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
@@ -97,7 +99,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">📋</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total inscriptions</p>
+              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.totalInscriptions')}</p>
               <p className="text-2xl font-bold text-gray-900">{stats.totalInscriptions}</p>
             </div>
           </div>
@@ -109,7 +111,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">⏳</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">En attente de validation</p>
+              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.pendingReview')}</p>
               <p className="text-2xl font-bold text-yellow-600">{stats.pendingReview}</p>
             </div>
           </div>
@@ -118,7 +120,7 @@ export default function AdminDashboard() {
               href="/admin/inscriptions?filter=pending_review"
               className="text-sm text-[#689e4e] hover:text-[#527d3e]"
             >
-              Voir les inscriptions →
+              {t('adminDashboard.viewInscriptionsLink')}
             </Link>
           </div>
         </div>
@@ -129,7 +131,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">✅</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Inscriptions validées</p>
+              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.approvedInscriptions')}</p>
               <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
             </div>
           </div>
@@ -141,7 +143,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">💰</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Paiements en attente</p>
+              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.paymentsPending')}</p>
               <p className="text-2xl font-bold text-orange-600">{stats.paymentPending}</p>
             </div>
           </div>
@@ -150,7 +152,7 @@ export default function AdminDashboard() {
               href="/admin/inscriptions?filter=payment_pending"
               className="text-sm text-[#689e4e] hover:text-[#527d3e]"
             >
-              Gérer les paiements →
+              {t('adminDashboard.managePaymentsLink')}
             </Link>
           </div>
         </div>
@@ -159,18 +161,18 @@ export default function AdminDashboard() {
       {/* Dernières inscriptions */}
       <div className="bg-white rounded-lg shadow border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900">Dernières inscriptions</h2>
+          <h2 className="text-lg font-bold text-gray-900">{t('adminDashboard.recentInscriptionsTitle')}</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Niveau</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableCode')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableName')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableLevel')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableDate')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableStatus')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableAction')}</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -203,7 +205,7 @@ export default function AdminDashboard() {
                       href={`/admin/inscriptions/${inscription.student_code}`}
                       className="text-[#689e4e] hover:text-[#527d3e]"
                     >
-                      Voir →
+                      {t('adminDashboard.viewLink')}
                     </Link>
                   </td>
                 </tr>
@@ -216,7 +218,7 @@ export default function AdminDashboard() {
             href="/admin/inscriptions"
             className="text-[#689e4e] hover:text-[#527d3e] font-medium"
           >
-            Voir toutes les inscriptions →
+            {t('adminDashboard.viewAllInscriptionsLink')}
           </Link>
         </div>
       </div>
@@ -224,44 +226,44 @@ export default function AdminDashboard() {
       {/* Actions rapides */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-          <h3 className="font-bold text-lg mb-4">Actions rapides</h3>
+          <h3 className="font-bold text-lg mb-4">{t('adminDashboard.quickActionsTitle')}</h3>
           <div className="space-y-3">
             <Link
               href="/admin/inscriptions?filter=pending_review"
               className="block w-full text-left px-4 py-3 bg-[#689e4e]/10 text-[#527d3e] rounded hover:bg-[#689e4e]/20"
             >
-              ⏳ Valider les inscriptions en attente
+              {t('adminDashboard.quickActionValidate')}
             </Link>
             <Link 
               href="/admin/students"
               className="block w-full text-left px-4 py-3 bg-green-50 text-green-700 rounded hover:bg-green-100"
             >
-              👨‍🎓 Gérer les étudiants
+              {t('adminDashboard.quickActionStudents')}
             </Link>
             <Link
               href="/admin/payments"
               className="block w-full text-left px-4 py-3 bg-orange-50 text-orange-700 rounded hover:bg-orange-100"
             >
-              💰 Suivi des paiements
+              {t('adminDashboard.quickActionPayments')}
             </Link>
             <Link
               href="/admin/parametres"
               className="block w-full text-left px-4 py-3 bg-gray-50 text-gray-700 rounded hover:bg-gray-100"
             >
-              ⚙️ Paramètres
+              {t('adminDashboard.quickActionSettings')}
             </Link>
           </div>
         </div>
 
         <div className="md:col-span-2 bg-white p-6 rounded-lg shadow border border-gray-200">
-          <h3 className="font-bold text-lg mb-4">Statistiques par niveau</h3>
+          <h3 className="font-bold text-lg mb-4">{t('adminDashboard.statsByLevelTitle')}</h3>
           <div className="grid grid-cols-3 gap-4">
             {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((niveau) => (
               <div key={niveau} className="text-center p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-[#689e4e]">{niveau}</div>
-                <div className="text-sm text-gray-600 mt-1">Niveau</div>
+                <div className="text-sm text-gray-600 mt-1">{t('adminDashboard.levelTileLabel')}</div>
                 <div className="mt-2 text-lg font-bold">0</div>
-                <div className="text-xs text-gray-500">étudiants</div>
+                <div className="text-xs text-gray-500">{t('adminDashboard.studentsUnit')}</div>
               </div>
             ))}
           </div>
