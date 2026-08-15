@@ -1,0 +1,277 @@
+// app/admin/payments/page.tsx
+'use client'
+
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase/client'
+import { getConfig } from '@/lib/config'
+import { sendPaymentConfirmationAction } from '@/app/actions/emailActions'
+
+const MODES_PAIEMENT = [
+  { value: 'virement', label: 'Virement' },
+  { value: 'especes', label: 'Espèces' },
+  { value: 'autre', label: 'Autre' }
+]
+
+export default function PaymentsPage() {
+  const [tab, setTab] = useState<'attente' | 'historique'>('attente')
+  const [enAttente, setEnAttente] = useState<any[]>([])
+  const [historique, setHistorique] = useState<any[]>([])
+  const [montantAttendu, setMontantAttendu] = useState(30)
+  const [loading, setLoading] = useState(true)
+
+  const [inscriptionSelectionnee, setInscriptionSelectionnee] = useState<any>(null)
+  const [montant, setMontant] = useState('')
+  const [mode, setMode] = useState('virement')
+  const [traitement, setTraitement] = useState(false)
+
+  useEffect(() => {
+    init()
+  }, [])
+
+  const init = async () => {
+    const config = await getConfig()
+    setMontantAttendu(config.montant_inscription || 30)
+    await Promise.all([loadEnAttente(), loadHistorique()])
+    setLoading(false)
+  }
+
+  const loadEnAttente = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('inscriptions')
+        .select('*')
+        .or('status.eq.payment_pending,and(status.eq.approved,statut_paiement.neq.paye)')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      setEnAttente(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }
+
+  const loadHistorique = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('paiements')
+        .select('*, inscriptions(nom, prenom, student_code)')
+        .order('created_at', { ascending: false })
+        .limit(30)
+
+      if (error) throw error
+      setHistorique(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }
+
+  const ouvrirConfirmation = (inscription: any) => {
+    setInscriptionSelectionnee(inscription)
+    setMontant(montantAttendu.toString())
+    setMode('virement')
+  }
+
+  const fermerConfirmation = () => {
+    setInscriptionSelectionnee(null)
+  }
+
+  const confirmerPaiement = async () => {
+    if (!inscriptionSelectionnee || traitement) return
+    setTraitement(true)
+
+    try {
+      const { error } = await supabase.rpc('marquer_inscription_payee', {
+        p_inscription_id: inscriptionSelectionnee.id,
+        p_montant: parseFloat(montant),
+        p_mode: mode
+      })
+
+      if (error) throw error
+
+      sendPaymentConfirmationAction(
+        inscriptionSelectionnee.email_contact,
+        `${inscriptionSelectionnee.prenom} ${inscriptionSelectionnee.nom}`,
+        inscriptionSelectionnee.student_code,
+        parseFloat(montant)
+      ).catch((err) => console.error('Erreur envoi email paiement:', err))
+
+      fermerConfirmation()
+      await Promise.all([loadEnAttente(), loadHistorique()])
+    } catch (error: any) {
+      console.error('Erreur:', error)
+      alert(`Erreur lors de l'enregistrement du paiement : ${error.message || 'Inconnue'}`)
+    } finally {
+      setTraitement(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-gray-900">Suivi des paiements</h1>
+
+      {/* Onglets */}
+      <div className="flex space-x-2">
+        <button
+          onClick={() => setTab('attente')}
+          className={`px-4 py-2 rounded ${tab === 'attente' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+        >
+          En attente ({enAttente.length})
+        </button>
+        <button
+          onClick={() => setTab('historique')}
+          className={`px-4 py-2 rounded ${tab === 'historique' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+        >
+          Historique des paiements
+        </button>
+      </div>
+
+      {tab === 'attente' && (
+        <div className="bg-white rounded shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Classe</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Montant attendu</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {enAttente.map((inscription) => (
+                <tr key={inscription.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {inscription.prenom} {inscription.nom}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">{inscription.student_code}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{inscription.classe_attribuee || '—'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{inscription.email_contact}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{montantAttendu}€</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => ouvrirConfirmation(inscription)}
+                      className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
+                    >
+                      Marquer payé
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {enAttente.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    Aucun paiement en attente.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {tab === 'historique' && (
+        <div className="bg-white rounded shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Candidat</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Montant</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mode</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {historique.map((paiement) => (
+                <tr key={paiement.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {paiement.inscriptions?.prenom} {paiement.inscriptions?.nom}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">
+                    {paiement.inscriptions?.student_code || '—'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{paiement.montant}€</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {paiement.date_paiement
+                      ? new Date(paiement.date_paiement).toLocaleDateString('fr-FR')
+                      : new Date(paiement.created_at).toLocaleDateString('fr-FR')}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm capitalize">{paiement.mode || '—'}</td>
+                </tr>
+              ))}
+              {historique.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                    Aucun paiement enregistré pour le moment.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Modale de confirmation */}
+      {inscriptionSelectionnee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow p-6 w-full max-w-md">
+            <h2 className="text-lg font-bold mb-4">Confirmer le paiement</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              {inscriptionSelectionnee.prenom} {inscriptionSelectionnee.nom} — {inscriptionSelectionnee.student_code}
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Montant (€)</label>
+                <input
+                  type="number"
+                  value={montant}
+                  onChange={(e) => setMontant(e.target.value)}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mode de paiement</label>
+                <select
+                  value={mode}
+                  onChange={(e) => setMode(e.target.value)}
+                  className="w-full p-2 border rounded"
+                >
+                  {MODES_PAIEMENT.map((m) => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={fermerConfirmation}
+                disabled={traitement}
+                className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={confirmerPaiement}
+                disabled={traitement || !montant}
+                className="px-4 py-2 bg-green-600 text-white rounded text-sm hover:bg-green-700 disabled:opacity-50"
+              >
+                {traitement ? 'Enregistrement...' : 'Confirmer le paiement'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
