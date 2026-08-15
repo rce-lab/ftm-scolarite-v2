@@ -3,23 +3,25 @@
 
 import { StepProps } from '../../types'
 import { useState } from 'react'
+import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 
-const JOURS_OPTIONS = [
-  { value: 'lundi', label: 'Lundi' },
-  { value: 'mardi', label: 'Mardi' },
-  { value: 'mercredi', label: 'Mercredi' },
-  { value: 'jeudi', label: 'Jeudi' },
-  { value: 'vendredi', label: 'Vendredi' },
-  { value: 'samedi', label: 'Samedi' }
-]
-
-export default function DisponibilitesStep({ 
-  formData, 
-  updateFormData, 
-  onNext, 
-  onBack 
+export default function DisponibilitesStep({
+  formData,
+  updateFormData,
+  onNext,
+  onBack
 }: StepProps) {
+  const { t } = usePublicTranslation()
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const JOURS_OPTIONS = [
+    { value: 'lundi', label: t('availability.monday') },
+    { value: 'mardi', label: t('availability.tuesday') },
+    { value: 'mercredi', label: t('availability.wednesday') },
+    { value: 'jeudi', label: t('availability.thursday') },
+    { value: 'vendredi', label: t('availability.friday') },
+    { value: 'samedi', label: t('availability.saturday') }
+  ]
 
   const peuImporte = formData.jours_preference.length === 1 && formData.jours_preference[0] === 'peu_importe'
 
@@ -58,22 +60,22 @@ export default function DisponibilitesStep({
   // Validation
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
-    
+
     // Vérifier au moins 1 jour sélectionné
     if (formData.jours_preference.length === 0) {
-      newErrors.jours = 'Veuillez sélectionner au moins un jour de préférence'
+      newErrors.jours = t('availability.daysRequiredError')
     }
-    
+
     // Vérifier au moins 1 horaire sélectionné
     if (!formData.horaire_apres_midi && !formData.horaire_soir && !formData.horaire_autre) {
-      newErrors.horaires = 'Veuillez sélectionner au moins un horaire'
+      newErrors.horaires = t('availability.timeRequiredError')
     }
-    
+
     // Si "autre" est coché, vérifier le détail
     if (formData.horaire_autre && !formData.horaire_autre_detail.trim()) {
-      newErrors.horaire_autre = 'Veuillez préciser l\'horaire autre'
+      newErrors.horaire_autre = t('availability.otherTimeRequiredError')
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -86,13 +88,13 @@ export default function DisponibilitesStep({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-bold">Disponibilités et préférences</h2>
-      
+      <h2 className="text-xl font-bold">{t('availability.title')}</h2>
+
       {/* Jours de disponibilité */}
       <div className="space-y-3">
         <div>
           <label className="block mb-2 font-medium text-sm">
-            10. Veuillez entrer vos jours de disponibilité par ordre de préférence (maximum 3)
+            {t('availability.daysQuestion')}
           </label>
 
           <label className="flex items-center space-x-2 cursor-pointer mb-3">
@@ -102,7 +104,7 @@ export default function DisponibilitesStep({
               onChange={(e) => handleTogglePeuImporte(e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded"
             />
-            <span className="text-sm font-medium">N'importe quel jour me convient</span>
+            <span className="text-sm font-medium">{t('availability.anyDayOption')}</span>
           </label>
 
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-2 ${peuImporte ? 'opacity-40' : ''}`}>
@@ -134,25 +136,25 @@ export default function DisponibilitesStep({
                   <div className="font-medium text-sm">{jour.label}</div>
                   {isSelected && (
                     <div className="text-xs mt-1 text-blue-600">
-                      Choix n°{position}
+                      {t('availability.choiceNumber').replace('{position}', String(position))}
                     </div>
                   )}
                 </button>
               )
             })}
           </div>
-          
+
           {errors.jours && (
             <p className="text-xs text-red-500 mt-1">{errors.jours}</p>
           )}
-          
+
           <div className="mt-3 text-xs text-gray-600">
             {peuImporte ? (
-              <p>Vous avez indiqué que n'importe quel jour vous convient.</p>
+              <p>{t('availability.anyDaySummary')}</p>
             ) : (
               <>
                 <p>
-                  Sélectionnés : {formData.jours_preference.length}/3 jours
+                  {t('availability.selectedCount').replace('{n}', String(formData.jours_preference.length))}
                   {formData.jours_preference.length > 0 && (
                     <span className="ml-2">
                       ({formData.jours_preference.map(j => {
@@ -164,7 +166,7 @@ export default function DisponibilitesStep({
                   )}
                 </p>
                 <p className="mt-1 text-gray-500">
-                  Cliquez sur les jours pour les sélectionner/désélectionner. L'ordre de sélection détermine votre préférence.
+                  {t('availability.selectionHint')}
                 </p>
               </>
             )}
@@ -174,9 +176,9 @@ export default function DisponibilitesStep({
         {/* Horaire souhaité */}
         <div className="pt-4 border-t border-gray-200">
           <label className="block mb-3 font-medium text-sm">
-            11. Horaire souhaité
+            {t('availability.timeQuestion')}
           </label>
-          
+
           <div className="space-y-3">
             <div className="flex flex-wrap gap-4">
               <label className="flex items-center space-x-2 cursor-pointer">
@@ -187,10 +189,10 @@ export default function DisponibilitesStep({
                   className="w-4 h-4 text-blue-600 rounded"
                 />
                 <div>
-                  <span className="font-medium text-sm">Après-midi</span>
+                  <span className="font-medium text-sm">{t('availability.afternoonOption')}</span>
                 </div>
               </label>
-              
+
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -199,10 +201,10 @@ export default function DisponibilitesStep({
                   className="w-4 h-4 text-blue-600 rounded"
                 />
                 <div>
-                  <span className="font-medium text-sm">Soir</span>
+                  <span className="font-medium text-sm">{t('availability.eveningOption')}</span>
                 </div>
               </label>
-              
+
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -211,20 +213,20 @@ export default function DisponibilitesStep({
                   className="w-4 h-4 text-blue-600 rounded"
                 />
                 <div>
-                  <span className="font-medium text-sm">Autre dans la mesure du possible</span>
+                  <span className="font-medium text-sm">{t('availability.otherTimeOption')}</span>
                 </div>
               </label>
             </div>
-            
+
             {errors.horaires && (
               <p className="text-xs text-red-500">{errors.horaires}</p>
             )}
-            
+
             {/* Détail autre horaire */}
             {formData.horaire_autre && (
               <div className="mt-3">
                 <label className="block mb-1 text-sm">
-                  Précisez l'horaire autre :
+                  {t('availability.otherTimeLabel')}
                 </label>
                 <input
                   type="text"
@@ -233,7 +235,7 @@ export default function DisponibilitesStep({
                   className={`w-full p-2 border rounded text-sm ${
                     errors.horaire_autre ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="Ex: Week-end, matinée..."
+                  placeholder={t('availability.otherTimePlaceholder')}
                 />
                 {errors.horaire_autre && (
                   <p className="text-xs text-red-500 mt-1">{errors.horaire_autre}</p>
@@ -246,27 +248,27 @@ export default function DisponibilitesStep({
 
       {/* Navigation */}
       <div className="flex justify-between pt-4 border-t border-gray-200">
-        <button 
+        <button
           onClick={onBack}
           className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
         >
-          ← Retour (Informations)
+          {t('availability.backButton')}
         </button>
-        
-        <button 
+
+        <button
           onClick={handleSubmit}
-          disabled={formData.jours_preference.length === 0 || 
+          disabled={formData.jours_preference.length === 0 ||
                    (!formData.horaire_apres_midi && !formData.horaire_soir && !formData.horaire_autre) ||
                    (formData.horaire_autre && !formData.horaire_autre_detail.trim())}
           className={`px-4 py-2 rounded text-sm ${
-            formData.jours_preference.length > 0 && 
+            formData.jours_preference.length > 0 &&
             (formData.horaire_apres_midi || formData.horaire_soir || formData.horaire_autre) &&
             (!formData.horaire_autre || formData.horaire_autre_detail.trim())
-              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
-          Suivant → Motivation
+          {t('availability.nextButton')}
         </button>
       </div>
     </div>

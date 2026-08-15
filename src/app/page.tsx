@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getConfig } from '@/lib/config'
+import { PublicLanguageProvider, usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 import logo from './public/logo FTM officiel 2024.jpeg'
 
-export default function HomePage() {
+function HomePageContent() {
+  const { t, language, setLanguage } = usePublicTranslation()
   const [config, setConfig] = useState<any>(null)
 
   useEffect(() => {
@@ -29,15 +31,24 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white rounded-lg shadow p-8 text-center border-t-4 border-[#b03c2d]">
+        <div className="text-right mb-2">
+          <button
+            onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+            className="text-sm text-[#689e4e] hover:text-[#527d3e] underline"
+          >
+            {language === 'fr' ? 'English version' : 'Version française'}
+          </button>
+        </div>
+
         <div className="flex justify-center mb-4">
-          <Image src={logo} alt="Logo FTM" className="h-24 w-auto" priority />
+          <Image src={logo} alt={t('homepage.logoAlt')} className="h-24 w-auto" priority />
         </div>
 
         <h1 className="text-4xl font-bold text-[#689e4e]">FTM</h1>
         <p className="text-gray-600 mt-1">Fianarana Teny Malagasy</p>
 
         <p className="text-sm text-gray-500 mt-4">
-          Année scolaire {config.annee_scolaire_courante}
+          {t('homepage.schoolYear').replace('{annee}', config.annee_scolaire_courante)}
         </p>
 
         <p className="text-sm text-gray-500 mt-1">
@@ -48,9 +59,17 @@ export default function HomePage() {
           href="/public/inscription"
           className="inline-block mt-6 bg-[#689e4e] text-white px-6 py-3 rounded font-medium hover:opacity-90"
         >
-          S'inscrire maintenant
+          {t('homepage.ctaButton')}
         </Link>
       </div>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <PublicLanguageProvider>
+      <HomePageContent />
+    </PublicLanguageProvider>
   )
 }

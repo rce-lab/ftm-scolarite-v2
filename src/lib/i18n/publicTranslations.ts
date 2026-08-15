@@ -1,9 +1,9 @@
 // src/lib/i18n/publicTranslations.ts
 // Dictionnaire fr/en pour le formulaire public d'inscription — système indépendant
 // de src/lib/i18n/translations.ts (fr/mg, réservé aux écrans internes).
-// Pour l'instant, seule la section "personalInfo" (PersonalInfoStep) est traduite.
-// Les autres étapes (Disponibilités, Motivation, Évaluation/CECRL, Contact, confirmation)
-// viendront dans de prochaines sessions.
+// Sections traduites : personalInfo, availability, motivation, homepage.
+// Restent à traduire dans de prochaines sessions : Évaluation/grille CEFR, Contact/récap,
+// page de confirmation.
 
 export interface PublicTranslationEntry {
   fr: string
@@ -59,5 +59,62 @@ export const publicTranslations = {
 
     backButton: { fr: "← Retour à l'accueil", en: '← Back to home' },
     nextButton: { fr: 'Suivant → Disponibilités', en: 'Next → Availability' }
+  },
+
+  availability: {
+    title: { fr: 'Disponibilités et préférences', en: 'Availability and preferences' },
+    daysQuestion: { fr: '10. Veuillez entrer vos jours de disponibilité par ordre de préférence (maximum 3)', en: '10. Please enter your available days in order of preference (maximum 3)' },
+    anyDayOption: { fr: "N'importe quel jour me convient", en: 'Any day works for me' },
+    monday: { fr: 'Lundi', en: 'Monday' },
+    tuesday: { fr: 'Mardi', en: 'Tuesday' },
+    wednesday: { fr: 'Mercredi', en: 'Wednesday' },
+    thursday: { fr: 'Jeudi', en: 'Thursday' },
+    friday: { fr: 'Vendredi', en: 'Friday' },
+    saturday: { fr: 'Samedi', en: 'Saturday' },
+    choiceNumber: { fr: 'Choix n°{position}', en: 'Choice #{position}' },
+    daysRequiredError: { fr: 'Veuillez sélectionner au moins un jour de préférence', en: 'Please select at least one preferred day' },
+    timeRequiredError: { fr: 'Veuillez sélectionner au moins un horaire', en: 'Please select at least one time slot' },
+    otherTimeRequiredError: { fr: "Veuillez préciser l'horaire autre", en: 'Please specify the other time slot' },
+    anyDaySummary: { fr: "Vous avez indiqué que n'importe quel jour vous convient.", en: 'You have indicated that any day works for you.' },
+    selectedCount: { fr: 'Sélectionnés : {n}/3 jours', en: 'Selected: {n}/3 days' },
+    selectionHint: { fr: "Cliquez sur les jours pour les sélectionner/désélectionner. L'ordre de sélection détermine votre préférence.", en: 'Click on the days to select/deselect them. The selection order determines your preference.' },
+    timeQuestion: { fr: '11. Horaire souhaité', en: '11. Preferred time' },
+    afternoonOption: { fr: 'Après-midi', en: 'Afternoon' },
+    eveningOption: { fr: 'Soir', en: 'Evening' },
+    otherTimeOption: { fr: 'Autre dans la mesure du possible', en: 'Other, if possible' },
+    otherTimeLabel: { fr: "Précisez l'horaire autre :", en: 'Please specify the other time slot:' },
+    otherTimePlaceholder: { fr: 'Ex: Week-end, matinée...', en: 'E.g.: Weekend, morning...' },
+    backButton: { fr: '← Retour (Informations)', en: '← Back (Personal info)' },
+    nextButton: { fr: 'Suivant → Motivation', en: 'Next → Motivation' }
+  },
+
+  motivation: {
+    title: { fr: 'Motivation et attentes', en: 'Motivation and expectations' },
+    reasonsQuestion: { fr: '12. Pour quelles raisons avez-vous choisi de suivre/reprendre cette formation ?', en: '12. Why did you choose to start/resume this course?' },
+    reasonMaternal: { fr: "C'est ma langue maternelle", en: 'It is my native language' },
+    reasonSkills: { fr: 'Développement de mes compétences', en: 'Developing my skills' },
+    reasonEnjoyment: { fr: 'Pour le plaisir', en: 'For enjoyment' },
+    otherOption: { fr: 'Autres', en: 'Other' },
+    otherReasonLabel: { fr: 'Précisez la raison autre :', en: 'Please specify the other reason:' },
+    otherReasonPlaceholder: { fr: 'Ex: Pour le travail, études...', en: 'E.g.: For work, studies...' },
+    expectationsQuestion: { fr: '13. Quelles sont vos attentes par rapport à cette formation ?', en: '13. What are your expectations for this course?' },
+    expectationsPlaceholder: { fr: 'Décrivez vos attentes, objectifs, ce que vous espérez apprendre...', en: 'Describe your expectations, goals, what you hope to learn...' },
+    howKnownQuestion: { fr: "14. Comment avez-vous appris l'existence de cette formation ?", en: '14. How did you hear about this course?' },
+    knownAcquaintances: { fr: 'Par le biais de mes connaissances', en: 'Through acquaintances' },
+    knownAssociation: { fr: 'Via une association', en: 'Through an association' },
+    knownFormerStudent: { fr: "Je suis un(e) ancien(ne) élève", en: 'I am a former student' },
+    knownRecommendation: { fr: 'Par recommandation', en: 'By recommendation' },
+    otherKnownLabel: { fr: 'Précisez :', en: 'Please specify:' },
+    otherKnownPlaceholder: { fr: 'Ex: Internet, réseaux sociaux, événement...', en: 'E.g.: Internet, social media, event...' },
+    remarksQuestion: { fr: '15. Remarques ou suggestions à nous adresser :', en: '15. Any comments or suggestions for us:' },
+    remarksPlaceholder: { fr: 'Vos commentaires, suggestions, questions...', en: 'Your comments, suggestions, questions...' },
+    backButton: { fr: '← Retour (Disponibilités)', en: '← Back (Availability)' },
+    nextButton: { fr: 'Suivant → Évaluation', en: 'Next → Assessment' }
+  },
+
+  homepage: {
+    schoolYear: { fr: 'Année scolaire {annee}', en: 'School year {annee}' },
+    ctaButton: { fr: "S'inscrire maintenant", en: 'Register now' },
+    logoAlt: { fr: 'Logo FTM', en: 'FTM logo' }
   }
 } as const
