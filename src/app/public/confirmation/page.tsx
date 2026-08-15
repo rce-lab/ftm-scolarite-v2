@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import { getConfig } from '@/lib/config'
-import Link from 'next/link'
 
 function ConfirmationContent() {
   const params = useSearchParams()
@@ -68,10 +67,8 @@ function ConfirmationContent() {
         </div>
       </div>
 
-      <div className="mt-8 text-center">
-        <Link href="/" className="text-blue-600 hover:underline">
-          Retour à l'accueil
-        </Link>
+      <div className="mt-8 text-center text-sm text-gray-500">
+        Vous pouvez fermer cet onglet.
       </div>
     </div>
   )

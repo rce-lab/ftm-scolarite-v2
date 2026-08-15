@@ -113,9 +113,11 @@ export default function PersonalInfoStep({
   }
 
   const handleGeneralChange = (field: keyof FormData, value: string) => {
-    const processed = (field === 'ville_residence' || field === 'adresse_postale')
-      ? value.toLowerCase()
-      : value
+    const processed = field === 'ville_residence'
+      ? value.toUpperCase()
+      : field === 'adresse_postale'
+        ? value.toLowerCase()
+        : value
     updateFormData(field, processed)
 
     if (field === 'pays_residence') {

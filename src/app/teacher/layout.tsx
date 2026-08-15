@@ -1,6 +1,6 @@
 import InternalNav from '@/components/InternalNav'
 
-export default function AdminLayout({
+export default function TeacherLayout({
   children,
 }: {
   children: React.ReactNode

@@ -1,12 +1,12 @@
 // app/admin/inscriptions/page.tsx
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-export default function InscriptionsListPage() {
+function InscriptionsListContent() {
   const params = useSearchParams()
   const filter = params.get('filter') || 'all'
   const [inscriptions, setInscriptions] = useState<any[]>([])
@@ -131,5 +131,17 @@ export default function InscriptionsListPage() {
         </table>
       </div>
     </div>
+  )
+}
+
+export default function InscriptionsListPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <InscriptionsListContent />
+    </Suspense>
   )
 }
