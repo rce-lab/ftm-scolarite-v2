@@ -1,5 +1,6 @@
 // src/lib/emailService.ts
 import { Resend } from 'resend'
+import { translations } from '@/lib/i18n/translations'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -62,40 +63,45 @@ export async function sendInscriptionNotification(
       `
     })
 
-    // Notification à l'administrateur
+    // Notification à l'administrateur (toujours en malgache — envoi automatique côté serveur, pas de bascule dynamique de langue ici)
+    const adminSubject = translations.emailAdminNotification.subject.mg
+      .replace('{code}', inscription.student_code)
+      .replace('{prenom}', inscription.prenom)
+      .replace('{nom}', inscription.nom)
+
     await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: adminEmails,
-      subject: `[Nouvelle inscription] ${inscription.student_code} - ${inscription.prenom} ${inscription.nom}`,
+      subject: adminSubject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
           <div style="background: #3b82f6; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
-            <h1 style="margin: 0;">Nouvelle inscription FTM</h1>
+            <h1 style="margin: 0;">${translations.emailAdminNotification.heading.mg}</h1>
             <p style="margin: 5px 0 0 0; opacity: 0.9;">${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}</p>
           </div>
-          
+
           <div style="padding: 25px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
             <h2 style="color: #1f2937; margin-top: 0;">${inscription.prenom} ${inscription.nom}</h2>
-            
+
             <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
               <tr>
-                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb; width: 30%;"><strong>Code étudiant</strong></td>
+                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb; width: 30%;"><strong>${translations.emailAdminNotification.studentCodeLabel.mg}</strong></td>
                 <td style="padding: 12px; border: 1px solid #e5e7eb; font-family: monospace; font-weight: bold; color: #1e40af;">${inscription.student_code}</td>
               </tr>
               <tr>
-                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>Email</strong></td>
+                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>${translations.emailAdminNotification.emailLabel.mg}</strong></td>
                 <td style="padding: 12px; border: 1px solid #e5e7eb;">${inscription.email_contact}</td>
               </tr>
               <tr>
-                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>Téléphone</strong></td>
+                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>${translations.emailAdminNotification.phoneLabel.mg}</strong></td>
                 <td style="padding: 12px; border: 1px solid #e5e7eb;">${inscription.telephone}</td>
               </tr>
               ${inscription.age ? `<tr>
-                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>Âge</strong></td>
-                <td style="padding: 12px; border: 1px solid #e5e7eb;">${inscription.age} ans</td>
+                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>${translations.emailAdminNotification.ageLabel.mg}</strong></td>
+                <td style="padding: 12px; border: 1px solid #e5e7eb;">${translations.emailAdminNotification.ageYears.mg.replace('{age}', String(inscription.age))}</td>
               </tr>` : ''}
               <tr>
-                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>Niveau suggéré</strong></td>
+                <td style="padding: 12px; border: 1px solid #e5e7eb; background: #f9fafb;"><strong>${translations.emailAdminNotification.suggestedLevelLabel.mg}</strong></td>
                 <td style="padding: 12px; border: 1px solid #e5e7eb;">
                   <span style="background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 20px; font-weight: bold;">
                     ${inscription.niveau_suggere}
@@ -103,16 +109,16 @@ export async function sendInscriptionNotification(
                 </td>
               </tr>
             </table>
-            
+
             <div style="margin-top: 30px; text-align: center;">
-              <a href="${process.env.APP_URL}/admin/inscriptions/${inscription.student_code}" 
+              <a href="${process.env.APP_URL}/admin/inscriptions/${inscription.student_code}"
                  style="background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-                👁️ Voir les détails de l'inscription
+                ${translations.emailAdminNotification.viewDetailsButton.mg}
               </a>
             </div>
-            
+
             <p style="color: #6b7280; font-size: 0.9em; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 20px;">
-              Cette notification a été envoyée automatiquement par le système d'inscription FTM.
+              ${translations.emailAdminNotification.autoNotice.mg}
             </p>
           </div>
         </div>

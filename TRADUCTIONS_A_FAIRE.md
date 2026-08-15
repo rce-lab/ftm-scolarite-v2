@@ -72,7 +72,7 @@ Parcouru :
 | Dernières inscriptions | Fisoratana anarana farany | |
 | Code | Kaody | En-tête de tableau |
 | Nom | Anarana | En-tête de tableau |
-| Niveau | Ambaratonga | En-tête de tableau |
+| Niveau | Lentam-pahaizana | En-tête de tableau |
 | Date | Daty | En-tête de tableau |
 | Statut | Sata | En-tête de tableau |
 | Action | Hetsika | En-tête de tableau |
@@ -84,7 +84,7 @@ Parcouru :
 | 💰 Suivi des paiements | 💰 Fanaraha-maso ny fandoavam-bola | |
 | ⚙️ Paramètres | ⚙️ Fanova | |
 | Statistiques par niveau | Antontan'isa araka ny ambaratonga | |
-| Niveau | Ambaratonga | Sous-libellé dans chaque tuile A1-C2 |
+| Niveau | Lentam-pahaizana | Sous-libellé dans chaque tuile A1-C2 |
 | étudiants | Mpianatra | |
 
 **Note technique (pas une chaîne à traduire à proprement parler) :** dans `admin/inscriptions/page.tsx`, le statut d'une inscription est actuellement affiché tel quel via `{inscription.status}` (valeurs techniques : `pending_review`, `approved`, `rejected`, `payment_pending`), sans libellé français traduit. Probablement un oubli côté code — signalé pour information, à corriger séparément avant de s'en préoccuper pour la traduction.
@@ -105,7 +105,7 @@ Parcouru :
 | Code | Kaody | En-tête de tableau |
 | Nom | Anarana | En-tête de tableau |
 | Email | Mailaka | En-tête de tableau |
-| Niveau | Ambaratonga | En-tête de tableau |
+| Niveau | Lentam-pahaizana | En-tête de tableau |
 | Date | Daty | En-tête de tableau |
 | Statut | Sata | En-tête de tableau, voir note technique dans la section Tableau de bord |
 | Actions | Hetsika | En-tête de tableau |
@@ -126,6 +126,7 @@ Parcouru :
 | ❌ Inscription rejetée | ❌ Lavina ny fisoratana anarana | |
 | 💰 Paiement en attente | 💰 Miandry ny fandoavam-bola | |
 | Inscrit le {date} | Voasoratra tamin'ny {daty} | |
+| Code étudiant: | Laharan'ny mpianatra | Ajouté après coup — absent de l'extraction initiale, repéré lors du câblage i18n |
 | Informations personnelles | Mombamomba ny tena manokana | |
 | Nom | Anarana | |
 | Prénom | Fanampin'anarana | |
@@ -134,16 +135,16 @@ Parcouru :
 | Email | Mailaka | |
 | Téléphone | Laharan-tariby | |
 | Évaluation et décision | Fanombanana sy fanapahan-kevitra | |
-| Niveau suggéré (auto) | Ambaratonga voakajy araka ny valinteny | |
+| Niveau suggéré (auto) | Lentam-pahaizana voakajy araka ny valinteny | |
 | Calculé automatiquement | Voakajy ho azy | |
-| Niveau définitif | Ambaratonga tazomina farany | |
+| Niveau définitif | Lentam-pahaizana tazomina farany | |
 | Classe attribuée | Sokajiana ao @ kilasy | |
 | — Aucune classe — | — Tsy misy kilasy — | |
 | Notes administratives | Fanamarihana ara-pitantanana | |
 | Notes internes pour cette inscription... *(placeholder)* | Fanamarihana manokana ho an'ity fisoratana anarana ity... | |
 | Enregistrer les modifications | Tahirizo ary ny fanovana | |
 | Statistiques détaillées | Antontan'isa amin'ny antsipiriany | |
-| Niveau | Ambaratonga | En-tête de tableau |
+| Niveau | Lentam-pahaizana | En-tête de tableau |
 | Score | Isa | En-tête de tableau |
 | Questions | Fanontaniana | En-tête de tableau |
 | % Score | % Isa | En-tête de tableau |
@@ -250,7 +251,7 @@ Parcouru :
 | Rejetées | Nolavina | Filtre |
 | Toutes | Rehetra | Filtre |
 | Étudiant | Mpianatra | En-tête de tableau |
-| Niveau suggéré | Ambaratonga voatolotra | En-tête de tableau |
+| Niveau suggéré | Lentam-pahaizana voatolotra | En-tête de tableau |
 | Statut | Sata | En-tête de tableau |
 | Date | Daty | En-tête de tableau |
 | Actions | Hetsika | En-tête de tableau |
@@ -260,8 +261,8 @@ Parcouru :
 | Délibérer → | Mifampidinika → | |
 | Délibération | Fifampidinihana | Titre du panneau |
 | Code: {code} | Kaody: {code} | |
-| Niveau suggéré (auto) | Ambaratonga voatolotra (ho azy) | |
-| Niveau définitif (conseil) | Ambaratonga farany (filan-kevitra) | |
+| Niveau suggéré (auto) | Lentam-pahaizana voatolotra (ho azy) | |
+| Niveau définitif (conseil) | Lentam-pahaizana farany (filan-kevitra) | |
 | Actuel: {niveau} | Ankehitriny: {niveau} | |
 | Non défini | Tsy voafaritra | |
 | Décision finale | Fanapahan-kevitra farany | |
@@ -289,7 +290,7 @@ Parcouru :
 | Nouvelle classe | Kilasy vaovao | |
 | Nom | Anarana | |
 | Ex: M-LUNDI-18H-A1 *(placeholder)* | Ohatra: M-LUNDI-18H-A1 | Format technique, à garder tel quel |
-| Niveau | Ambaratonga | |
+| Niveau | Lentam-pahaizana | |
 | Tranche d'âge | Sokajy taona | |
 | Ex: Enfants, Adultes *(placeholder)* | Ohatra: Ankizy, Olon-dehibe | |
 | Capacité max | Fetra isan'olona | |
@@ -313,7 +314,7 @@ Parcouru :
 | Création... | Eo am-pamoronana... | |
 | Créer la classe | Mamorona ny kilasy | |
 | Nom | Anarana | En-tête de tableau |
-| Niveau | Ambaratonga | En-tête de tableau |
+| Niveau | Lentam-pahaizana | En-tête de tableau |
 | Tranche d'âge | Sokajy taona | En-tête de tableau |
 | Jour | Andro | En-tête de tableau |
 | Heure | Ora | En-tête de tableau |
@@ -338,7 +339,7 @@ Ceci est le seul email traduit ici : le second envoi de `sendInscriptionNotifica
 | Téléphone | Laharan-tariby | Libellé de tableau |
 | Âge | Taona | Libellé de tableau |
 | {age} ans | {age} taona | |
-| Niveau suggéré | Ambaratonga voatolotra | Libellé de tableau |
+| Niveau suggéré | Lentam-pahaizana voatolotra | Libellé de tableau |
 | 👁️ Voir les détails de l'inscription | 👁️ Jereo ny antsipirian'ny fisoratana anarana | Bouton dans l'email |
 | Cette notification a été envoyée automatiquement par le système d'inscription FTM. | Nalefan'ny rafi-pisoratana anaran'ny FTM ho azy ity fampahafantarana ity. | |
 

@@ -183,7 +183,7 @@ export default function InscriptionDetailPage() {
             </h1>
           </div>
           <p className="text-gray-600 mt-1">
-            Code étudiant: <span className="font-mono font-bold">{inscription.student_code}</span>
+            {t('inscriptionsDetail.studentCodeLabel')} <span className="font-mono font-bold">{inscription.student_code}</span>
           </p>
         </div>
         <div className="text-right">

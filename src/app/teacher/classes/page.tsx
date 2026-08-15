@@ -3,9 +3,18 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+const JOUR_KEYS: Record<string, string> = {
+  Lundi: 'classes.monday',
+  Mardi: 'classes.tuesday',
+  Mercredi: 'classes.wednesday',
+  Jeudi: 'classes.thursday',
+  Vendredi: 'classes.friday',
+  Samedi: 'classes.saturday'
+}
 
 const emptyForm = {
   nom: '',
@@ -21,6 +30,7 @@ const emptyForm = {
 }
 
 export default function TeacherClassesPage() {
+  const { t } = useTranslation()
   const [classes, setClasses] = useState<any[]>([])
   const [comptesVisio, setComptesVisio] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -123,7 +133,7 @@ export default function TeacherClassesPage() {
       loadClasses()
     } catch (error: any) {
       console.error('Erreur:', error)
-      alert(`Erreur lors de la création : ${error.message || 'Inconnue'}`)
+      alert(t('classes.createErrorAlert').replace('{message}', error.message || 'Inconnue'))
     } finally {
       setSaving(false)
     }
@@ -140,27 +150,27 @@ export default function TeacherClassesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gestion des classes</h1>
+        <h1 className="text-2xl font-bold">{t('classes.title')}</h1>
       </div>
 
       {/* Formulaire de création */}
       <div className="bg-white rounded shadow p-6">
-        <h2 className="text-lg font-bold mb-4">Nouvelle classe</h2>
+        <h2 className="text-lg font-bold mb-4">{t('classes.newClassTitle')}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Nom</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.nameLabel')}</label>
               <input
                 type="text"
                 value={form.nom}
                 onChange={(e) => updateForm('nom', e.target.value)}
-                placeholder="Ex: M-LUNDI-18H-A1"
+                placeholder={t('classes.namePlaceholder')}
                 className="w-full p-2 border rounded"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Niveau</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.levelLabel')}</label>
               <select
                 value={form.niveau}
                 onChange={(e) => updateForm('niveau', e.target.value)}
@@ -172,17 +182,17 @@ export default function TeacherClassesPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Tranche d'âge</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.ageRangeLabel')}</label>
               <input
                 type="text"
                 value={form.tranche_age}
                 onChange={(e) => updateForm('tranche_age', e.target.value)}
-                placeholder="Ex: Enfants, Adultes"
+                placeholder={t('classes.ageRangePlaceholder')}
                 className="w-full p-2 border rounded"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Capacité max</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.maxCapacityLabel')}</label>
               <input
                 type="number"
                 value={form.capacite_max}
@@ -192,30 +202,30 @@ export default function TeacherClassesPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Jour</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.dayLabel')}</label>
               <select
                 value={form.jour}
                 onChange={(e) => updateForm('jour', e.target.value)}
                 className="w-full p-2 border rounded"
               >
                 {JOURS.map(j => (
-                  <option key={j} value={j}>{j}</option>
+                  <option key={j} value={j}>{t(JOUR_KEYS[j])}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Heure</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.timeLabel')}</label>
               <input
                 type="text"
                 value={form.heure}
                 onChange={(e) => updateForm('heure', e.target.value)}
-                placeholder="Ex: 18:00"
+                placeholder={t('classes.timePlaceholder')}
                 className="w-full p-2 border rounded"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Durée (minutes)</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.durationLabel')}</label>
               <input
                 type="number"
                 value={form.duree_minutes}
@@ -225,34 +235,34 @@ export default function TeacherClassesPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Compte visio</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.videoAccountLabel')}</label>
               <select
                 value={form.compte_visio_id}
                 onChange={(e) => updateForm('compte_visio_id', e.target.value)}
                 className="w-full p-2 border rounded"
               >
-                <option value="">— Aucun —</option>
+                <option value="">{t('classes.noneOption')}</option>
                 {comptesVisio.map(c => (
                   <option key={c.id} value={c.id}>{c.nom}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Lien visio</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.videoLinkLabel')}</label>
               <input
                 type="text"
                 value={form.lien_visio}
                 onChange={(e) => updateForm('lien_visio', e.target.value)}
-                placeholder="https://..."
+                placeholder={t('classes.videoLinkPlaceholder')}
                 className="w-full p-2 border rounded"
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium mb-1">Enseignants</label>
+              <label className="block text-sm font-medium mb-1">{t('classes.teachersLabel')}</label>
               <textarea
                 value={form.enseignants}
                 onChange={(e) => updateForm('enseignants', e.target.value)}
-                placeholder="Un nom par ligne, ou séparés par des virgules"
+                placeholder={t('classes.teachersPlaceholder')}
                 rows={2}
                 className="w-full p-2 border rounded"
               />
@@ -261,8 +271,9 @@ export default function TeacherClassesPage() {
 
           {conflit && (
             <div className="p-4 bg-orange-50 border border-orange-300 text-orange-800 rounded">
-              ⚠️ Ce compte est déjà utilisé à ce créneau par la classe <strong>{conflit.nom}</strong>.
-              La création reste possible, mais vérifiez qu'il n'y a pas de conflit réel.
+              {t('classes.conflictWarning').split('{nom}')[0]}
+              <strong>{conflit.nom}</strong>
+              {t('classes.conflictWarning').split('{nom}')[1]}
             </div>
           )}
 
@@ -272,7 +283,7 @@ export default function TeacherClassesPage() {
               disabled={saving}
               className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
             >
-              {saving ? 'Création...' : 'Créer la classe'}
+              {saving ? t('classes.creatingButton') : t('classes.createButton')}
             </button>
           </div>
         </form>
@@ -283,14 +294,14 @@ export default function TeacherClassesPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Niveau</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tranche d'âge</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jour</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Heure</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Capacité</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Compte visio</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Enseignants</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableName')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableLevel')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableAgeRange')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableDay')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableTime')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableCapacity')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableVideoAccount')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableTeachers')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -303,7 +314,9 @@ export default function TeacherClassesPage() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.tranche_age || '—'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.jour || '—'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {classe.jour ? (JOUR_KEYS[classe.jour] ? t(JOUR_KEYS[classe.jour]) : classe.jour) : '—'}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.heure || '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.capacite_max ?? '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.comptes_visio?.nom || '—'}</td>
@@ -315,7 +328,7 @@ export default function TeacherClassesPage() {
             {classes.length === 0 && (
               <tr>
                 <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
-                  Aucune classe créée pour le moment.
+                  {t('classes.noClassesYet')}
                 </td>
               </tr>
             )}
