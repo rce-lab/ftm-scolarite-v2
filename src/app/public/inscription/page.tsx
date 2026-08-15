@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { getConfig } from '@/lib/config'
 import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { PublicLanguageProvider, usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 import logo from '../logo FTM officiel 2024.jpeg'
 
 // Composants
@@ -20,8 +21,9 @@ import ContactStep from './components/ContactStep'
 import { useInscriptionForm } from './hooks/useInscriptionForm'
 import { sendInscriptionNotificationAction } from '@/app/actions/emailActions'
 
-export default function InscriptionPage() {
+function InscriptionPageContent() {
   const router = useRouter()
+  const { language, setLanguage } = usePublicTranslation()
   const [config, setConfig] = useState<any>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -179,6 +181,14 @@ export default function InscriptionPage() {
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow">
         {/* En-tête avec logo et branding FTM */}
         <div className="mb-6 text-center border-b-4 border-[#b03c2d] pb-6">
+          <div className="text-right">
+            <button
+              onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+              className="text-sm text-[#689e4e] hover:text-[#527d3e] underline"
+            >
+              {language === 'fr' ? 'English version' : 'Version française'}
+            </button>
+          </div>
           <div className="flex justify-center mb-4">
             <Image src={logo} alt="Logo FTM" className="h-24 w-auto" priority />
           </div>
@@ -258,5 +268,13 @@ export default function InscriptionPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function InscriptionPage() {
+  return (
+    <PublicLanguageProvider>
+      <InscriptionPageContent />
+    </PublicLanguageProvider>
   )
 }

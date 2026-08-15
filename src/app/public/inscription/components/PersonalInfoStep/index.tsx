@@ -4,63 +4,64 @@
 import { StepProps, FormData } from '../../types'
 import { useState } from 'react'
 import { PAYS } from '../../data/pays'
+import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 
-export default function PersonalInfoStep({ 
-  formData, 
-  updateFormData, 
-  onNext, 
-  onBack 
+export default function PersonalInfoStep({
+  formData,
+  updateFormData,
+  onNext,
+  onBack
 }: StepProps) {
+  const { t } = usePublicTranslation()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Validation des noms
   const validateName = (name: string, field: 'nom' | 'prenom'): string => {
     if (!name.trim()) {
-      return field === 'prenom' ? 'Le prénom est requis' : 'Le nom est requis'
+      return field === 'prenom' ? t('personalInfo.firstNameRequiredError') : t('personalInfo.nameRequiredError')
     }
     const nameRegex = /^[a-zA-ZÀ-ÿ\-\'\s]{2,50}$/
     if (!nameRegex.test(name.trim())) {
-      return field === 'prenom' 
-        ? 'Prénom invalide. Utilisez seulement des lettres, accents, apostrophes et traits d\'union'
-        : 'Nom invalide. Utilisez seulement des lettres, accents, apostrophes et traits d\'union'
+      return field === 'prenom'
+        ? t('personalInfo.firstNameInvalidError')
+        : t('personalInfo.nameInvalidError')
     }
     return ''
   }
 
   // Validation email
   const validateEmail = (email: string): string => {
-    if (!email.trim()) return 'L\'email est requis'
+    if (!email.trim()) return t('personalInfo.emailRequiredError')
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(email)) {
-      return 'Format email invalide (ex: nom@domaine.com)'
+      return t('personalInfo.emailInvalidError')
     }
     return ''
   }
 
   // Validation téléphone (numéro local, sans indicatif)
   const validatePhone = (phone: string): string => {
-    if (!phone.trim()) return 'Le téléphone est requis'
+    if (!phone.trim()) return t('personalInfo.phoneRequiredError')
     const digitsOnly = phone.replace(/\D/g, '')
     if (digitsOnly.length < 6) {
-      return 'Numéro trop court (minimum 6 chiffres)'
+      return t('personalInfo.phoneTooShortError')
     }
     return ''
   }
 
   // Validation âge
   const validateAge = (age: string): string => {
-    if (!age.trim()) return 'L\'âge est requis (6-80 ans)'
+    if (!age.trim()) return t('personalInfo.ageRequiredError')
     const ageNum = parseInt(age)
     if (isNaN(ageNum) || ageNum < 6 || ageNum > 80) {
-      return 'Âge invalide (doit être entre 6 et 80 ans)'
+      return t('personalInfo.ageInvalidError')
     }
     return ''
   }
 
-  // Validation champ requis
-  const validateRequired = (value: string, fieldName: string): string => {
-    if (!value.trim()) return `${fieldName} est requis`
-    return ''
+  // Validation champ requis (le message traduit est déjà résolu par l'appelant)
+  const validateRequiredField = (value: string, message: string): string => {
+    return value.trim() ? '' : message
   }
 
   // Formatage téléphone (numéro local uniquement, sans indicatif)
@@ -92,7 +93,7 @@ export default function PersonalInfoStep({
 
   const handleEmailChange = (value: string) => {
     updateFormData('email_contact', value)
-    
+
     const error = validateEmail(value)
     setErrors(prev => ({
       ...prev,
@@ -103,7 +104,7 @@ export default function PersonalInfoStep({
   const handlePhoneChange = (value: string) => {
     const formatted = formatPhoneNumber(value)
     updateFormData('telephone', formatted)
-    
+
     const error = validatePhone(formatted)
     setErrors(prev => ({
       ...prev,
@@ -113,7 +114,7 @@ export default function PersonalInfoStep({
 
   const handleAgeChange = (value: string) => {
     updateFormData('age', value)
-    
+
     const error = validateAge(value)
     setErrors(prev => ({
       ...prev,
@@ -133,7 +134,8 @@ export default function PersonalInfoStep({
     }
 
     if (field === 'pays_residence' || field === 'ville_residence') {
-      const error = validateRequired(processed, field === 'pays_residence' ? 'Pays de résidence' : 'Ville de résidence')
+      const message = field === 'pays_residence' ? t('personalInfo.countryRequiredError') : t('personalInfo.cityRequiredError')
+      const error = validateRequiredField(processed, message)
       setErrors(prev => ({
         ...prev,
         [field]: error
@@ -151,14 +153,14 @@ export default function PersonalInfoStep({
       nom: validateName(formData.nom, 'nom'),
       prenom: validateName(formData.prenom, 'prenom'),
       age: validateAge(formData.age),
-      pays_residence: validateRequired(formData.pays_residence, 'Pays de résidence'),
-      ville_residence: validateRequired(formData.ville_residence, 'Ville de résidence'),
+      pays_residence: validateRequiredField(formData.pays_residence, t('personalInfo.countryRequiredError')),
+      ville_residence: validateRequiredField(formData.ville_residence, t('personalInfo.cityRequiredError')),
       email_contact: validateEmail(formData.email_contact),
       telephone: validatePhone(formData.telephone)
     }
-    
+
     setErrors(newErrors)
-    
+
     return !Object.values(newErrors).some(error => error !== '')
   }
 
@@ -194,15 +196,15 @@ export default function PersonalInfoStep({
 
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold">Informations personnelles</h2>
-      <p className="text-gray-600 text-sm">Veuillez remplir tous les champs obligatoires (*)</p>
-      
+      <h2 className="text-xl font-bold">{t('personalInfo.title')}</h2>
+      <p className="text-gray-600 text-sm">{t('personalInfo.subtitle')}</p>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Colonne gauche */}
         <div className="space-y-3">
           <div>
             <label className="block mb-1 text-sm">
-              Nom *
+              {t('personalInfo.nameLabel')}
             </label>
             <input
               name="nom"
@@ -213,14 +215,14 @@ export default function PersonalInfoStep({
               value={formData.nom}
               onChange={(e) => handleNameChange('nom', e.target.value)}
               required
-              placeholder="Dupont"
+              placeholder={t('personalInfo.namePlaceholder')}
             />
             {errors.nom && <p className="text-xs text-red-500 mt-1">{errors.nom}</p>}
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Prénom *
+              {t('personalInfo.firstNameLabel')}
             </label>
             <input
               name="prenom"
@@ -231,14 +233,14 @@ export default function PersonalInfoStep({
               value={formData.prenom}
               onChange={(e) => handleNameChange('prenom', e.target.value)}
               required
-              placeholder="Jean"
+              placeholder={t('personalInfo.firstNamePlaceholder')}
             />
             {errors.prenom && <p className="text-xs text-red-500 mt-1">{errors.prenom}</p>}
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Âge *
+              {t('personalInfo.ageLabel')}
             </label>
             <input
               name="age"
@@ -251,14 +253,14 @@ export default function PersonalInfoStep({
               min="6"
               max="80"
               required
-              placeholder="Entre 6 et 80 ans"
+              placeholder={t('personalInfo.agePlaceholder')}
             />
             {errors.age && <p className="text-xs text-red-500 mt-1">{errors.age}</p>}
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Pays de résidence *
+              {t('personalInfo.countryLabel')}
             </label>
             <select
               name="pays_residence"
@@ -269,17 +271,17 @@ export default function PersonalInfoStep({
               onChange={(e) => handleGeneralChange('pays_residence', e.target.value)}
               required
             >
-              <option value="">— Sélectionnez un pays —</option>
+              <option value="">{t('personalInfo.countrySelectPlaceholder')}</option>
               {PAYS.map((pays) => (
                 <option key={pays.nom} value={pays.nom}>{pays.nom}</option>
               ))}
             </select>
             {errors.pays_residence && <p className="text-xs text-red-500 mt-1">{errors.pays_residence}</p>}
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Ville de résidence *
+              {t('personalInfo.cityLabel')}
             </label>
             <input
               name="ville_residence"
@@ -290,31 +292,31 @@ export default function PersonalInfoStep({
               value={formData.ville_residence}
               onChange={(e) => handleGeneralChange('ville_residence', e.target.value)}
               required
-              placeholder="Paris"
+              placeholder={t('personalInfo.cityPlaceholder')}
             />
             {errors.ville_residence && <p className="text-xs text-red-500 mt-1">{errors.ville_residence}</p>}
           </div>
         </div>
-        
+
         {/* Colonne droite */}
         <div className="space-y-3">
           <div>
             <label className="block mb-1 text-sm">
-              Responsable légal
+              {t('personalInfo.legalGuardianLabel')}
             </label>
             <input
               type="text"
               className="w-full p-2 border border-gray-300 rounded text-sm"
               value={formData.responsable_legal}
               onChange={(e) => updateFormData('responsable_legal', e.target.value)}
-              placeholder="Pour les mineurs uniquement"
+              placeholder={t('personalInfo.legalGuardianPlaceholder')}
             />
-            <p className="text-xs text-gray-500 mt-1">À remplir uniquement pour les mineurs</p>
+            <p className="text-xs text-gray-500 mt-1">{t('personalInfo.legalGuardianHint')}</p>
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Email *
+              {t('personalInfo.emailLabel')}
             </label>
             <input
               name="email_contact"
@@ -325,27 +327,27 @@ export default function PersonalInfoStep({
               value={formData.email_contact}
               onChange={(e) => handleEmailChange(e.target.value)}
               required
-              placeholder="jean.dupont@exemple.com"
+              placeholder={t('personalInfo.emailPlaceholder')}
             />
             {errors.email_contact && <p className="text-xs text-red-500 mt-1">{errors.email_contact}</p>}
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Adresse postale
+              {t('personalInfo.addressLabel')}
             </label>
             <textarea
               className="w-full p-2 border border-gray-300 rounded text-sm"
               value={formData.adresse_postale}
               onChange={(e) => handleGeneralChange('adresse_postale', e.target.value)}
               rows={2}
-              placeholder="123 Rue de l'Exemple, 75000 Paris"
+              placeholder={t('personalInfo.addressPlaceholder')}
             />
           </div>
-          
+
           <div>
             <label className="block mb-1 text-sm">
-              Téléphone *
+              {t('personalInfo.phoneLabel')}
             </label>
             <div className="flex gap-2">
               <input
@@ -354,7 +356,7 @@ export default function PersonalInfoStep({
                 value={formData.indicatif_pays}
                 onChange={(e) => handleIndicatifChange(e.target.value)}
                 className="w-20 p-2 border border-gray-300 rounded text-sm"
-                placeholder="+33"
+                placeholder={t('personalInfo.countryCodePlaceholder')}
               />
               <input
                 name="telephone"
@@ -365,35 +367,35 @@ export default function PersonalInfoStep({
                 value={formData.telephone}
                 onChange={(e) => handlePhoneChange(e.target.value)}
                 required
-                placeholder="1 23 45 67 89"
+                placeholder={t('personalInfo.phonePlaceholder')}
               />
             </div>
             {errors.telephone && <p className="text-xs text-red-500 mt-1">{errors.telephone}</p>}
             <p className="text-xs text-gray-500 mt-1">
-              Indicatif pré-rempli selon le pays de résidence, modifiable si besoin
+              {t('personalInfo.countryCodeHint')}
             </p>
           </div>
         </div>
       </div>
 
       <div className="flex justify-between pt-4">
-        <button 
+        <button
           onClick={onBack}
           className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
         >
-          ← Retour à l'accueil
+          {t('personalInfo.backButton')}
         </button>
-        
-        <button 
+
+        <button
           onClick={handleSubmit}
           disabled={!isFormValid()}
           className={`px-4 py-2 rounded text-sm ${
-            isFormValid() 
-              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+            isFormValid()
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
-          Suivant → Disponibilités
+          {t('personalInfo.nextButton')}
         </button>
       </div>
     </div>
