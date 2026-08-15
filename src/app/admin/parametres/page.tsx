@@ -3,17 +3,18 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
 
 const CHAMPS_CONFIG = [
-  { key: 'montant_inscription', label: "Frais d'inscription (€)", type: 'number' },
-  { key: 'email_communication', label: 'Email de contact/communication', type: 'email' },
-  { key: 'annee_scolaire_courante', label: 'Année scolaire courante', type: 'text', placeholder: 'AAAA-AAAA' },
-  { key: 'prefixe_code_etudiant', label: 'Préfixe des codes étudiants', type: 'text' },
-  { key: 'rib_banque', label: 'RIB bancaire', type: 'textarea' },
-  { key: 'beneficiaire', label: 'Bénéficiaire (nom sur le compte)', type: 'text' },
-  { key: 'email_responsable_scolarite', label: 'Email Responsable Scolarité', type: 'email' },
-  { key: 'email_responsable_administratif', label: 'Email Responsable Administratif', type: 'email' },
-  { key: 'adresse_association', label: "Adresse de l'association", type: 'text' }
+  { key: 'montant_inscription', labelKey: 'settings.registrationFeeLabel', type: 'number' },
+  { key: 'email_communication', labelKey: 'settings.contactEmailLabel', type: 'email' },
+  { key: 'annee_scolaire_courante', labelKey: 'settings.currentSchoolYearLabel', type: 'text', placeholderKey: 'settings.schoolYearPlaceholder' },
+  { key: 'prefixe_code_etudiant', labelKey: 'settings.studentCodePrefixLabel', type: 'text' },
+  { key: 'rib_banque', labelKey: 'settings.bankRibLabel', type: 'textarea' },
+  { key: 'beneficiaire', labelKey: 'settings.beneficiaryLabel', type: 'text' },
+  { key: 'email_responsable_scolarite', labelKey: 'settings.schoolManagerEmailLabel', type: 'email' },
+  { key: 'email_responsable_administratif', labelKey: 'settings.adminManagerEmailLabel', type: 'email' },
+  { key: 'adresse_association', labelKey: 'settings.associationAddressLabel', type: 'text' }
 ] as const
 
 type FormState = Record<typeof CHAMPS_CONFIG[number]['key'], string>
@@ -31,6 +32,7 @@ const emptyForm: FormState = {
 }
 
 export default function ParametresPage() {
+  const { t } = useTranslation()
   const [form, setForm] = useState<FormState>(emptyForm)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -84,10 +86,10 @@ export default function ParametresPage() {
 
       if (error) throw error
 
-      setSuccessMessage('Paramètres enregistrés avec succès.')
+      setSuccessMessage(t('settings.saveSuccessMessage'))
     } catch (error: any) {
       console.error('Erreur:', error)
-      setErrorMessage(error.message || 'Une erreur est survenue lors de la sauvegarde.')
+      setErrorMessage(error.message || t('settings.saveErrorMessage'))
     } finally {
       setSaving(false)
     }
@@ -103,12 +105,12 @@ export default function ParametresPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
+      <h1 className="text-2xl font-bold text-gray-900">{t('settings.title')}</h1>
 
       <form onSubmit={handleSave} className="bg-white rounded-lg shadow border border-gray-200 p-6 space-y-4">
         {CHAMPS_CONFIG.map((champ) => (
           <div key={champ.key}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{champ.label}</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t(champ.labelKey)}</label>
             {champ.type === 'textarea' ? (
               <textarea
                 value={form[champ.key]}
@@ -121,7 +123,7 @@ export default function ParametresPage() {
                 type={champ.type}
                 value={form[champ.key]}
                 onChange={(e) => updateField(champ.key, e.target.value)}
-                placeholder={'placeholder' in champ ? champ.placeholder : undefined}
+                placeholder={'placeholderKey' in champ ? t(champ.placeholderKey) : undefined}
                 className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
               />
             )}
@@ -146,7 +148,7 @@ export default function ParametresPage() {
             disabled={saving}
             className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
           >
-            {saving ? 'Enregistrement...' : 'Enregistrer'}
+            {saving ? t('settings.savingButton') : t('settings.saveButton')}
           </button>
         </div>
       </form>

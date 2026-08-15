@@ -5,14 +5,16 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { getConfig } from '@/lib/config'
 import { sendPaymentConfirmationAction } from '@/app/actions/emailActions'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
 
 const MODES_PAIEMENT = [
-  { value: 'virement', label: 'Virement' },
-  { value: 'especes', label: 'Espèces' },
-  { value: 'autre', label: 'Autre' }
-]
+  { value: 'virement', labelKey: 'payments.modeTransfer' },
+  { value: 'especes', labelKey: 'payments.modeCash' },
+  { value: 'autre', labelKey: 'payments.modeOther' }
+] as const
 
 export default function PaymentsPage() {
+  const { t } = useTranslation()
   const [tab, setTab] = useState<'attente' | 'historique'>('attente')
   const [enAttente, setEnAttente] = useState<any[]>([])
   const [historique, setHistorique] = useState<any[]>([])
@@ -99,7 +101,7 @@ export default function PaymentsPage() {
       await Promise.all([loadEnAttente(), loadHistorique()])
     } catch (error: any) {
       console.error('Erreur:', error)
-      alert(`Erreur lors de l'enregistrement du paiement : ${error.message || 'Inconnue'}`)
+      alert(t('payments.saveErrorAlert').replace('{message}', error.message || 'Inconnue'))
     } finally {
       setTraitement(false)
     }
@@ -115,7 +117,7 @@ export default function PaymentsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Suivi des paiements</h1>
+      <h1 className="text-2xl font-bold text-gray-900">{t('payments.title')}</h1>
 
       {/* Onglets */}
       <div className="flex space-x-2">
@@ -123,13 +125,13 @@ export default function PaymentsPage() {
           onClick={() => setTab('attente')}
           className={`px-4 py-2 rounded ${tab === 'attente' ? 'bg-[#689e4e] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
-          En attente ({enAttente.length})
+          {t('payments.pendingTab').replace('{n}', String(enAttente.length))}
         </button>
         <button
           onClick={() => setTab('historique')}
           className={`px-4 py-2 rounded ${tab === 'historique' ? 'bg-[#689e4e] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
         >
-          Historique des paiements
+          {t('payments.historyTab')}
         </button>
       </div>
 
@@ -138,12 +140,12 @@ export default function PaymentsPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Classe</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Montant attendu</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableName')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableCode')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableClass')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableEmail')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableExpectedAmount')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableAction')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -161,7 +163,7 @@ export default function PaymentsPage() {
                       onClick={() => ouvrirConfirmation(inscription)}
                       className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
                     >
-                      Marquer payé
+                      {t('payments.markPaidButton')}
                     </button>
                   </td>
                 </tr>
@@ -169,7 +171,7 @@ export default function PaymentsPage() {
               {enAttente.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                    Aucun paiement en attente.
+                    {t('payments.noPendingPayments')}
                   </td>
                 </tr>
               )}
@@ -183,11 +185,11 @@ export default function PaymentsPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Candidat</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Montant</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mode</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableCandidate')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableCode')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableAmount')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableDate')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableMode')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -211,7 +213,7 @@ export default function PaymentsPage() {
               {historique.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                    Aucun paiement enregistré pour le moment.
+                    {t('payments.noPaymentsRecorded')}
                   </td>
                 </tr>
               )}
@@ -224,14 +226,14 @@ export default function PaymentsPage() {
       {inscriptionSelectionnee && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow p-6 w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4">Confirmer le paiement</h2>
+            <h2 className="text-lg font-bold mb-4">{t('payments.confirmModalTitle')}</h2>
             <p className="text-sm text-gray-600 mb-4">
               {inscriptionSelectionnee.prenom} {inscriptionSelectionnee.nom} — {inscriptionSelectionnee.student_code}
             </p>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Montant (€)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('payments.amountLabel')}</label>
                 <input
                   type="number"
                   value={montant}
@@ -240,14 +242,14 @@ export default function PaymentsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mode de paiement</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('payments.paymentModeLabel')}</label>
                 <select
                   value={mode}
                   onChange={(e) => setMode(e.target.value)}
                   className="w-full p-2 border rounded"
                 >
                   {MODES_PAIEMENT.map((m) => (
-                    <option key={m.value} value={m.value}>{m.label}</option>
+                    <option key={m.value} value={m.value}>{t(m.labelKey)}</option>
                   ))}
                 </select>
               </div>
@@ -259,14 +261,14 @@ export default function PaymentsPage() {
                 disabled={traitement}
                 className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50"
               >
-                Annuler
+                {t('payments.cancelButton')}
               </button>
               <button
                 onClick={confirmerPaiement}
                 disabled={traitement || !montant}
                 className="px-4 py-2 bg-green-600 text-white rounded text-sm hover:bg-green-700 disabled:opacity-50"
               >
-                {traitement ? 'Enregistrement...' : 'Confirmer le paiement'}
+                {traitement ? t('payments.savingButton') : t('payments.confirmButton')}
               </button>
             </div>
           </div>

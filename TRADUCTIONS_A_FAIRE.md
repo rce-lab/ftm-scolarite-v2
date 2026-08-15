@@ -110,6 +110,7 @@ Parcouru :
 | Statut | Sata | En-tête de tableau, voir note technique dans la section Tableau de bord |
 | Actions | Hetsika | En-tête de tableau |
 | Voir → | Jereo → | |
+| Code étudiant : | Laharan'ny mpianatra | |
 
 ---
 

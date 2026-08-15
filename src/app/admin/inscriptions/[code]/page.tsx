@@ -4,12 +4,14 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { getStatutLabel } from '@/lib/statuts'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { useParams, useRouter } from 'next/navigation'
 import { calculerStatistiquesDetaillees } from '@/app/public/inscription/data/niveauCalcul'
 import { sendDecisionEmailAction } from '@/app/actions/emailActions'
 import Link from 'next/link'
 
 export default function InscriptionDetailPage() {
+  const { t } = useTranslation()
   const params = useParams()
   const router = useRouter()
   const [inscription, setInscription] = useState<any>(null)
@@ -120,23 +122,23 @@ export default function InscriptionDetailPage() {
         }
       }
 
-      alert('Modifications enregistrées avec succès')
+      alert(t('inscriptionsDetail.saveSuccessAlert'))
       loadInscription()
     } else {
-      alert('Erreur lors de l\'enregistrement')
+      alert(t('inscriptionsDetail.saveErrorAlert'))
     }
   }
 
   const handleStatusChange = async (newStatus: string) => {
-    if (!confirm(`Voulez-vous vraiment changer le statut en "${newStatus}" ?`)) return
-    
+    if (!confirm(t('inscriptionsDetail.statusChangeConfirm').replace('{status}', newStatus))) return
+
     const result = await updateInscription({ status: newStatus })
-    
+
     if (result.success) {
-      alert('Statut mis à jour avec succès')
+      alert(t('inscriptionsDetail.statusUpdateSuccessAlert'))
       loadInscription()
     } else {
-      alert('Erreur lors de la mise à jour')
+      alert(t('inscriptionsDetail.statusUpdateErrorAlert'))
     }
   }
 
@@ -152,13 +154,13 @@ export default function InscriptionDetailPage() {
     return (
       <div className="text-center py-12">
         <div className="text-gray-400 text-4xl mb-4">❌</div>
-        <h3 className="text-lg font-medium text-gray-900 mb-1">Inscription non trouvée</h3>
-        <p className="text-gray-500 mb-6">Le code étudiant {params.code} n'existe pas.</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-1">{t('inscriptionsDetail.notFoundTitle')}</h3>
+        <p className="text-gray-500 mb-6">{t('inscriptionsDetail.notFoundMessage').replace('{code}', String(params.code))}</p>
         <Link
           href="/admin/inscriptions"
           className="text-[#689e4e] hover:text-[#527d3e] font-medium"
         >
-          ← Retour à la liste
+          {t('inscriptionsDetail.backToListLink')}
         </Link>
       </div>
     )
@@ -194,7 +196,7 @@ export default function InscriptionDetailPage() {
             {getStatutLabel(inscription.status, { emoji: true })}
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Inscrit le {new Date(inscription.created_at).toLocaleDateString('fr-FR')}
+            {t('inscriptionsDetail.registeredOn').replace('{date}', new Date(inscription.created_at).toLocaleDateString('fr-FR'))}
           </p>
         </div>
       </div>
@@ -204,28 +206,28 @@ export default function InscriptionDetailPage() {
         <div className="lg:col-span-2 space-y-6">
           {/* Informations personnelles */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Informations personnelles</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.personalInfoTitle')}</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldName')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.nom}</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldFirstName')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.prenom}</div>
               </div>
               {inscription.age && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Âge</label>
-                  <div className="p-2 bg-gray-50 rounded border">{inscription.age} ans</div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldAge')}</label>
+                  <div className="p-2 bg-gray-50 rounded border">{t('inscriptionsDetail.ageYears').replace('{age}', String(inscription.age))}</div>
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldEmail')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.email_contact}</div>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldPhone')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.telephone}</div>
               </div>
             </div>
@@ -233,19 +235,19 @@ export default function InscriptionDetailPage() {
 
           {/* Évaluation et décision */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Évaluation et décision</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.evaluationTitle')}</h2>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Niveau suggéré (auto)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.suggestedLevelLabel')}</label>
                 <div className="p-3 bg-[#689e4e]/10 rounded border border-[#689e4e]/30">
                   <div className="text-2xl font-bold text-[#689e4e]">{inscription.niveau_suggere}</div>
-                  <div className="text-sm text-[#527d3e]">Calculé automatiquement</div>
+                  <div className="text-sm text-[#527d3e]">{t('inscriptionsDetail.autoCalculated')}</div>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Niveau définitif</label>
-                <select 
-                  value={niveauFinal} 
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.finalLevelLabel')}</label>
+                <select
+                  value={niveauFinal}
                   onChange={(e) => setNiveauFinal(e.target.value)}
                   className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
                 >
@@ -255,13 +257,13 @@ export default function InscriptionDetailPage() {
                 </select>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Classe attribuée</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.assignedClassLabel')}</label>
                 <select
                   value={classeId}
                   onChange={(e) => handleClasseChange(e.target.value)}
                   className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
                 >
-                  <option value="">— Aucune classe —</option>
+                  <option value="">{t('inscriptionsDetail.noClassOption')}</option>
                   {classesList.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.nom} — {c.niveau} — {c.jour} {c.heure}
@@ -275,13 +277,13 @@ export default function InscriptionDetailPage() {
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Notes administratives</label>
-              <textarea 
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('inscriptionsDetail.adminNotesLabel')}</label>
+              <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
-                placeholder="Notes internes pour cette inscription..."
+                placeholder={t('inscriptionsDetail.adminNotesPlaceholder')}
               />
             </div>
 
@@ -290,7 +292,7 @@ export default function InscriptionDetailPage() {
                 onClick={handleSave}
                 className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium"
               >
-                Enregistrer les modifications
+                {t('inscriptionsDetail.saveButton')}
               </button>
             </div>
           </div>
@@ -298,17 +300,17 @@ export default function InscriptionDetailPage() {
           {/* Statistiques détaillées */}
           {stats && (
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Statistiques détaillées</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.detailedStatsTitle')}</h2>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="px-4 py-3 text-left font-medium">Niveau</th>
-                      <th className="px-4 py-3 text-left font-medium">Score</th>
-                      <th className="px-4 py-3 text-left font-medium">Questions</th>
-                      <th className="px-4 py-3 text-left font-medium">% Score</th>
-                      <th className="px-4 py-3 text-left font-medium">Seuil</th>
-                      <th className="px-4 py-3 text-left font-medium">Statut</th>
+                      <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableLevel')}</th>
+                      <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableScore')}</th>
+                      <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableQuestions')}</th>
+                      <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableScorePercent')}</th>
+                      <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableThreshold')}</th>
+                      <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableStatus')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -333,9 +335,9 @@ export default function InscriptionDetailPage() {
                         <td className="px-4 py-3">{data.seuil}</td>
                         <td className="px-4 py-3">
                           {data.seuilAtteint ? (
-                            <span className="px-2 py-1 text-xs rounded bg-green-100 text-green-800">Atteint</span>
+                            <span className="px-2 py-1 text-xs rounded bg-green-100 text-green-800">{t('inscriptionsDetail.thresholdReached')}</span>
                           ) : (
-                            <span className="px-2 py-1 text-xs rounded bg-red-100 text-red-800">Non atteint</span>
+                            <span className="px-2 py-1 text-xs rounded bg-red-100 text-red-800">{t('inscriptionsDetail.thresholdNotReached')}</span>
                           )}
                         </td>
                       </tr>
@@ -351,7 +353,7 @@ export default function InscriptionDetailPage() {
         <div className="space-y-6">
           {/* Actions */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Actions</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.actionsTitle')}</h2>
             <div className="space-y-3">
               {inscription.status === 'pending_review' && (
                 <>
@@ -359,19 +361,19 @@ export default function InscriptionDetailPage() {
                     onClick={() => handleStatusChange('approved')}
                     className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-left"
                   >
-                    ✅ Valider l'inscription
+                    {t('inscriptionsDetail.actionApprove')}
                   </button>
                   <button
                     onClick={() => handleStatusChange('payment_pending')}
                     className="w-full p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium text-left"
                   >
-                    💰 Marquer comme "Paiement en attente"
+                    {t('inscriptionsDetail.actionMarkPaymentPending')}
                   </button>
                   <button
                     onClick={() => handleStatusChange('rejected')}
                     className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium text-left"
                   >
-                    ❌ Rejeter l'inscription
+                    {t('inscriptionsDetail.actionReject')}
                   </button>
                 </>
               )}
@@ -380,7 +382,7 @@ export default function InscriptionDetailPage() {
                   onClick={() => handleStatusChange('payment_pending')}
                   className="w-full p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium text-left"
                 >
-                  💰 Paiement en attente
+                  {t('inscriptionsDetail.actionPaymentPending')}
                 </button>
               )}
               {inscription.status === 'payment_pending' && (
@@ -388,35 +390,35 @@ export default function InscriptionDetailPage() {
                   onClick={() => handleStatusChange('approved')}
                   className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-left"
                 >
-                  ✅ Paiement confirmé
+                  {t('inscriptionsDetail.actionPaymentConfirmed')}
                 </button>
               )}
               <button
                 onClick={() => window.print()}
                 className="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium text-left"
               >
-                🖨️ Imprimer cette page
+                {t('inscriptionsDetail.actionPrint')}
               </button>
               <button
                 onClick={() => router.push(`/admin/inscriptions/${inscription.student_code}/email`)}
                 className="w-full p-3 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium text-left"
               >
-                  📧 Envoyer un email
+                  {t('inscriptionsDetail.actionSendEmail')}
               </button>
             </div>
           </div>
 
           {/* Historique */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Historique</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.historyTitle')}</h2>
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Création</span>
+                <span className="text-gray-600">{t('inscriptionsDetail.createdLabel')}</span>
                 <span className="font-medium">{new Date(inscription.created_at).toLocaleString('fr-FR')}</span>
               </div>
               {inscription.updated_at !== inscription.created_at && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Dernière modification</span>
+                  <span className="text-gray-600">{t('inscriptionsDetail.lastModifiedLabel')}</span>
                   <span className="font-medium">{new Date(inscription.updated_at).toLocaleString('fr-FR')}</span>
                 </div>
               )}
@@ -426,26 +428,26 @@ export default function InscriptionDetailPage() {
           {/* Réponses */}
           {inscription.reponses_competences && Object.keys(inscription.reponses_competences).length > 0 && (
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Résumé des réponses</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.responsesSummaryTitle')}</h2>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Total questions</span>
+                  <span className="text-gray-600">{t('inscriptionsDetail.totalQuestions')}</span>
                   <span className="font-medium">{Object.keys(inscription.reponses_competences).length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Réponses OUI</span>
+                  <span className="text-gray-600">{t('inscriptionsDetail.responsesYes')}</span>
                   <span className="font-medium text-green-600">
                     {Object.values(inscription.reponses_competences).filter(r => r === 'oui').length}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Réponses UN PEU</span>
+                  <span className="text-gray-600">{t('inscriptionsDetail.responsesSomewhat')}</span>
                   <span className="font-medium text-yellow-600">
                     {Object.values(inscription.reponses_competences).filter(r => r === 'un_peu').length}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Réponses NON</span>
+                  <span className="text-gray-600">{t('inscriptionsDetail.responsesNo')}</span>
                   <span className="font-medium text-red-600">
                     {Object.values(inscription.reponses_competences).filter(r => r === 'non').length}
                   </span>
