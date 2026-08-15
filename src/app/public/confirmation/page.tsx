@@ -26,7 +26,7 @@ function ConfirmationContent() {
         <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
           ✓
         </div>
-        <h1 className="text-3xl font-bold">Inscription confirmée !</h1>
+        <h1 className="text-3xl font-bold">Inscription reçue et enregistrée</h1>
         <p className="text-gray-600 mt-2">Votre inscription a été enregistrée avec succès</p>
       </div>
 
@@ -67,8 +67,16 @@ function ConfirmationContent() {
         </div>
       </div>
 
-      <div className="mt-8 text-center text-sm text-gray-500">
-        Vous pouvez fermer cet onglet.
+      <div className="mt-8 text-center">
+        <button
+          onClick={() => window.close()}
+          className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700"
+        >
+          Quitter
+        </button>
+        <p className="text-sm text-gray-500 mt-2">
+          Vous pouvez fermer cet onglet.
+        </p>
       </div>
     </div>
   )
