@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { getStatutLabel } from '@/lib/statuts'
 import { useParams, useRouter } from 'next/navigation'
 import { calculerStatistiquesDetaillees } from '@/app/public/inscription/data/niveauCalcul'
 import { sendDecisionEmailAction } from '@/app/actions/emailActions'
@@ -190,10 +191,7 @@ export default function InscriptionDetailPage() {
             inscription.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-200' :
             'bg-orange-100 text-orange-800 border-orange-200'
           }`}>
-            {inscription.status === 'pending_review' && '⏳ En attente de validation'}
-            {inscription.status === 'approved' && '✅ Inscription validée'}
-            {inscription.status === 'rejected' && '❌ Inscription rejetée'}
-            {inscription.status === 'payment_pending' && '💰 Paiement en attente'}
+            {getStatutLabel(inscription.status, { emoji: true })}
           </div>
           <p className="text-xs text-gray-500 mt-1">
             Inscrit le {new Date(inscription.created_at).toLocaleDateString('fr-FR')}

@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { getStatutLabel } from '@/lib/statuts'
 import Link from 'next/link'
 
 export default function AdminDashboard() {
@@ -194,7 +195,7 @@ export default function AdminDashboard() {
                       inscription.status === 'payment_pending' ? 'bg-orange-100 text-orange-800' :
                       'bg-red-100 text-red-800'
                     }`}>
-                      {inscription.status}
+                      {getStatutLabel(inscription.status)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">

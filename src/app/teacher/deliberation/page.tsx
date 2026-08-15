@@ -3,6 +3,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { getStatutLabel } from '@/lib/statuts'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 
@@ -153,8 +154,7 @@ function DeliberationContent() {
                         inscription.status === 'approved' ? 'bg-green-100 text-green-800' :
                         'bg-red-100 text-red-800'
                       }`}>
-                        {inscription.status === 'pending_review' ? '⏳ En attente' :
-                         inscription.status === 'approved' ? '✅ Validé' : '❌ Rejeté'}
+                        {getStatutLabel(inscription.status, { emoji: true })}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm">

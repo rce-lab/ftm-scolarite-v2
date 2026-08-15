@@ -16,8 +16,10 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
 
+    const emailReel = email.includes('@') ? email : `${email}@ftm.local`
+
     const { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: emailReel,
       password
     })
 
@@ -39,13 +41,13 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold mb-6 text-center text-[#689e4e]">FTM - Connexion</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm">Email</label>
+            <label className="block mb-2 text-sm">Identifiant</label>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
-              placeholder="admin@ftm.local"
+              placeholder="prenom.nom"
               required
             />
           </div>

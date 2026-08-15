@@ -3,6 +3,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { getStatutLabel } from '@/lib/statuts'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
@@ -114,7 +115,7 @@ function InscriptionsListContent() {
                     inscription.status === 'rejected' ? 'bg-red-100 text-red-800' :
                     'bg-orange-100 text-orange-800'
                   }`}>
-                    {inscription.status}
+                    {getStatutLabel(inscription.status)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
