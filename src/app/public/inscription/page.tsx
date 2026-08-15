@@ -91,7 +91,8 @@ function InscriptionPageContent() {
         adresse_postale: formData.adresse_postale,
         telephone: formData.telephone,
         indicatif_pays: formData.indicatif_pays,
-        
+        photo_url: formData.photo_url || null,
+
         // Disponibilités
         jours_preference: formData.jours_preference,
         horaire_apres_midi: formData.horaire_apres_midi,

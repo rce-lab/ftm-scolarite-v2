@@ -11,6 +11,7 @@ export interface FormData {
   adresse_postale: string
   telephone: string
   indicatif_pays: string
+  photo_url: string
 
   // Disponibilités
   jours_preference: string[]

@@ -29,6 +29,7 @@ export const translations = {
     classes: { fr: 'Classes', mg: 'Kilasy' },
     payments: { fr: 'Paiements', mg: 'Fandoavam-bola' },
     settings: { fr: 'Paramètres', mg: 'Fanova' },
+    reports: { fr: 'Rapports', mg: 'Tatitra' },
     accessDeniedTooltip: { fr: 'Accès non autorisé pour votre rôle', mg: "Tsy manana alalana hiditra eto ianao raha ny anjara asanao" },
     logout: { fr: 'Déconnexion', mg: 'Hiala' },
     logoAlt: { fr: 'Logo FTM', mg: 'Sary famatarana FTM' }
@@ -266,6 +267,50 @@ export const translations = {
     tableTeachers: { fr: 'Enseignants', mg: 'Mpampianatra' },
     noClassesYet: { fr: 'Aucune classe créée pour le moment.', mg: 'Tsy misy kilasy voaforona ankehitriny.' },
     createErrorAlert: { fr: 'Erreur lors de la création : {message}', mg: 'Hadisoana teo am-pamoronana : {message}' }
+  },
+
+  reports: {
+    title: { fr: 'Rapports', mg: 'Tatitra' },
+    inscriptionsTitle: { fr: 'Inscriptions', mg: 'Fisoratana anarana' },
+    classesTitle: { fr: 'Classes', mg: 'Kilasy' },
+    paymentsTitle: { fr: 'Paiements', mg: 'Fandoavam-bola' },
+    downloadCsvButton: { fr: 'Télécharger CSV', mg: 'Alao CSV' },
+    printButton: { fr: 'Imprimer', mg: 'Manonta' },
+    filterStatus: { fr: 'Statut', mg: 'Sata' },
+    filterAllStatuses: { fr: 'Tous les statuts', mg: 'Sata rehetra' },
+    filterLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
+    filterAllLevels: { fr: 'Tous les niveaux', mg: 'Lentam-pahaizana rehetra' },
+    noData: { fr: 'Aucune donnée', mg: 'Tsy misy angona' },
+
+    colStudentCode: { fr: 'Code étudiant', mg: 'Kaody mpianatra' },
+    colName: { fr: 'Nom', mg: 'Anarana' },
+    colFirstName: { fr: 'Prénom', mg: "Fanampin'anarana" },
+    colEmail: { fr: 'Email', mg: 'Mailaka' },
+    colPhone: { fr: 'Téléphone', mg: 'Laharan-tariby' },
+    colCountry: { fr: 'Pays', mg: 'Firenena' },
+    colSuggestedLevel: { fr: 'Niveau suggéré', mg: 'Lentam-pahaizana voatolotra' },
+    colFinalLevel: { fr: 'Niveau définitif', mg: 'Lentam-pahaizana farany' },
+    colStatus: { fr: 'Statut', mg: 'Sata' },
+    colAssignedClass: { fr: 'Classe attribuée', mg: 'Kilasy nomena' },
+    colPaymentStatus: { fr: 'Statut paiement', mg: "Sataon'ny fandoavam-bola" },
+    colRegistrationDate: { fr: "Date d'inscription", mg: 'Daty nisoratana anarana' },
+
+    colLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
+    colAgeRange: { fr: "Tranche d'âge", mg: 'Sokajy taona' },
+    colDay: { fr: 'Jour', mg: 'Andro' },
+    colTime: { fr: 'Heure', mg: 'Ora' },
+    colMaxCapacity: { fr: 'Capacité max', mg: "Fetra isan'olona" },
+    colEnrolledCount: { fr: "Nombre d'inscrits", mg: "Isan'ny mpianatra voasoratra" },
+    colTeachers: { fr: 'Enseignants', mg: 'Mpampianatra' },
+    colVideoAccount: { fr: 'Compte visio', mg: 'Kaonty Zoom iza sa jitsi' },
+
+    colCandidateName: { fr: 'Nom du candidat', mg: "Anaran'ny mpandray anjara" },
+    colAmount: { fr: 'Montant', mg: 'Vola' },
+    colDate: { fr: 'Date', mg: 'Daty' },
+    colMode: { fr: 'Mode', mg: 'Fomba' },
+
+    paymentStatusPending: { fr: 'En attente', mg: 'Miandry' },
+    paymentStatusPaid: { fr: 'Payé', mg: 'Voaloa' }
   },
 
   emailAdminNotification: {

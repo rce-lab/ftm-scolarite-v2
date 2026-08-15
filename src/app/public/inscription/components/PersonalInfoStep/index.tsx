@@ -5,6 +5,16 @@ import { StepProps, FormData } from '../../types'
 import { useState } from 'react'
 import { PAYS } from '../../data/pays'
 import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
+import { supabase } from '@/lib/supabase/client'
+
+const MAX_PHOTO_SIZE = 5 * 1024 * 1024 // 5 Mo
+
+const generateUniqueId = (): string => {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID()
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
 
 export default function PersonalInfoStep({
   formData,
@@ -14,6 +24,12 @@ export default function PersonalInfoStep({
 }: StepProps) {
   const { t } = usePublicTranslation()
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [photoUploading, setPhotoUploading] = useState(false)
+  const [photoError, setPhotoError] = useState('')
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null)
+
+  const ageNum = parseInt(formData.age)
+  const isMinor = !isNaN(ageNum) && ageNum < 18
 
   // Validation des noms
   const validateName = (name: string, field: 'nom' | 'prenom'): string => {
@@ -52,8 +68,8 @@ export default function PersonalInfoStep({
   // Validation âge
   const validateAge = (age: string): string => {
     if (!age.trim()) return t('personalInfo.ageRequiredError')
-    const ageNum = parseInt(age)
-    if (isNaN(ageNum) || ageNum < 6 || ageNum > 80) {
+    const ageNumLocal = parseInt(age)
+    if (isNaN(ageNumLocal) || ageNumLocal < 6 || ageNumLocal > 80) {
       return t('personalInfo.ageInvalidError')
     }
     return ''
@@ -62,6 +78,16 @@ export default function PersonalInfoStep({
   // Validation champ requis (le message traduit est déjà résolu par l'appelant)
   const validateRequiredField = (value: string, message: string): string => {
     return value.trim() ? '' : message
+  }
+
+  // Validation du responsable légal, obligatoire uniquement si le candidat est mineur
+  const validateLegalGuardian = (value: string, age: string): string => {
+    const ageNumLocal = parseInt(age)
+    const minor = !isNaN(ageNumLocal) && ageNumLocal < 18
+    if (minor && !value.trim()) {
+      return t('personalInfo.legalGuardianRequiredError')
+    }
+    return ''
   }
 
   // Formatage téléphone (numéro local uniquement, sans indicatif)
@@ -115,10 +141,19 @@ export default function PersonalInfoStep({
   const handleAgeChange = (value: string) => {
     updateFormData('age', value)
 
-    const error = validateAge(value)
     setErrors(prev => ({
       ...prev,
-      age: error
+      age: validateAge(value),
+      responsable_legal: validateLegalGuardian(formData.responsable_legal, value)
+    }))
+  }
+
+  const handleLegalGuardianChange = (value: string) => {
+    updateFormData('responsable_legal', value)
+
+    setErrors(prev => ({
+      ...prev,
+      responsable_legal: validateLegalGuardian(value, formData.age)
     }))
   }
 
@@ -147,6 +182,58 @@ export default function PersonalInfoStep({
     updateFormData('indicatif_pays', value)
   }
 
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setPhotoError('')
+
+    if (!file.type.startsWith('image/')) {
+      setPhotoError(t('personalInfo.photoInvalidTypeError'))
+      e.target.value = ''
+      return
+    }
+
+    if (file.size > MAX_PHOTO_SIZE) {
+      setPhotoError(t('personalInfo.photoTooLargeError'))
+      e.target.value = ''
+      return
+    }
+
+    if (photoPreviewUrl) {
+      URL.revokeObjectURL(photoPreviewUrl)
+    }
+    setPhotoPreviewUrl(URL.createObjectURL(file))
+
+    setPhotoUploading(true)
+    try {
+      const extension = file.name.includes('.') ? file.name.split('.').pop() : 'jpg'
+      const filePath = `${generateUniqueId()}.${extension}`
+
+      const { data, error } = await supabase.storage
+        .from('photos-candidats')
+        .upload(filePath, file, { upsert: false })
+
+      if (error) throw error
+
+      updateFormData('photo_url', data.path)
+    } catch (error) {
+      console.error('Erreur upload photo:', error)
+      setPhotoError(t('personalInfo.photoUploadError'))
+    } finally {
+      setPhotoUploading(false)
+    }
+  }
+
+  const handleRemovePhoto = () => {
+    if (photoPreviewUrl) {
+      URL.revokeObjectURL(photoPreviewUrl)
+    }
+    setPhotoPreviewUrl(null)
+    setPhotoError('')
+    updateFormData('photo_url', '')
+  }
+
   // Validation complète
   const validateForm = () => {
     const newErrors = {
@@ -156,7 +243,8 @@ export default function PersonalInfoStep({
       pays_residence: validateRequiredField(formData.pays_residence, t('personalInfo.countryRequiredError')),
       ville_residence: validateRequiredField(formData.ville_residence, t('personalInfo.cityRequiredError')),
       email_contact: validateEmail(formData.email_contact),
-      telephone: validatePhone(formData.telephone)
+      telephone: validatePhone(formData.telephone),
+      responsable_legal: validateLegalGuardian(formData.responsable_legal, formData.age)
     }
 
     setErrors(newErrors)
@@ -185,13 +273,15 @@ export default function PersonalInfoStep({
            formData.ville_residence.trim() !== '' &&
            formData.email_contact.trim() !== '' &&
            formData.telephone.trim() !== '' &&
+           (!isMinor || formData.responsable_legal.trim() !== '') &&
            errors.nom === '' &&
            errors.prenom === '' &&
            errors.age === '' &&
            errors.pays_residence === '' &&
            errors.ville_residence === '' &&
            errors.email_contact === '' &&
-           errors.telephone === ''
+           errors.telephone === '' &&
+           !errors.responsable_legal
   }
 
   return (
@@ -302,16 +392,23 @@ export default function PersonalInfoStep({
         <div className="space-y-3">
           <div>
             <label className="block mb-1 text-sm">
-              {t('personalInfo.legalGuardianLabel')}
+              {t('personalInfo.legalGuardianLabel')}{isMinor ? ' *' : ''}
             </label>
             <input
+              name="responsable_legal"
               type="text"
-              className="w-full p-2 border border-gray-300 rounded text-sm"
+              className={`w-full p-2 border rounded text-sm ${
+                errors.responsable_legal ? 'border-red-500' : 'border-gray-300'
+              }`}
               value={formData.responsable_legal}
-              onChange={(e) => updateFormData('responsable_legal', e.target.value)}
+              onChange={(e) => handleLegalGuardianChange(e.target.value)}
               placeholder={t('personalInfo.legalGuardianPlaceholder')}
             />
-            <p className="text-xs text-gray-500 mt-1">{t('personalInfo.legalGuardianHint')}</p>
+            {errors.responsable_legal ? (
+              <p className="text-xs text-red-500 mt-1">{errors.responsable_legal}</p>
+            ) : (
+              <p className="text-xs text-gray-500 mt-1">{t('personalInfo.legalGuardianHint')}</p>
+            )}
           </div>
 
           <div>
@@ -376,6 +473,46 @@ export default function PersonalInfoStep({
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Photo (optionnelle) */}
+      <div className="pt-3 border-t border-gray-200">
+        <label className="block mb-1 text-sm">
+          {t('personalInfo.photoLabel')}
+        </label>
+
+        {photoPreviewUrl ? (
+          <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={photoPreviewUrl}
+              alt={t('personalInfo.photoPreviewAlt')}
+              className="w-16 h-16 object-cover rounded border border-gray-300"
+            />
+            <div className="flex flex-col gap-1">
+              {photoUploading && <span className="text-xs text-gray-500">{t('personalInfo.photoUploading')}</span>}
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                className="text-xs text-red-600 hover:text-red-800 text-left"
+              >
+                {t('personalInfo.removePhotoButton')}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoChange}
+              className="w-full text-sm"
+            />
+            <p className="text-xs text-gray-500 mt-1">{t('personalInfo.photoHint')}</p>
+          </>
+        )}
+
+        {photoError && <p className="text-xs text-red-500 mt-1">{photoError}</p>}
       </div>
 
       <div className="flex justify-between pt-4">

@@ -41,6 +41,16 @@ export const publicTranslations = {
     legalGuardianLabel: { fr: 'Responsable légal', en: 'Legal guardian' },
     legalGuardianPlaceholder: { fr: 'Pour les mineurs uniquement', en: 'For minors only' },
     legalGuardianHint: { fr: 'À remplir uniquement pour les mineurs', en: 'To be filled in for minors only' },
+    legalGuardianRequiredError: { fr: 'Le responsable légal est requis pour les candidats mineurs (moins de 18 ans)', en: 'A legal guardian is required for candidates under 18' },
+
+    photoLabel: { fr: 'Photo (optionnelle)', en: 'Photo (optional)' },
+    photoHint: { fr: 'Formats image uniquement, 5 Mo maximum', en: 'Image files only, 5 MB maximum' },
+    photoInvalidTypeError: { fr: 'Veuillez sélectionner un fichier image', en: 'Please select an image file' },
+    photoTooLargeError: { fr: 'Le fichier est trop volumineux (5 Mo maximum)', en: 'File is too large (5 MB maximum)' },
+    photoUploadError: { fr: 'Échec de l\'envoi de la photo. Vous pouvez continuer sans photo.', en: 'Photo upload failed. You can continue without a photo.' },
+    photoUploading: { fr: 'Envoi en cours...', en: 'Uploading...' },
+    photoPreviewAlt: { fr: 'Aperçu de la photo', en: 'Photo preview' },
+    removePhotoButton: { fr: 'Retirer la photo', en: 'Remove photo' },
 
     emailLabel: { fr: 'Email *', en: 'Email *' },
     emailPlaceholder: { fr: 'jean.dupont@exemple.com', en: 'john.smith@example.com' },
