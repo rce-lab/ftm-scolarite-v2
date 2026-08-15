@@ -2,9 +2,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { getConfig } from '@/lib/config'
 import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import logo from '../logo FTM officiel 2024.jpeg'
 
 // Composants
 import Stepper from './components/common/Stepper'
@@ -175,37 +177,17 @@ export default function InscriptionPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow">
-        {/* En-tête avec logo et fallback */}
-        <div className="mb-6 text-center">
+        {/* En-tête avec logo et branding FTM */}
+        <div className="mb-6 text-center border-b-4 border-[#b03c2d] pb-6">
           <div className="flex justify-center mb-4">
-            <div className="relative">
-              {/* Logo avec fallback */}
-              <img 
-                src="/logo_FTM_officiel_2024.jpeg" 
-                alt="Logo FTM" 
-                className="h-24"
-                onError={(e) => {
-                  // Si le logo n'existe pas, afficher le fallback
-                  e.currentTarget.style.display = 'none';
-                  const fallback = document.getElementById('logo-fallback');
-                  if (fallback) fallback.style.display = 'flex';
-                }}
-              />
-              {/* Fallback si le logo ne charge pas */}
-              <div 
-                id="logo-fallback"
-                className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center hidden mx-auto"
-              >
-                <span className="text-blue-600 font-bold text-xl">FTM</span>
-              </div>
-            </div>
+            <Image src={logo} alt="Logo FTM" className="h-24 w-auto" priority />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Inscription aux cours de Malagasy</h1>
+          <h1 className="text-2xl font-bold text-[#689e4e]">Inscription aux cours de Malagasy</h1>
           <p className="text-gray-600 mt-1">
             FTM - Formation en langue Malagasy
           </p>
           <p className="text-sm text-gray-500 mt-1">
-            Année scolaire {config.annee_scolaire_courante}-{parseInt(config.annee_scolaire_courante) + 1} • {config.montant_inscription}€/an
+            Année scolaire {config.annee_scolaire_courante}
           </p>
         </div>
 
