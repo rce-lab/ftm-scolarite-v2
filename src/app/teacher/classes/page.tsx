@@ -6,6 +6,18 @@ import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+const COULEURS = [
+  { hex: '#ef4444', key: 'classes.colorRed' },
+  { hex: '#22c55e', key: 'classes.colorGreen' },
+  { hex: '#3b82f6', key: 'classes.colorBlue' },
+  { hex: '#eab308', key: 'classes.colorYellow' },
+  { hex: '#f97316', key: 'classes.colorOrange' },
+  { hex: '#8b5cf6', key: 'classes.colorPurple' },
+  { hex: '#ec4899', key: 'classes.colorPink' },
+  { hex: '#92400e', key: 'classes.colorBrown' },
+  { hex: '#6b7280', key: 'classes.colorGray' },
+  { hex: '#111827', key: 'classes.colorBlack' }
+]
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 const JOUR_KEYS: Record<string, string> = {
   Lundi: 'classes.monday',
@@ -19,13 +31,15 @@ const JOUR_KEYS: Record<string, string> = {
 const emptyForm = {
   nom: '',
   niveau: 'A1',
+  niveau_max: '',
   tranche_age: '',
   capacite_max: '',
   jour: 'Lundi',
   heure: '',
   duree_minutes: '90',
   compte_visio_id: '',
-  lien_visio: ''
+  lien_visio: '',
+  couleur: ''
 }
 
 export default function TeacherClassesPage() {
@@ -133,13 +147,15 @@ export default function TeacherClassesPage() {
       const { data, error } = await supabase.from('classes').insert([{
         nom: form.nom,
         niveau: form.niveau,
+        niveau_max: form.niveau_max || null,
         tranche_age: form.tranche_age || null,
         capacite_max: form.capacite_max ? parseInt(form.capacite_max) : null,
         jour: form.jour,
         heure: form.heure,
         duree_minutes: form.duree_minutes ? parseInt(form.duree_minutes) : 90,
         compte_visio_id: form.compte_visio_id || null,
-        lien_visio: form.lien_visio || null
+        lien_visio: form.lien_visio || null,
+        couleur: form.couleur || null
       }]).select('id').single()
 
       if (error) throw error
@@ -203,6 +219,19 @@ export default function TeacherClassesPage() {
                 onChange={(e) => updateForm('niveau', e.target.value)}
                 className="w-full p-2 border rounded"
               >
+                {NIVEAUX.map(n => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('classes.levelMaxLabel')}</label>
+              <select
+                value={form.niveau_max}
+                onChange={(e) => updateForm('niveau_max', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">{t('classes.noneOption')}</option>
                 {NIVEAUX.map(n => (
                   <option key={n} value={n}>{n}</option>
                 ))}
@@ -284,10 +313,23 @@ export default function TeacherClassesPage() {
                 className="w-full p-2 border rounded"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('classes.colorLabel')}</label>
+              <select
+                value={form.couleur}
+                onChange={(e) => updateForm('couleur', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">{t('classes.noneOption')}</option>
+                {COULEURS.map(c => (
+                  <option key={c.hex} value={c.hex}>{t(c.key)}</option>
+                ))}
+              </select>
+            </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-medium mb-1">{t('classes.teachersLabel')}</label>
               {enseignants.length > 0 ? (
-                <div className="flex flex-wrap gap-3 p-2 border rounded">
+                <div className="flex flex-wrap gap-3 p-2 border rounded max-h-48 overflow-y-auto">
                   {enseignants.map(enseignant => (
                     <label key={enseignant.id} className="flex items-center gap-1.5 text-sm">
                       <input
@@ -344,10 +386,24 @@ export default function TeacherClassesPage() {
           <tbody className="divide-y divide-gray-200">
             {classes.map((classe) => (
               <tr key={classe.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap font-medium">{classe.nom}</td>
+                <td className="px-6 py-4 whitespace-nowrap font-medium">
+                  <span className="flex items-center gap-2">
+                    {classe.couleur && (
+                      <span
+                        className="inline-block rounded-full flex-shrink-0"
+                        style={{ width: 12, height: 12, backgroundColor: classe.couleur }}
+                      ></span>
+                    )}
+                    {classe.nom}
+                  </span>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e] font-bold">
-                    {classe.niveau || '—'}
+                    {classe.niveau
+                      ? (classe.niveau_max && classe.niveau_max !== classe.niveau
+                          ? `${classe.niveau}-${classe.niveau_max}`
+                          : classe.niveau)
+                      : '—'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.tranche_age || '—'}</td>

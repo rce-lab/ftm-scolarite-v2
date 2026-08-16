@@ -301,6 +301,9 @@ export const translations = {
     levelUpdateAlert: { fr: 'Niveau définitif mis à jour: {niveau}', mg: 'Voaova ny ambaratonga farany: {niveau}' }
   },
 
+  // Traductions malgaches des clés colorLabel/colorRed.../colorBlack, levelMaxLabel et
+  // ageRangePlaceholder ajoutées en brouillon, non encore validées par un locuteur natif.
+  // Le reste de la section reste validé.
   classes: {
     title: { fr: 'Gestion des classes', mg: 'Fitantanana ny kilasy' },
     newClassTitle: { fr: 'Nouvelle classe', mg: 'Kilasy vaovao' },
@@ -308,7 +311,8 @@ export const translations = {
     namePlaceholder: { fr: 'Ex: M-LUNDI-18H-A1', mg: 'Ohatra: M-LUNDI-18H-A1' },
     levelLabel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     ageRangeLabel: { fr: "Tranche d'âge", mg: 'Sokajy taona' },
-    ageRangePlaceholder: { fr: 'Ex: Enfants, Adultes', mg: 'Ohatra: Ankizy, Olon-dehibe' },
+    ageRangePlaceholder: { fr: 'Ex: Enfants, Adultes, Mixte', mg: 'Ohatra: Ankizy, Olon-dehibe, Mifangaro' },
+    levelMaxLabel: { fr: 'Niveau max (si classe mixte, ex: A1-A2)', mg: 'Ambaratonga farany (raha kilasy mifangaro, ohatra: A1-A2)' },
     maxCapacityLabel: { fr: 'Capacité max', mg: "Fetra isan'olona" },
     dayLabel: { fr: 'Jour', mg: 'Andro' },
     monday: { fr: 'Lundi', mg: 'Alatsinainy' },
@@ -326,6 +330,17 @@ export const translations = {
     videoLinkPlaceholder: { fr: 'https://...', mg: 'https://...' },
     teachersLabel: { fr: 'Enseignants', mg: 'Mpampianatra' },
     noTeachersAvailable: { fr: 'Aucun enseignant enregistré. Ajoutez-en dans la gestion des enseignants.', mg: 'Tsy misy mpampianatra voarakitra. Ampio ao amin\'ny fitantanana ny mpampianatra.' },
+    colorLabel: { fr: 'Couleur', mg: 'Loko' },
+    colorRed: { fr: 'Rouge', mg: 'Mena' },
+    colorGreen: { fr: 'Vert', mg: 'Maitso' },
+    colorBlue: { fr: 'Bleu', mg: 'Manga' },
+    colorYellow: { fr: 'Jaune', mg: 'Mavo' },
+    colorOrange: { fr: 'Orange', mg: 'Orange' },
+    colorPurple: { fr: 'Violet', mg: 'Volet' },
+    colorPink: { fr: 'Rose', mg: 'Mavokely' },
+    colorBrown: { fr: 'Marron', mg: 'Marron' },
+    colorGray: { fr: 'Gris', mg: 'Volomparasy' },
+    colorBlack: { fr: 'Noir', mg: 'Mainty' },
     conflictWarning: { fr: '⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu\'il n\'y a pas de conflit réel.', mg: '⚠️ Efa ampiasain\'ny kilasy {nom} amin\'ity fotoana ity  kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanitsahana marina.' },
     creatingButton: { fr: 'Création...', mg: 'Eo am-pamoronana...' },
     createButton: { fr: 'Créer la classe', mg: 'Mamorona ny kilasy' },
@@ -350,6 +365,8 @@ export const translations = {
     emailLabel: { fr: 'Email', mg: 'Email' },
     phoneLabel: { fr: 'Téléphone', mg: 'Laharana finday' },
     activeLabel: { fr: 'Actif', mg: 'Miasa' },
+    remarksLabel: { fr: 'Remarques', mg: 'Fanamarihana' },
+    remarksPlaceholder: { fr: 'Ex: Peut enseigner en anglais', mg: 'Ohatra: Afaka mampianatra anglisy' },
     creatingButton: { fr: 'Création...', mg: 'Eo am-pamoronana...' },
     createButton: { fr: 'Ajouter l\'enseignant', mg: 'Hampiditra ny mpampianatra' },
     tableLastName: { fr: 'Nom', mg: 'Anarana' },
@@ -357,6 +374,7 @@ export const translations = {
     tableEmail: { fr: 'Email', mg: 'Email' },
     tablePhone: { fr: 'Téléphone', mg: 'Laharana finday' },
     tableStatus: { fr: 'Statut', mg: 'Sata' },
+    tableRemarks: { fr: 'Remarques', mg: 'Fanamarihana' },
     statusActive: { fr: 'Actif', mg: 'Miasa' },
     statusInactive: { fr: 'Inactif', mg: 'Tsy miasa' },
     noTeachersYet: { fr: 'Aucun enseignant enregistré pour le moment.', mg: 'Tsy misy mpampianatra voarakitra ankehitriny.' },

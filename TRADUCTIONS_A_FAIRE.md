@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-08-16 — 15 sections, 354 entrées.
+Généré le 2026-08-16 — 15 sections, 369 entrées.
 
 ---
 
@@ -325,7 +325,8 @@ Généré le 2026-08-16 — 15 sections, 354 entrées.
 | classes.namePlaceholder | Ex: M-LUNDI-18H-A1 | Ohatra: M-LUNDI-18H-A1 |
 | classes.levelLabel | Niveau | Lentam-pahaizana |
 | classes.ageRangeLabel | Tranche d'âge | Sokajy taona |
-| classes.ageRangePlaceholder | Ex: Enfants, Adultes | Ohatra: Ankizy, Olon-dehibe |
+| classes.ageRangePlaceholder | Ex: Enfants, Adultes, Mixte | Ohatra: Ankizy, Olon-dehibe, Mifangaro |
+| classes.levelMaxLabel | Niveau max (si classe mixte, ex: A1-A2) | Ambaratonga farany (raha kilasy mifangaro, ohatra: A1-A2) |
 | classes.maxCapacityLabel | Capacité max | Fetra isan'olona |
 | classes.dayLabel | Jour | Andro |
 | classes.monday | Lundi | Alatsinainy |
@@ -343,6 +344,17 @@ Généré le 2026-08-16 — 15 sections, 354 entrées.
 | classes.videoLinkPlaceholder | https://... | https://... |
 | classes.teachersLabel | Enseignants | Mpampianatra |
 | classes.noTeachersAvailable | Aucun enseignant enregistré. Ajoutez-en dans la gestion des enseignants. | Tsy misy mpampianatra voarakitra. Ampio ao amin'ny fitantanana ny mpampianatra. |
+| classes.colorLabel | Couleur | Loko |
+| classes.colorRed | Rouge | Mena |
+| classes.colorGreen | Vert | Maitso |
+| classes.colorBlue | Bleu | Manga |
+| classes.colorYellow | Jaune | Mavo |
+| classes.colorOrange | Orange | Orange |
+| classes.colorPurple | Violet | Volet |
+| classes.colorPink | Rose | Mavokely |
+| classes.colorBrown | Marron | Marron |
+| classes.colorGray | Gris | Volomparasy |
+| classes.colorBlack | Noir | Mainty |
 | classes.conflictWarning | ⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu'il n'y a pas de conflit réel. | ⚠️ Efa ampiasain'ny kilasy {nom} amin'ity fotoana ity  kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanitsahana marina. |
 | classes.creatingButton | Création... | Eo am-pamoronana... |
 | classes.createButton | Créer la classe | Mamorona ny kilasy |
@@ -368,6 +380,8 @@ Généré le 2026-08-16 — 15 sections, 354 entrées.
 | enseignants.emailLabel | Email | Email |
 | enseignants.phoneLabel | Téléphone | Laharana finday |
 | enseignants.activeLabel | Actif | Miasa |
+| enseignants.remarksLabel | Remarques | Fanamarihana |
+| enseignants.remarksPlaceholder | Ex: Peut enseigner en anglais | Ohatra: Afaka mampianatra anglisy |
 | enseignants.creatingButton | Création... | Eo am-pamoronana... |
 | enseignants.createButton | Ajouter l'enseignant | Hampiditra ny mpampianatra |
 | enseignants.tableLastName | Nom | Anarana |
@@ -375,6 +389,7 @@ Généré le 2026-08-16 — 15 sections, 354 entrées.
 | enseignants.tableEmail | Email | Email |
 | enseignants.tablePhone | Téléphone | Laharana finday |
 | enseignants.tableStatus | Statut | Sata |
+| enseignants.tableRemarks | Remarques | Fanamarihana |
 | enseignants.statusActive | Actif | Miasa |
 | enseignants.statusInactive | Inactif | Tsy miasa |
 | enseignants.noTeachersYet | Aucun enseignant enregistré pour le moment. | Tsy misy mpampianatra voarakitra ankehitriny. |

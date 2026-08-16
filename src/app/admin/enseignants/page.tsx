@@ -10,7 +10,8 @@ const emptyForm = {
   prenom: '',
   email: '',
   telephone: '',
-  actif: true
+  actif: true,
+  remarques: ''
 }
 
 export default function EnseignantsPage() {
@@ -55,7 +56,8 @@ export default function EnseignantsPage() {
         prenom: form.prenom,
         email: form.email || null,
         telephone: form.telephone || null,
-        actif: form.actif
+        actif: form.actif,
+        remarques: form.remarques || null
       }])
 
       if (error) throw error
@@ -137,6 +139,16 @@ export default function EnseignantsPage() {
               />
               <label htmlFor="enseignant-actif" className="text-sm font-medium">{t('enseignants.activeLabel')}</label>
             </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">{t('enseignants.remarksLabel')}</label>
+              <textarea
+                value={form.remarques}
+                onChange={(e) => updateForm('remarques', e.target.value)}
+                placeholder={t('enseignants.remarksPlaceholder')}
+                rows={2}
+                className="w-full p-2 border rounded"
+              />
+            </div>
           </div>
 
           <div className="flex justify-end">
@@ -161,6 +173,7 @@ export default function EnseignantsPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableEmail')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tablePhone')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableStatus')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableRemarks')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -181,11 +194,12 @@ export default function EnseignantsPage() {
                     </span>
                   )}
                 </td>
+                <td className="px-6 py-4 text-sm max-w-xs">{enseignant.remarques || '—'}</td>
               </tr>
             ))}
             {enseignants.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                   {t('enseignants.noTeachersYet')}
                 </td>
               </tr>
