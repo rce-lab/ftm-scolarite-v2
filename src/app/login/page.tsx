@@ -20,18 +20,28 @@ function LoginForm() {
 
     const emailReel = email.includes('@') ? email : `${email}@ftm.local`
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: emailReel,
       password
     })
 
     if (error) {
       alert(t('login.errorPrefix').replace('{message}', error.message))
+      setLoading(false)
+      return
+    }
+
+    const { data: utilisateur } = await supabase
+      .from('utilisateurs')
+      .select('must_change_password')
+      .eq('auth_user_id', data.user.id)
+      .single()
+
+    if (utilisateur?.must_change_password) {
+      window.location.href = '/change-password'
     } else {
       window.location.href = '/admin'
     }
-
-    setLoading(false)
   }
 
   return (

@@ -22,6 +22,19 @@ export const translations = {
     logoAlt: { fr: 'Logo FTM', mg: 'Sary famatarana ny FTM' }
   },
 
+  // Traduction malgache brouillon, non encore validée par un locuteur natif.
+  changePassword: {
+    title: { fr: 'Changement de mot de passe requis', mg: 'Fanovana tenimiafina ilaina' },
+    subtitle: { fr: 'Pour des raisons de sécurité, vous devez définir un nouveau mot de passe avant de continuer.', mg: 'Noho ny antony fiarovana, tsy maintsy mametraka tenimiafina vaovao ianao alohan\'ny handehanana.' },
+    newPasswordLabel: { fr: 'Nouveau mot de passe', mg: 'Tenimiafina vaovao' },
+    confirmPasswordLabel: { fr: 'Confirmer le mot de passe', mg: 'Hamarino ny tenimiafina' },
+    submitButton: { fr: 'Valider', mg: 'Hanova' },
+    loadingButton: { fr: 'Enregistrement...', mg: 'Eo am-pitahirizana...' },
+    errorMismatch: { fr: 'Les mots de passe ne correspondent pas.', mg: 'Tsy mitovy ny tenimiafina roa.' },
+    errorTooShort: { fr: 'Le mot de passe doit contenir au moins 8 caractères.', mg: 'Tsy maintsy misy fara-fahakeliny 8 tarehin-tsoratra ny tenimiafina.' },
+    errorPrefix: { fr: 'Erreur : {message}', mg: 'Hadisoana : {message}' }
+  },
+
   internalNav: {
     dashboard: { fr: 'Tableau de bord', mg: 'Pejy fandravonana' },
     inscriptions: { fr: 'Inscriptions', mg: 'Fisoratana anarana' },

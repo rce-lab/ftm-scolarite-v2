@@ -399,12 +399,6 @@ export default function InscriptionDetailPage() {
               >
                 {t('inscriptionsDetail.actionPrint')}
               </button>
-              <button
-                onClick={() => router.push(`/admin/inscriptions/${inscription.student_code}/email`)}
-                className="w-full p-3 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium text-left"
-              >
-                  {t('inscriptionsDetail.actionSendEmail')}
-              </button>
             </div>
           </div>
 

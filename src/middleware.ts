@@ -43,8 +43,8 @@ export async function middleware(request: NextRequest) {
   return response
 }
 
-// Le matcher restreint déjà l'exécution du middleware à /admin/* et /teacher/* :
+// Le matcher restreint déjà l'exécution du middleware à /admin/*, /teacher/* et /change-password/* :
 // /public/*, /login et / restent accessibles sans authentification.
 export const config = {
-  matcher: ['/admin/:path*', '/teacher/:path*'],
+  matcher: ['/admin/:path*', '/teacher/:path*', '/change-password/:path*'],
 }
