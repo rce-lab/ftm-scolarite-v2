@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-traductions-doc": "node scripts/generate-traductions-doc.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
