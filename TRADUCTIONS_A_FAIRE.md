@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-08-16 — 15 sections, 369 entrées.
+Généré le 2026-08-16 — 15 sections, 374 entrées.
 
 ---
 
@@ -349,12 +349,17 @@ Généré le 2026-08-16 — 15 sections, 369 entrées.
 | classes.colorGreen | Vert | Maitso |
 | classes.colorBlue | Bleu | Manga |
 | classes.colorYellow | Jaune | Mavo |
-| classes.colorOrange | Orange | Orange |
-| classes.colorPurple | Violet | Volet |
+| classes.colorOrange | Orange | Laoranjy |
+| classes.colorPurple | Violet | Volombatolalaka |
 | classes.colorPink | Rose | Mavokely |
-| classes.colorBrown | Marron | Marron |
-| classes.colorGray | Gris | Volomparasy |
+| classes.colorBrown | Marron | Volontany |
+| classes.colorPuce | Puce | Volomparasy |
 | classes.colorBlack | Noir | Mainty |
+| classes.colorWhite | Blanc | Fotsy |
+| classes.colorGrayReal | Gris | Volontakatra |
+| classes.colorNavy | Bleu foncé | Mangabe |
+| classes.colorGold | Or | Volamena |
+| classes.colorSilver | Argent | Volafotsy |
 | classes.conflictWarning | ⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu'il n'y a pas de conflit réel. | ⚠️ Efa ampiasain'ny kilasy {nom} amin'ity fotoana ity  kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanitsahana marina. |
 | classes.creatingButton | Création... | Eo am-pamoronana... |
 | classes.createButton | Créer la classe | Mamorona ny kilasy |

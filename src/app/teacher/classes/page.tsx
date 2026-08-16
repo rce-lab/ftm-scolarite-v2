@@ -17,8 +17,13 @@ const COULEURS = [
   { hex: '#8b5cf6', key: 'classes.colorPurple' },
   { hex: '#ec4899', key: 'classes.colorPink' },
   { hex: '#92400e', key: 'classes.colorBrown' },
-  { hex: '#6b7280', key: 'classes.colorGray' },
-  { hex: '#111827', key: 'classes.colorBlack' }
+  { hex: '#7d4f50', key: 'classes.colorPuce' },
+  { hex: '#111827', key: 'classes.colorBlack' },
+  { hex: '#FFFFFF', key: 'classes.colorWhite' },
+  { hex: '#6b7280', key: 'classes.colorGrayReal' },
+  { hex: '#1e3a8a', key: 'classes.colorNavy' },
+  { hex: '#d4af37', key: 'classes.colorGold' },
+  { hex: '#c0c0c0', key: 'classes.colorSilver' }
 ]
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 const JOUR_KEYS: Record<string, string> = {

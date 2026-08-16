@@ -301,9 +301,10 @@ export const translations = {
     levelUpdateAlert: { fr: 'Niveau définitif mis à jour: {niveau}', mg: 'Voaova ny ambaratonga farany: {niveau}' }
   },
 
-  // Traductions malgaches des clés colorLabel/colorRed.../colorBlack, levelMaxLabel et
-  // ageRangePlaceholder ajoutées en brouillon, non encore validées par un locuteur natif.
-  // Le reste de la section reste validé.
+  // Traductions malgaches des clés colorWhite/colorGrayReal/colorNavy/colorGold/colorSilver
+  // ajoutées en brouillon, non encore validées par un locuteur natif.
+  // Le reste de la section (dont colorRed.../colorPuce, corrigées par un locuteur natif),
+  // levelMaxLabel et ageRangePlaceholder sont validés.
   classes: {
     title: { fr: 'Gestion des classes', mg: 'Fitantanana ny kilasy' },
     newClassTitle: { fr: 'Nouvelle classe', mg: 'Kilasy vaovao' },
@@ -335,12 +336,17 @@ export const translations = {
     colorGreen: { fr: 'Vert', mg: 'Maitso' },
     colorBlue: { fr: 'Bleu', mg: 'Manga' },
     colorYellow: { fr: 'Jaune', mg: 'Mavo' },
-    colorOrange: { fr: 'Orange', mg: 'Orange' },
-    colorPurple: { fr: 'Violet', mg: 'Volet' },
+    colorOrange: { fr: 'Orange', mg: 'Laoranjy' },
+    colorPurple: { fr: 'Violet', mg: 'Volombatolalaka' },
     colorPink: { fr: 'Rose', mg: 'Mavokely' },
-    colorBrown: { fr: 'Marron', mg: 'Marron' },
-    colorGray: { fr: 'Gris', mg: 'Volomparasy' },
+    colorBrown: { fr: 'Marron', mg: 'Volontany' },
+    colorPuce: { fr: 'Puce', mg: 'Volomparasy' },
     colorBlack: { fr: 'Noir', mg: 'Mainty' },
+    colorWhite: { fr: 'Blanc', mg: 'Fotsy' },
+    colorGrayReal: { fr: 'Gris', mg: 'Volontakatra' },
+    colorNavy: { fr: 'Bleu foncé', mg: 'Mangabe' },
+    colorGold: { fr: 'Or', mg: 'Volamena' },
+    colorSilver: { fr: 'Argent', mg: 'Volafotsy' },
     conflictWarning: { fr: '⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu\'il n\'y a pas de conflit réel.', mg: '⚠️ Efa ampiasain\'ny kilasy {nom} amin\'ity fotoana ity  kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanitsahana marina.' },
     creatingButton: { fr: 'Création...', mg: 'Eo am-pamoronana...' },
     createButton: { fr: 'Créer la classe', mg: 'Mamorona ny kilasy' },
