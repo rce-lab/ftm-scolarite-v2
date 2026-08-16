@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import SectionDivider from '@/components/SectionDivider'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const ROWS_PER_PAGE = 30
@@ -228,20 +229,28 @@ export default function HistoriquePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('historique.title')}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('historique.title')}
+        </h1>
         <p className="text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-4">{t('historique.introText')}</p>
       </div>
 
+      <SectionDivider />
+
       {/* Statistiques */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6 space-y-6">
-        <h2 className="text-lg font-bold text-gray-900">{t('historique.statsSectionTitle')}</h2>
+        <h2 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('historique.statsSectionTitle')}
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gray-50 rounded-lg p-4 text-center">
+          <div className="bg-gray-50 rounded-lg p-4 text-center border-l-4 border-l-[#689e4e]">
             <p className="text-3xl font-bold text-[#689e4e]">{uniqueStudentsCount}</p>
             <p className="text-sm text-gray-600">{t('historique.uniqueStudentsLabel')}</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4 text-center">
+          <div className="bg-gray-50 rounded-lg p-4 text-center border-l-4 border-l-[#689e4e]">
             <p className="text-3xl font-bold text-[#689e4e]">{reenrolledCount}</p>
             <p className="text-sm text-gray-600">
               {t('historique.reenrolledLabel')} ({t('historique.reenrolledPercentSuffix').replace('{percent}', reenrolledPercent)})
@@ -352,9 +361,14 @@ export default function HistoriquePage() {
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Recherche et liste */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">{t('historique.searchListTitle')}</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('historique.searchListTitle')}
+        </h2>
 
         <div className="flex flex-wrap gap-3 mb-4">
           <input
@@ -447,9 +461,14 @@ export default function HistoriquePage() {
         )}
       </div>
 
+      <SectionDivider />
+
       {/* Résolution des identités ambiguës */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-2">{t('historique.resolutionTitle')}</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('historique.resolutionTitle')}
+        </h2>
         <p className="text-sm text-gray-600 mb-4">{t('historique.resolutionIntro')}</p>
 
         {toVerifyGroups.length === 0 ? (

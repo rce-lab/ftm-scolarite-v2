@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { translations } from '@/lib/i18n/translations'
+import SectionDivider from '@/components/SectionDivider'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const COULEURS = [
@@ -44,7 +45,7 @@ const emptyForm = {
 }
 
 export default function TeacherClassesPage() {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
   const [classes, setClasses] = useState<any[]>([])
   const [comptesVisio, setComptesVisio] = useState<any[]>([])
   const [enseignants, setEnseignants] = useState<any[]>([])
@@ -193,7 +194,14 @@ export default function TeacherClassesPage() {
       loadClasses()
     } catch (error: any) {
       console.error('Erreur:', error)
-      alert(t('classes.createErrorAlert').replace('{message}', error.message || 'Inconnue'))
+      const couleurDejaUtilisee = error?.code === '23505' && String(error?.message || '').toLowerCase().includes('couleur')
+      if (couleurDejaUtilisee) {
+        alert(language === 'mg'
+          ? "Efa ampiasain'ny kilasy hafa io loko io, misafidiana loko hafa"
+          : 'Cette couleur est déjà utilisée par une autre classe, choisissez-en une autre')
+      } else {
+        alert(t('classes.createErrorAlert').replace('{message}', error.message || 'Inconnue'))
+      }
     } finally {
       setSaving(false)
     }
@@ -210,24 +218,51 @@ export default function TeacherClassesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{t('classes.title')}</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('classes.title')}
+        </h1>
       </div>
 
       {/* Formulaire de création */}
       <div className="bg-white rounded shadow p-6">
-        <h2 className="text-lg font-bold mb-4">{t('classes.newClassTitle')}</h2>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('classes.newClassTitle')}
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">{t('classes.nameLabel')}</label>
-              <input
-                type="text"
-                value={form.nom}
-                onChange={(e) => updateForm('nom', e.target.value)}
-                placeholder={t('classes.namePlaceholder')}
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={form.nom}
+                  onChange={(e) => updateForm('nom', e.target.value)}
+                  placeholder={t('classes.namePlaceholder')}
+                  className="w-full p-2 border rounded"
+                  required
+                />
+                {form.couleur && (
+                  <span
+                    className="inline-block rounded-full flex-shrink-0 border border-gray-300"
+                    style={{ width: 16, height: 16, backgroundColor: form.couleur }}
+                  ></span>
+                )}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('classes.colorLabel')}</label>
+              <select
+                value={form.couleur}
+                onChange={(e) => handleColorChange(e.target.value)}
                 className="w-full p-2 border rounded"
-                required
-              />
+              >
+                <option value="">{t('classes.noneOption')}</option>
+                {COULEURS.map(c => (
+                  <option key={c.hex} value={c.hex}>{t(c.key)}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">{t('classes.levelLabel')}</label>
@@ -330,19 +365,6 @@ export default function TeacherClassesPage() {
                 className="w-full p-2 border rounded"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">{t('classes.colorLabel')}</label>
-              <select
-                value={form.couleur}
-                onChange={(e) => handleColorChange(e.target.value)}
-                className="w-full p-2 border rounded"
-              >
-                <option value="">{t('classes.noneOption')}</option>
-                {COULEURS.map(c => (
-                  <option key={c.hex} value={c.hex}>{t(c.key)}</option>
-                ))}
-              </select>
-            </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-medium mb-1">{t('classes.teachersLabel')}</label>
               {enseignants.length > 0 ? (
@@ -384,6 +406,8 @@ export default function TeacherClassesPage() {
           </div>
         </form>
       </div>
+
+      <SectionDivider />
 
       {/* Liste des classes */}
       <div className="bg-white rounded shadow overflow-hidden">

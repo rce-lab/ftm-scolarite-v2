@@ -7,6 +7,7 @@ import { getStatutLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
+import SectionDivider from '@/components/SectionDivider'
 
 function DeliberationContent() {
   const { t } = useTranslation()
@@ -100,7 +101,10 @@ function DeliberationContent() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">{t('deliberation.title')}</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
+        <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+        {t('deliberation.title')}
+      </h1>
 
       {/* Filtres */}
       <div className="flex space-x-2 mb-6">
@@ -119,6 +123,8 @@ function DeliberationContent() {
           </button>
         ))}
       </div>
+
+      <SectionDivider />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Liste des inscriptions */}
@@ -184,7 +190,10 @@ function DeliberationContent() {
         <div className="space-y-6">
           {selectedInscription ? (
             <div className="bg-white rounded shadow p-6">
-              <h2 className="text-lg font-bold mb-4">{t('deliberation.panelTitle')}</h2>
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
+                <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+                {t('deliberation.panelTitle')}
+              </h2>
 
               <div className="space-y-4">
                 <div>

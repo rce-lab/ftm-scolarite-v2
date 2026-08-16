@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { getStatutLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import SectionDivider from '@/components/SectionDivider'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const STATUTS = ['pending_review', 'approved', 'rejected', 'payment_pending']
@@ -170,12 +171,18 @@ export default function RapportsPage() {
         }
       `}</style>
 
-      <h1 className="text-2xl font-bold text-gray-900 no-print">{t('reports.title')}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 no-print flex items-center gap-3">
+        <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+        {t('reports.title')}
+      </h1>
 
       {/* Inscriptions */}
       <div className={`print-section ${printSection === 'inscriptions' ? 'active-print' : ''} bg-white rounded-lg shadow border border-gray-200 p-6`}>
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-          <h2 className="text-lg font-bold text-gray-900">{t('reports.inscriptionsTitle')}</h2>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+            <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+            {t('reports.inscriptionsTitle')}
+          </h2>
           <div className="flex gap-2 no-print">
             <button
               onClick={() => downloadCSV('inscriptions', inscriptionsRows())}
@@ -260,10 +267,15 @@ export default function RapportsPage() {
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Classes */}
       <div className={`print-section ${printSection === 'classes' ? 'active-print' : ''} bg-white rounded-lg shadow border border-gray-200 p-6`}>
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-          <h2 className="text-lg font-bold text-gray-900">{t('reports.classesTitle')}</h2>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+            <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+            {t('reports.classesTitle')}
+          </h2>
           <div className="flex gap-2 no-print">
             <button
               onClick={() => downloadCSV('classes', classesRows())}
@@ -319,10 +331,15 @@ export default function RapportsPage() {
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Paiements */}
       <div className={`print-section ${printSection === 'paiements' ? 'active-print' : ''} bg-white rounded-lg shadow border border-gray-200 p-6`}>
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-          <h2 className="text-lg font-bold text-gray-900">{t('reports.paymentsTitle')}</h2>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+            <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+            {t('reports.paymentsTitle')}
+          </h2>
           <div className="flex gap-2 no-print">
             <button
               onClick={() => downloadCSV('paiements', paiementsRows())}

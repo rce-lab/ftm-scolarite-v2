@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import SectionDivider from '@/components/SectionDivider'
 
 const emptyForm = {
   nom: '',
@@ -83,12 +84,18 @@ export default function EnseignantsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{t('enseignants.title')}</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('enseignants.title')}
+        </h1>
       </div>
 
       {/* Formulaire d'ajout */}
       <div className="bg-white rounded shadow p-6">
-        <h2 className="text-lg font-bold mb-4">{t('enseignants.newTeacherTitle')}</h2>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('enseignants.newTeacherTitle')}
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -162,6 +169,8 @@ export default function EnseignantsPage() {
           </div>
         </form>
       </div>
+
+      <SectionDivider />
 
       {/* Liste des enseignants */}
       <div className="bg-white rounded shadow overflow-hidden">

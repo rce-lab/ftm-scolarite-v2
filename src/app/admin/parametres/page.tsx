@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import SectionDivider from '@/components/SectionDivider'
 
 const CHAMPS_CONFIG = [
   { key: 'montant_inscription', labelKey: 'settings.registrationFeeLabel', type: 'number' },
@@ -105,7 +106,12 @@ export default function ParametresPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">{t('settings.title')}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+        <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+        {t('settings.title')}
+      </h1>
+
+      <SectionDivider />
 
       <form onSubmit={handleSave} className="bg-white rounded-lg shadow border border-gray-200 p-6 space-y-4">
         {CHAMPS_CONFIG.map((champ) => (

@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client'
 import { getStatutLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
+import SectionDivider from '@/components/SectionDivider'
 
 export default function AdminDashboard() {
   const { t } = useTranslation()
@@ -85,15 +86,20 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t('adminDashboard.title')}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('adminDashboard.title')}
+        </h1>
         <div className="text-sm text-gray-500">
           {new Date().toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
       </div>
 
+      <SectionDivider />
+
       {/* Statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 border-l-4 border-l-[#689e4e]">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">📋</span>
@@ -105,7 +111,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 border-l-4 border-l-yellow-500">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">⏳</span>
@@ -125,7 +131,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 border-l-4 border-l-green-500">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">✅</span>
@@ -137,7 +143,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 border-l-4 border-l-orange-500">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">💰</span>
@@ -161,7 +167,10 @@ export default function AdminDashboard() {
       {/* Dernières inscriptions */}
       <div className="bg-white rounded-lg shadow border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900">{t('adminDashboard.recentInscriptionsTitle')}</h2>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+            <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+            {t('adminDashboard.recentInscriptionsTitle')}
+          </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">

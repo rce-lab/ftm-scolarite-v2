@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client'
 import { getConfig } from '@/lib/config'
 import { sendPaymentConfirmationAction } from '@/app/actions/emailActions'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import SectionDivider from '@/components/SectionDivider'
 
 const MODES_PAIEMENT = [
   { value: 'virement', labelKey: 'payments.modeTransfer' },
@@ -117,7 +118,12 @@ export default function PaymentsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">{t('payments.title')}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+        <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+        {t('payments.title')}
+      </h1>
+
+      <SectionDivider />
 
       {/* Onglets */}
       <div className="flex space-x-2">
@@ -226,7 +232,10 @@ export default function PaymentsPage() {
       {inscriptionSelectionnee && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow p-6 w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4">{t('payments.confirmModalTitle')}</h2>
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+              {t('payments.confirmModalTitle')}
+            </h2>
             <p className="text-sm text-gray-600 mb-4">
               {inscriptionSelectionnee.prenom} {inscriptionSelectionnee.nom} — {inscriptionSelectionnee.student_code}
             </p>

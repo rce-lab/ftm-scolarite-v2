@@ -7,6 +7,7 @@ import { getStatutLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import SectionDivider from '@/components/SectionDivider'
 
 function InscriptionsListContent() {
   const { t } = useTranslation()
@@ -52,7 +53,10 @@ function InscriptionsListContent() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{t('inscriptionsList.title')}</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('inscriptionsList.title')}
+        </h1>
         <Link
           href="/public/inscription"
           className="bg-[#689e4e] text-white px-4 py-2 rounded hover:bg-[#527d3e]"
@@ -60,6 +64,8 @@ function InscriptionsListContent() {
           {t('inscriptionsList.newInscriptionButton')}
         </Link>
       </div>
+
+      <SectionDivider />
 
       {/* Filtres */}
       <div className="flex space-x-2">

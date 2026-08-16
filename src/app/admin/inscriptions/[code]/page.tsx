@@ -9,6 +9,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { calculerStatistiquesDetaillees } from '@/app/public/inscription/data/niveauCalcul'
 import { sendDecisionEmailAction } from '@/app/actions/emailActions'
 import Link from 'next/link'
+import SectionDivider from '@/components/SectionDivider'
 
 export default function InscriptionDetailPage() {
   const { t } = useTranslation()
@@ -178,7 +179,8 @@ export default function InscriptionDetailPage() {
             >
               ←
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
               {inscription.prenom} {inscription.nom}
             </h1>
           </div>
@@ -201,12 +203,17 @@ export default function InscriptionDetailPage() {
         </div>
       </div>
 
+      <SectionDivider />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Colonne de gauche - Informations */}
         <div className="lg:col-span-2 space-y-6">
           {/* Informations personnelles */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.personalInfoTitle')}</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+              {t('inscriptionsDetail.personalInfoTitle')}
+            </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldName')}</label>
@@ -235,7 +242,10 @@ export default function InscriptionDetailPage() {
 
           {/* Évaluation et décision */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.evaluationTitle')}</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+              {t('inscriptionsDetail.evaluationTitle')}
+            </h2>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.suggestedLevelLabel')}</label>
@@ -300,7 +310,10 @@ export default function InscriptionDetailPage() {
           {/* Statistiques détaillées */}
           {stats && (
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.detailedStatsTitle')}</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+                <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+                {t('inscriptionsDetail.detailedStatsTitle')}
+              </h2>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
@@ -353,7 +366,10 @@ export default function InscriptionDetailPage() {
         <div className="space-y-6">
           {/* Actions */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.actionsTitle')}</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+              {t('inscriptionsDetail.actionsTitle')}
+            </h2>
             <div className="space-y-3">
               {inscription.status === 'pending_review' && (
                 <>
@@ -404,7 +420,10 @@ export default function InscriptionDetailPage() {
 
           {/* Historique */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.historyTitle')}</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+              {t('inscriptionsDetail.historyTitle')}
+            </h2>
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t('inscriptionsDetail.createdLabel')}</span>
@@ -422,7 +441,10 @@ export default function InscriptionDetailPage() {
           {/* Réponses */}
           {inscription.reponses_competences && Object.keys(inscription.reponses_competences).length > 0 && (
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">{t('inscriptionsDetail.responsesSummaryTitle')}</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+                <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+                {t('inscriptionsDetail.responsesSummaryTitle')}
+              </h2>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">{t('inscriptionsDetail.totalQuestions')}</span>
