@@ -250,8 +250,8 @@ export default function TeacherClassesPage() {
                 />
                 {form.couleur && (
                   <span
-                    className="inline-block rounded-full flex-shrink-0 border border-gray-300"
-                    style={{ width: 16, height: 16, backgroundColor: form.couleur }}
+                    className="inline-block rounded-full flex-shrink-0 border-2 border-gray-300"
+                    style={{ width: 32, height: 32, backgroundColor: form.couleur }}
                   ></span>
                 )}
               </div>
@@ -436,8 +436,8 @@ export default function TeacherClassesPage() {
                   <span className="flex items-center gap-2">
                     {classe.couleur && (
                       <span
-                        className="inline-block rounded-full flex-shrink-0 border border-gray-300"
-                        style={{ width: 16, height: 16, backgroundColor: classe.couleur }}
+                        className="inline-block rounded-full flex-shrink-0 border-2 border-gray-300"
+                        style={{ width: 32, height: 32, backgroundColor: classe.couleur }}
                       ></span>
                     )}
                     {classe.nom}
