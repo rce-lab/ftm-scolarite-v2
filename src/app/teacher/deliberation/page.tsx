@@ -17,10 +17,34 @@ function DeliberationContent() {
   const [inscriptions, setInscriptions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedInscription, setSelectedInscription] = useState<any>(null)
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
 
   useEffect(() => {
     loadInscriptions()
   }, [filter])
+
+  useEffect(() => {
+    loadPhotoUrl()
+  }, [selectedInscription?.id])
+
+  const loadPhotoUrl = async () => {
+    if (!selectedInscription?.photo_url) {
+      setPhotoUrl(null)
+      return
+    }
+
+    try {
+      const { data, error } = await supabase.storage
+        .from('photos-candidats')
+        .createSignedUrl(selectedInscription.photo_url, 3600)
+
+      if (error) throw error
+      setPhotoUrl(data?.signedUrl || null)
+    } catch (error) {
+      console.error('Erreur:', error)
+      setPhotoUrl(null)
+    }
+  }
 
   const loadInscriptions = async () => {
     try {
@@ -197,6 +221,13 @@ function DeliberationContent() {
 
               <div className="space-y-4">
                 <div>
+                  {photoUrl && (
+                    <img
+                      src={photoUrl}
+                      alt={`${selectedInscription.prenom} ${selectedInscription.nom}`}
+                      className="w-20 h-20 rounded-full object-cover border border-gray-300 mb-3"
+                    />
+                  )}
                   <h3 className="font-medium mb-2">{selectedInscription.prenom} {selectedInscription.nom}</h3>
                   <p className="text-sm text-gray-600">{t('deliberation.codeLabel').replace('{code}', selectedInscription.student_code)}</p>
                 </div>
