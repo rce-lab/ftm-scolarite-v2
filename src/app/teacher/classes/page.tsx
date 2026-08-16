@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import { translations } from '@/lib/i18n/translations'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const COULEURS = [
@@ -136,6 +137,22 @@ export default function TeacherClassesPage() {
 
   const updateForm = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleColorChange = (hex: string) => {
+    const couleur = COULEURS.find(c => c.hex === hex)
+    setForm(prev => {
+      if (prev.nom || !couleur) {
+        return { ...prev, couleur: hex }
+      }
+      const shortKey = couleur.key.split('.')[1] as keyof typeof translations.classes
+      const nomMalgache = translations.classes[shortKey]?.mg
+      return {
+        ...prev,
+        couleur: hex,
+        nom: nomMalgache ? `Kilasy ${nomMalgache}` : prev.nom
+      }
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -317,7 +334,7 @@ export default function TeacherClassesPage() {
               <label className="block text-sm font-medium mb-1">{t('classes.colorLabel')}</label>
               <select
                 value={form.couleur}
-                onChange={(e) => updateForm('couleur', e.target.value)}
+                onChange={(e) => handleColorChange(e.target.value)}
                 className="w-full p-2 border rounded"
               >
                 <option value="">{t('classes.noneOption')}</option>
@@ -390,8 +407,8 @@ export default function TeacherClassesPage() {
                   <span className="flex items-center gap-2">
                     {classe.couleur && (
                       <span
-                        className="inline-block rounded-full flex-shrink-0"
-                        style={{ width: 12, height: 12, backgroundColor: classe.couleur }}
+                        className="inline-block rounded-full flex-shrink-0 border border-gray-300"
+                        style={{ width: 16, height: 16, backgroundColor: classe.couleur }}
                       ></span>
                     )}
                     {classe.nom}
