@@ -19,6 +19,7 @@ const NAV_ENTRIES: NavEntry[] = [
   { key: 'internalNav.inscriptions', href: '/admin/inscriptions', roles: null },
   { key: 'internalNav.deliberation', href: '/teacher/deliberation', roles: null },
   { key: 'internalNav.classes', href: '/teacher/classes', roles: ['responsable_scolarite', 'responsable_administratif', 'organisation_it'] },
+  { key: 'internalNav.enseignants', href: '/admin/enseignants', roles: null },
   { key: 'internalNav.payments', href: '/admin/payments', roles: ['comptable', 'responsable_administratif', 'organisation_it'] },
   { key: 'internalNav.settings', href: '/admin/parametres', roles: ['organisation_it'] },
   { key: 'internalNav.reports', href: '/admin/rapports', roles: null },

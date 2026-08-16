@@ -25,14 +25,15 @@ const emptyForm = {
   heure: '',
   duree_minutes: '90',
   compte_visio_id: '',
-  lien_visio: '',
-  enseignants: ''
+  lien_visio: ''
 }
 
 export default function TeacherClassesPage() {
   const { t } = useTranslation()
   const [classes, setClasses] = useState<any[]>([])
   const [comptesVisio, setComptesVisio] = useState<any[]>([])
+  const [enseignants, setEnseignants] = useState<any[]>([])
+  const [enseignantsSelectionnes, setEnseignantsSelectionnes] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState(emptyForm)
@@ -41,6 +42,7 @@ export default function TeacherClassesPage() {
   useEffect(() => {
     loadClasses()
     loadComptesVisio()
+    loadEnseignants()
   }, [])
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function TeacherClassesPage() {
     try {
       const { data, error } = await supabase
         .from('classes')
-        .select('*, comptes_visio(nom)')
+        .select('*, comptes_visio(nom), classe_enseignants(enseignants(id, nom, prenom))')
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -75,6 +77,26 @@ export default function TeacherClassesPage() {
     } catch (error) {
       console.error('Erreur:', error)
     }
+  }
+
+  const loadEnseignants = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('enseignants')
+        .select('id, nom, prenom')
+        .order('nom')
+
+      if (error) throw error
+      setEnseignants(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }
+
+  const toggleEnseignant = (id: string) => {
+    setEnseignantsSelectionnes(prev =>
+      prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id]
+    )
   }
 
   const verifierConflit = async () => {
@@ -108,12 +130,7 @@ export default function TeacherClassesPage() {
     setSaving(true)
 
     try {
-      const enseignants = form.enseignants
-        .split(/[\n,]+/)
-        .map(s => s.trim())
-        .filter(Boolean)
-
-      const { error } = await supabase.from('classes').insert([{
+      const { data, error } = await supabase.from('classes').insert([{
         nom: form.nom,
         niveau: form.niveau,
         tranche_age: form.tranche_age || null,
@@ -122,13 +139,23 @@ export default function TeacherClassesPage() {
         heure: form.heure,
         duree_minutes: form.duree_minutes ? parseInt(form.duree_minutes) : 90,
         compte_visio_id: form.compte_visio_id || null,
-        lien_visio: form.lien_visio || null,
-        enseignants
-      }])
+        lien_visio: form.lien_visio || null
+      }]).select('id').single()
 
       if (error) throw error
 
+      if (enseignantsSelectionnes.length > 0) {
+        const { error: erreurEnseignants } = await supabase.from('classe_enseignants').insert(
+          enseignantsSelectionnes.map(enseignantId => ({
+            classe_id: data.id,
+            enseignant_id: enseignantId
+          }))
+        )
+        if (erreurEnseignants) throw erreurEnseignants
+      }
+
       setForm(emptyForm)
+      setEnseignantsSelectionnes([])
       setConflit(null)
       loadClasses()
     } catch (error: any) {
@@ -259,13 +286,23 @@ export default function TeacherClassesPage() {
             </div>
             <div className="md:col-span-3">
               <label className="block text-sm font-medium mb-1">{t('classes.teachersLabel')}</label>
-              <textarea
-                value={form.enseignants}
-                onChange={(e) => updateForm('enseignants', e.target.value)}
-                placeholder={t('classes.teachersPlaceholder')}
-                rows={2}
-                className="w-full p-2 border rounded"
-              />
+              {enseignants.length > 0 ? (
+                <div className="flex flex-wrap gap-3 p-2 border rounded">
+                  {enseignants.map(enseignant => (
+                    <label key={enseignant.id} className="flex items-center gap-1.5 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={enseignantsSelectionnes.includes(enseignant.id)}
+                        onChange={() => toggleEnseignant(enseignant.id)}
+                        className="h-4 w-4"
+                      />
+                      {enseignant.prenom} {enseignant.nom}
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">{t('classes.noTeachersAvailable')}</p>
+              )}
             </div>
           </div>
 
@@ -321,7 +358,9 @@ export default function TeacherClassesPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.capacite_max ?? '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">{classe.comptes_visio?.nom || '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {classe.enseignants && classe.enseignants.length > 0 ? classe.enseignants.join(', ') : '—'}
+                  {classe.classe_enseignants && classe.classe_enseignants.length > 0
+                    ? classe.classe_enseignants.map((ce: any) => `${ce.enseignants.prenom} ${ce.enseignants.nom}`).join(', ')
+                    : '—'}
                 </td>
               </tr>
             ))}

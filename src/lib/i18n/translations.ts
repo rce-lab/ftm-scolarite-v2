@@ -40,6 +40,7 @@ export const translations = {
     inscriptions: { fr: 'Inscriptions', mg: 'Fisoratana anarana' },
     deliberation: { fr: 'Délibération', mg: 'Fifampidinihana' },
     classes: { fr: 'Classes', mg: 'Kilasy' },
+    enseignants: { fr: 'Enseignants', mg: 'Mpampianatra' },
     payments: { fr: 'Paiements', mg: 'Fandoavam-bola' },
     settings: { fr: 'Paramètres', mg: 'Fanova' },
     reports: { fr: 'Rapports', mg: 'Tatitra' },
@@ -324,7 +325,7 @@ export const translations = {
     videoLinkLabel: { fr: 'Lien visio', mg: 'Rohy Zoom na jitsi' },
     videoLinkPlaceholder: { fr: 'https://...', mg: 'https://...' },
     teachersLabel: { fr: 'Enseignants', mg: 'Mpampianatra' },
-    teachersPlaceholder: { fr: 'Un nom par ligne, ou séparés par des virgules', mg: "Anarana iray isaky ny andalana, na sarahin'ny faingo" },
+    noTeachersAvailable: { fr: 'Aucun enseignant enregistré. Ajoutez-en dans la gestion des enseignants.', mg: 'Tsy misy mpampianatra voarakitra. Ampio ao amin\'ny fitantanana ny mpampianatra.' },
     conflictWarning: { fr: '⚠️ Ce compte est déjà utilisé à ce créneau par la classe {nom}. La création reste possible, mais vérifiez qu\'il n\'y a pas de conflit réel.', mg: '⚠️ Efa ampiasain\'ny kilasy {nom} amin\'ity fotoana ity  kaonty ity. Azo atao ihany ny mamorona, kanefa hamarino raha tsy misy fifanitsahana marina.' },
     creatingButton: { fr: 'Création...', mg: 'Eo am-pamoronana...' },
     createButton: { fr: 'Créer la classe', mg: 'Mamorona ny kilasy' },
@@ -337,6 +338,28 @@ export const translations = {
     tableVideoAccount: { fr: 'Compte visio', mg: 'Kaonty Zoom iza sa jitsi' },
     tableTeachers: { fr: 'Enseignants', mg: 'Mpampianatra' },
     noClassesYet: { fr: 'Aucune classe créée pour le moment.', mg: 'Tsy misy kilasy voaforona ankehitriny.' },
+    createErrorAlert: { fr: 'Erreur lors de la création : {message}', mg: 'Hadisoana teo am-pamoronana : {message}' }
+  },
+
+  // Traduction malgache brouillon, non encore validée par un locuteur natif.
+  enseignants: {
+    title: { fr: 'Gestion des enseignants', mg: 'Fitantanana ny mpampianatra' },
+    newTeacherTitle: { fr: 'Nouvel enseignant', mg: 'Mpampianatra vaovao' },
+    lastNameLabel: { fr: 'Nom', mg: 'Anarana' },
+    firstNameLabel: { fr: 'Prénom', mg: 'Fanampin\'anarana' },
+    emailLabel: { fr: 'Email', mg: 'Email' },
+    phoneLabel: { fr: 'Téléphone', mg: 'Laharana finday' },
+    activeLabel: { fr: 'Actif', mg: 'Miasa' },
+    creatingButton: { fr: 'Création...', mg: 'Eo am-pamoronana...' },
+    createButton: { fr: 'Ajouter l\'enseignant', mg: 'Hampiditra ny mpampianatra' },
+    tableLastName: { fr: 'Nom', mg: 'Anarana' },
+    tableFirstName: { fr: 'Prénom', mg: 'Fanampin\'anarana' },
+    tableEmail: { fr: 'Email', mg: 'Email' },
+    tablePhone: { fr: 'Téléphone', mg: 'Laharana finday' },
+    tableStatus: { fr: 'Statut', mg: 'Sata' },
+    statusActive: { fr: 'Actif', mg: 'Miasa' },
+    statusInactive: { fr: 'Inactif', mg: 'Tsy miasa' },
+    noTeachersYet: { fr: 'Aucun enseignant enregistré pour le moment.', mg: 'Tsy misy mpampianatra voarakitra ankehitriny.' },
     createErrorAlert: { fr: 'Erreur lors de la création : {message}', mg: 'Hadisoana teo am-pamoronana : {message}' }
   },
 
