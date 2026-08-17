@@ -35,6 +35,19 @@ const JOUR_KEYS: Record<string, string> = {
   Samedi: 'classes.saturday'
 }
 
+// Textes ajoutés pour l'édition — translations.ts hors périmètre pour cette tâche.
+// editButton/cancelButton/saveEditButton/savingEditButton/tableActions réutilisent des
+// paires fr/mg déjà validées ailleurs dans translations.ts (voir commentaires).
+// editTitle est un brouillon, non validé par un locuteur natif.
+const EDIT_TEXTS = {
+  editButton: { fr: '✏️ Modifier', mg: '✏️ Hanova' }, // cf. changePassword.submitButton
+  cancelButton: { fr: 'Annuler', mg: 'Foano' }, // cf. payments.cancelButton
+  saveEditButton: { fr: 'Enregistrer les modifications', mg: 'Tahirizo ary ny fanovana' }, // cf. inscriptionsDetail.saveButton
+  savingEditButton: { fr: 'Enregistrement...', mg: 'Eo am-pitahirizana...' }, // cf. settings.savingButton
+  editTitle: { fr: 'Modifier la classe', mg: "Fanovan'ny kilasy" }, // brouillon
+  tableActions: { fr: 'Actions', mg: 'Hetsika' } // cf. deliberation.tableActions
+}
+
 const emptyForm = {
   nom: '',
   niveau: 'A1',
@@ -61,6 +74,7 @@ export default function TeacherClassesPage() {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState(emptyForm)
   const [conflit, setConflit] = useState<any>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
 
   useEffect(() => {
     loadClasses()
@@ -141,6 +155,36 @@ export default function TeacherClassesPage() {
     )
   }
 
+  const commencerEdition = (classe: any) => {
+    setEditingId(classe.id)
+    setForm({
+      nom: classe.nom || '',
+      niveau: classe.niveau || 'A1',
+      niveau_max: classe.niveau_max || '',
+      tranche_age: classe.tranche_age || '',
+      capacite_max: classe.capacite_max != null ? String(classe.capacite_max) : '',
+      jour: classe.jour || 'Lundi',
+      heure: classe.heure || '',
+      duree_minutes: classe.duree_minutes != null ? String(classe.duree_minutes) : '90',
+      compte_visio_id: classe.compte_visio_id || '',
+      lien_visio: classe.lien_visio || '',
+      couleur: classe.couleur || '',
+      pays: classe.pays || 'France'
+    })
+    setEnseignantsSelectionnes(
+      (classe.classe_enseignants || []).map((ce: any) => ce.enseignants.id)
+    )
+    setConflit(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const annulerEdition = () => {
+    setEditingId(null)
+    setForm(emptyForm)
+    setEnseignantsSelectionnes([])
+    setConflit(null)
+  }
+
   const verifierConflit = async () => {
     if (!form.compte_visio_id || !form.jour || !form.heure) {
       setConflit(null)
@@ -188,7 +232,7 @@ export default function TeacherClassesPage() {
     setSaving(true)
 
     try {
-      const { data, error } = await supabase.from('classes').insert([{
+      const payload = {
         nom: form.nom,
         niveau: form.niveau,
         niveau_max: form.niveau_max || null,
@@ -201,14 +245,30 @@ export default function TeacherClassesPage() {
         lien_visio: form.lien_visio || null,
         couleur: form.couleur || null,
         pays: form.pays || 'France'
-      }]).select('id').single()
+      }
 
-      if (error) throw error
+      let classeId: string
+
+      if (editingId) {
+        const { error } = await supabase.from('classes').update(payload).eq('id', editingId)
+        if (error) throw error
+        classeId = editingId
+
+        const { error: erreurSuppression } = await supabase
+          .from('classe_enseignants')
+          .delete()
+          .eq('classe_id', classeId)
+        if (erreurSuppression) throw erreurSuppression
+      } else {
+        const { data, error } = await supabase.from('classes').insert([payload]).select('id').single()
+        if (error) throw error
+        classeId = data.id
+      }
 
       if (enseignantsSelectionnes.length > 0) {
         const { error: erreurEnseignants } = await supabase.from('classe_enseignants').insert(
           enseignantsSelectionnes.map(enseignantId => ({
-            classe_id: data.id,
+            classe_id: classeId,
             enseignant_id: enseignantId
           }))
         )
@@ -218,6 +278,7 @@ export default function TeacherClassesPage() {
       setForm(emptyForm)
       setEnseignantsSelectionnes([])
       setConflit(null)
+      setEditingId(null)
       loadClasses()
     } catch (error: any) {
       console.error('Erreur:', error)
@@ -255,7 +316,7 @@ export default function TeacherClassesPage() {
       <div className="bg-white rounded shadow p-6">
         <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
           <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
-          {t('classes.newClassTitle')}
+          {editingId ? EDIT_TEXTS.editTitle[language] : t('classes.newClassTitle')}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -439,13 +500,25 @@ export default function TeacherClassesPage() {
             </div>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
+            {editingId && (
+              <button
+                type="button"
+                onClick={annulerEdition}
+                disabled={saving}
+                className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
+              >
+                {EDIT_TEXTS.cancelButton[language]}
+              </button>
+            )}
             <button
               type="submit"
               disabled={saving}
               className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
             >
-              {saving ? t('classes.creatingButton') : t('classes.createButton')}
+              {editingId
+                ? (saving ? EDIT_TEXTS.savingEditButton[language] : EDIT_TEXTS.saveEditButton[language])
+                : (saving ? t('classes.creatingButton') : t('classes.createButton'))}
             </button>
           </div>
         </form>
@@ -466,6 +539,7 @@ export default function TeacherClassesPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableCapacity')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableVideoAccount')}</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('classes.tableTeachers')}</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{EDIT_TEXTS.tableActions[language]}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -508,11 +582,20 @@ export default function TeacherClassesPage() {
                     ? classe.classe_enseignants.map((ce: any) => `${ce.enseignants.prenom} ${ce.enseignants.nom}`).join(', ')
                     : '—'}
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <button
+                    type="button"
+                    onClick={() => commencerEdition(classe)}
+                    className="text-[#689e4e] hover:text-[#527d3e] font-medium"
+                  >
+                    {EDIT_TEXTS.editButton[language]}
+                  </button>
+                </td>
               </tr>
             ))}
             {classes.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={9} className="px-6 py-8 text-center text-gray-500">
                   {t('classes.noClassesYet')}
                 </td>
               </tr>
