@@ -85,7 +85,7 @@ export default function TeacherClassesPage() {
 
   useEffect(() => {
     verifierConflit()
-  }, [form.compte_visio_id, form.jour, form.heure])
+  }, [form.compte_visio_id, form.jour, form.heure, editingId])
 
   const loadClasses = async () => {
     try {
@@ -192,12 +192,18 @@ export default function TeacherClassesPage() {
     }
 
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('classes')
         .select('id, nom')
         .eq('compte_visio_id', form.compte_visio_id)
         .eq('jour', form.jour)
         .eq('heure', form.heure)
+
+      if (editingId) {
+        query = query.neq('id', editingId)
+      }
+
+      const { data, error } = await query
 
       if (error) throw error
       setConflit(data && data.length > 0 ? data[0] : null)
