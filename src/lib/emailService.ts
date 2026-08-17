@@ -7,12 +7,14 @@ const FROM_ADDRESS = 'FTM Malagasy <scolarite.ftm@gmail.com>'
 // Adresses mises en copie (CC) sur les emails envoyés à un candidat UNIQUEMENT
 // (pas sur les notifications internes, déjà envoyées à scolarite.ftm@gmail.com —
 // les dupliquer ici serait redondant). Ajouter/retirer une adresse ici suffit.
+// Liste définitive à remettre une fois les tests confirmés :
+// 'sonya.rakotonirina@gmail.com',
+// 'livafocard@gmail.com',
+// 'r.philippejoelle@yahoo.fr',
+// 'ramelintsoa@gmail.com',
+// 't.rakotomavo@free.fr'
 const ADMINS_EN_COPIE_CANDIDATS = [
-  'sonya.rakotonirina@gmail.com',
-  'livafocard@gmail.com',
-  'r.philippejoelle@yahoo.fr',
-  'ramelintsoa@gmail.com',
-  't.rakotomavo@free.fr'
+  'crama6104@gmail.com'
 ]
 
 const transporter = nodemailer.createTransport({
