@@ -21,7 +21,7 @@ export async function sendInscriptionNotification(
   try {
     // Email à l'étudiant
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'FTM Malagasy <scolarite@ftmala.fr>',
       to: inscription.email_contact,
       subject: 'Confirmation de votre inscription - FTM Malagasy',
       html: `
@@ -70,7 +70,7 @@ export async function sendInscriptionNotification(
       .replace('{nom}', inscription.nom)
 
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'FTM Malagasy <scolarite@ftmala.fr>',
       to: adminEmails,
       subject: adminSubject,
       html: `
@@ -147,7 +147,7 @@ export async function sendDecisionEmail(
     const horaire = [classe.jour, classe.heure].filter(Boolean).join(' à ')
 
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'FTM Malagasy <scolarite@ftmala.fr>',
       to: inscription.email_contact,
       subject: 'Votre inscription est validée - FTM Malagasy',
       html: `
@@ -207,7 +207,7 @@ export async function sendPaymentConfirmation(
 ) {
   try {
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'FTM Malagasy <scolarite@ftmala.fr>',
       to: studentEmail,
       subject: 'Confirmation de paiement - FTM Malagasy',
       html: `
