@@ -1,8 +1,29 @@
 // src/lib/emailService.ts
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 import { translations } from '@/lib/i18n/translations'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const FROM_ADDRESS = 'FTM Malagasy <scolarite.ftm@gmail.com>'
+
+// Adresses mises en copie (CC) sur les emails envoyés à un candidat UNIQUEMENT
+// (pas sur les notifications internes, déjà envoyées à scolarite.ftm@gmail.com —
+// les dupliquer ici serait redondant). Ajouter/retirer une adresse ici suffit.
+const ADMINS_EN_COPIE_CANDIDATS = [
+  'sonya.rakotonirina@gmail.com',
+  'livafocard@gmail.com',
+  'r.philippejoelle@yahoo.fr',
+  'ramelintsoa@gmail.com',
+  't.rakotomavo@free.fr'
+]
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.GMAIL_SMTP_USER,
+    pass: process.env.GMAIL_SMTP_PASSWORD
+  }
+})
 
 interface InscriptionData {
   nom: string
@@ -20,9 +41,10 @@ export async function sendInscriptionNotification(
 ) {
   try {
     // Email à l'étudiant
-    await resend.emails.send({
-      from: 'FTM Malagasy <scolarite@ftmala.fr>',
+    await transporter.sendMail({
+      from: FROM_ADDRESS,
       to: inscription.email_contact,
+      cc: ADMINS_EN_COPIE_CANDIDATS,
       subject: 'Confirmation de votre inscription - FTM Malagasy',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -69,8 +91,8 @@ export async function sendInscriptionNotification(
       .replace('{prenom}', inscription.prenom)
       .replace('{nom}', inscription.nom)
 
-    await resend.emails.send({
-      from: 'FTM Malagasy <scolarite@ftmala.fr>',
+    await transporter.sendMail({
+      from: FROM_ADDRESS,
       to: adminEmails,
       subject: adminSubject,
       html: `
@@ -146,9 +168,10 @@ export async function sendDecisionEmail(
   try {
     const horaire = [classe.jour, classe.heure].filter(Boolean).join(' à ')
 
-    await resend.emails.send({
-      from: 'FTM Malagasy <scolarite@ftmala.fr>',
+    await transporter.sendMail({
+      from: FROM_ADDRESS,
       to: inscription.email_contact,
+      cc: ADMINS_EN_COPIE_CANDIDATS,
       subject: 'Votre inscription est validée - FTM Malagasy',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -206,9 +229,10 @@ export async function sendPaymentConfirmation(
   amount: number
 ) {
   try {
-    await resend.emails.send({
-      from: 'FTM Malagasy <scolarite@ftmala.fr>',
+    await transporter.sendMail({
+      from: FROM_ADDRESS,
       to: studentEmail,
+      cc: ADMINS_EN_COPIE_CANDIDATS,
       subject: 'Confirmation de paiement - FTM Malagasy',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
