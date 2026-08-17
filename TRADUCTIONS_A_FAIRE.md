@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-08-16 — 15 sections, 374 entrées.
+Généré le 2026-08-17 — 15 sections, 383 entrées.
 
 ---
 
@@ -268,6 +268,14 @@ Généré le 2026-08-16 — 15 sections, 374 entrées.
 | settings.saveErrorMessage | Une erreur est survenue lors de la sauvegarde. | Nisy hadisoana teo am-pitahirizana. |
 | settings.savingButton | Enregistrement... | Eo am-pitahirizana... |
 | settings.saveButton | Enregistrer | Tahirizo |
+| settings.countriesTitle | Pays des classes | Firenen'ny kilasy |
+| settings.noCountriesYet | Aucun pays enregistré. | Tsy misy firenena voarakitra. |
+| settings.removeCountryLabel | Supprimer ce pays | Fafao ity firenena ity |
+| settings.newCountryPlaceholder | Ex: Suisse | Ohatra: Suisse |
+| settings.addCountryButton | Ajouter | Ampio |
+| settings.countryEmptyError | Veuillez saisir un nom de pays. | Ampidiro ny anaran'ny firenena. |
+| settings.countryDuplicateError | Ce pays est déjà dans la liste. | Efa ao anaty lisitra io firenena io. |
+| settings.countrySaveError | Erreur lors de l'enregistrement. | Nisy hadisoana teo am-pitahirizana. |
 
 ## Gestion des étudiants
 
@@ -345,6 +353,7 @@ Généré le 2026-08-16 — 15 sections, 374 entrées.
 | classes.teachersLabel | Enseignants | Mpampianatra |
 | classes.noTeachersAvailable | Aucun enseignant enregistré. Ajoutez-en dans la gestion des enseignants. | Tsy misy mpampianatra voarakitra. Ampio ao amin'ny fitantanana ny mpampianatra. |
 | classes.colorLabel | Couleur | Loko |
+| classes.countryLabel | Pays | Firenena |
 | classes.colorRed | Rouge | Mena |
 | classes.colorGreen | Vert | Maitso |
 | classes.colorBlue | Bleu | Manga |

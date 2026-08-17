@@ -40,6 +40,11 @@ export default function ParametresPage() {
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
+  const [paysList, setPaysList] = useState<string[]>([])
+  const [newPays, setNewPays] = useState('')
+  const [savingPays, setSavingPays] = useState(false)
+  const [paysErrorMessage, setPaysErrorMessage] = useState('')
+
   useEffect(() => {
     loadConfiguration()
   }, [])
@@ -59,11 +64,62 @@ export default function ParametresPage() {
         }
       })
       setForm(nouveauForm)
+
+      const paysItem = data?.find((item) => item.key === 'pays_disponibles')
+      if (paysItem?.value) {
+        try {
+          const parsed = JSON.parse(paysItem.value)
+          if (Array.isArray(parsed)) setPaysList(parsed)
+        } catch (parseError) {
+          console.error('Erreur de parsing pays_disponibles:', parseError)
+        }
+      }
     } catch (error) {
       console.error('Erreur:', error)
     } finally {
       setLoading(false)
     }
+  }
+
+  const persistPaysList = async (liste: string[]) => {
+    setSavingPays(true)
+    try {
+      const { error } = await supabase
+        .from('configuration')
+        .upsert({ key: 'pays_disponibles', value: JSON.stringify(liste) }, { onConflict: 'key' })
+
+      if (error) throw error
+      setPaysList(liste)
+    } catch (error: any) {
+      console.error('Erreur:', error)
+      setPaysErrorMessage(error.message || t('settings.countrySaveError'))
+    } finally {
+      setSavingPays(false)
+    }
+  }
+
+  const addPays = async () => {
+    const valeur = newPays.trim()
+    setPaysErrorMessage('')
+
+    if (!valeur) {
+      setPaysErrorMessage(t('settings.countryEmptyError'))
+      return
+    }
+
+    const dejaPresent = paysList.some((p) => p.toLowerCase() === valeur.toLowerCase())
+    if (dejaPresent) {
+      setPaysErrorMessage(t('settings.countryDuplicateError'))
+      return
+    }
+
+    await persistPaysList([...paysList, valeur])
+    setNewPays('')
+  }
+
+  const removePays = async (pays: string) => {
+    setPaysErrorMessage('')
+    await persistPaysList(paysList.filter((p) => p !== pays))
   }
 
   const updateField = (key: keyof FormState, value: string) => {
@@ -158,6 +214,63 @@ export default function ParametresPage() {
           </button>
         </div>
       </form>
+
+      <SectionDivider />
+
+      {/* Pays des classes */}
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6 space-y-4">
+        <h2 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+          <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+          {t('settings.countriesTitle')}
+        </h2>
+
+        <div className="flex flex-wrap gap-2">
+          {paysList.map((pays) => (
+            <span
+              key={pays}
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#689e4e]/15 text-[#527d3e] rounded-full text-sm font-medium"
+            >
+              {pays}
+              <button
+                type="button"
+                onClick={() => removePays(pays)}
+                disabled={savingPays}
+                aria-label={t('settings.removeCountryLabel')}
+                className="text-[#527d3e] hover:text-red-600 disabled:opacity-50"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          {paysList.length === 0 && (
+            <p className="text-sm text-gray-500">{t('settings.noCountriesYet')}</p>
+          )}
+        </div>
+
+        {paysErrorMessage && (
+          <div className="p-3 bg-red-50 border border-red-300 text-red-800 rounded text-sm">
+            {paysErrorMessage}
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newPays}
+            onChange={(e) => setNewPays(e.target.value)}
+            placeholder={t('settings.newCountryPlaceholder')}
+            className="flex-1 p-2 border rounded"
+          />
+          <button
+            type="button"
+            onClick={addPays}
+            disabled={savingPays}
+            className="px-4 py-2 bg-[#689e4e] text-white rounded hover:bg-[#527d3e] font-medium disabled:opacity-50"
+          >
+            {t('settings.addCountryButton')}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

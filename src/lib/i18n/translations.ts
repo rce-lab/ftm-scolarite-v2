@@ -241,6 +241,10 @@ export const translations = {
     saveErrorAlert: { fr: "Erreur lors de l'enregistrement du paiement : {message}", mg: 'Hadisoana teo am-pitahirizana ny fandoavam-bola : {message}' }
   },
 
+  // Traductions malgaches des clés countriesTitle/noCountriesYet/removeCountryLabel/
+  // newCountryPlaceholder/addCountryButton/countryEmptyError/countryDuplicateError/
+  // countrySaveError ajoutées en brouillon, non encore validées par un locuteur natif.
+  // Le reste de la section reste validé.
   settings: {
     title: { fr: 'Paramètres', mg: 'Fandrindrana' },
     registrationFeeLabel: { fr: "Frais d'inscription (€)", mg: 'Sarany fisoratana anarana (€)' },
@@ -256,7 +260,15 @@ export const translations = {
     saveSuccessMessage: { fr: 'Paramètres enregistrés avec succès.', mg: 'Voatahiry soa aman-tsara ny fanova.' },
     saveErrorMessage: { fr: 'Une erreur est survenue lors de la sauvegarde.', mg: 'Nisy hadisoana teo am-pitahirizana.' },
     savingButton: { fr: 'Enregistrement...', mg: 'Eo am-pitahirizana...' },
-    saveButton: { fr: 'Enregistrer', mg: 'Tahirizo' }
+    saveButton: { fr: 'Enregistrer', mg: 'Tahirizo' },
+    countriesTitle: { fr: 'Pays des classes', mg: "Firenen'ny kilasy" },
+    noCountriesYet: { fr: 'Aucun pays enregistré.', mg: 'Tsy misy firenena voarakitra.' },
+    removeCountryLabel: { fr: 'Supprimer ce pays', mg: 'Fafao ity firenena ity' },
+    newCountryPlaceholder: { fr: 'Ex: Suisse', mg: 'Ohatra: Suisse' },
+    addCountryButton: { fr: 'Ajouter', mg: 'Ampio' },
+    countryEmptyError: { fr: 'Veuillez saisir un nom de pays.', mg: "Ampidiro ny anaran'ny firenena." },
+    countryDuplicateError: { fr: 'Ce pays est déjà dans la liste.', mg: 'Efa ao anaty lisitra io firenena io.' },
+    countrySaveError: { fr: 'Erreur lors de l\'enregistrement.', mg: 'Nisy hadisoana teo am-pitahirizana.' }
   },
 
   students: {
@@ -302,7 +314,7 @@ export const translations = {
   },
 
   // Traductions malgaches des clés colorWhite/colorGrayReal/colorNavy/colorGold/colorSilver
-  // ajoutées en brouillon, non encore validées par un locuteur natif.
+  // et countryLabel ajoutées en brouillon, non encore validées par un locuteur natif.
   // Le reste de la section (dont colorRed.../colorPuce, corrigées par un locuteur natif),
   // levelMaxLabel et ageRangePlaceholder sont validés.
   classes: {
@@ -332,6 +344,7 @@ export const translations = {
     teachersLabel: { fr: 'Enseignants', mg: 'Mpampianatra' },
     noTeachersAvailable: { fr: 'Aucun enseignant enregistré. Ajoutez-en dans la gestion des enseignants.', mg: 'Tsy misy mpampianatra voarakitra. Ampio ao amin\'ny fitantanana ny mpampianatra.' },
     colorLabel: { fr: 'Couleur', mg: 'Loko' },
+    countryLabel: { fr: 'Pays', mg: 'Firenena' },
     colorRed: { fr: 'Rouge', mg: 'Mena' },
     colorGreen: { fr: 'Vert', mg: 'Maitso' },
     colorBlue: { fr: 'Bleu', mg: 'Manga' },

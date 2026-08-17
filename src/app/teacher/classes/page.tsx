@@ -46,7 +46,8 @@ const emptyForm = {
   duree_minutes: '90',
   compte_visio_id: '',
   lien_visio: '',
-  couleur: ''
+  couleur: '',
+  pays: 'France'
 }
 
 export default function TeacherClassesPage() {
@@ -55,6 +56,7 @@ export default function TeacherClassesPage() {
   const [comptesVisio, setComptesVisio] = useState<any[]>([])
   const [enseignants, setEnseignants] = useState<any[]>([])
   const [enseignantsSelectionnes, setEnseignantsSelectionnes] = useState<string[]>([])
+  const [paysDisponibles, setPaysDisponibles] = useState<string[]>(['France'])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState(emptyForm)
@@ -64,6 +66,7 @@ export default function TeacherClassesPage() {
     loadClasses()
     loadComptesVisio()
     loadEnseignants()
+    loadPaysDisponibles()
   }, [])
 
   useEffect(() => {
@@ -109,6 +112,24 @@ export default function TeacherClassesPage() {
 
       if (error) throw error
       setEnseignants(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }
+
+  const loadPaysDisponibles = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('configuration')
+        .select('value')
+        .eq('key', 'pays_disponibles')
+        .single()
+
+      if (error) throw error
+      if (data?.value) {
+        const parsed = JSON.parse(data.value)
+        if (Array.isArray(parsed) && parsed.length > 0) setPaysDisponibles(parsed)
+      }
     } catch (error) {
       console.error('Erreur:', error)
     }
@@ -178,7 +199,8 @@ export default function TeacherClassesPage() {
         duree_minutes: form.duree_minutes ? parseInt(form.duree_minutes) : 90,
         compte_visio_id: form.compte_visio_id || null,
         lien_visio: form.lien_visio || null,
-        couleur: form.couleur || null
+        couleur: form.couleur || null,
+        pays: form.pays || 'France'
       }]).select('id').single()
 
       if (error) throw error
@@ -254,6 +276,11 @@ export default function TeacherClassesPage() {
                     style={{ width: 32, height: 32, backgroundColor: form.couleur }}
                   ></span>
                 )}
+                {form.couleur && form.pays && (
+                  <span className="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-600 font-medium flex-shrink-0">
+                    {form.pays}
+                  </span>
+                )}
               </div>
             </div>
             <div>
@@ -266,6 +293,18 @@ export default function TeacherClassesPage() {
                 <option value="">{t('classes.noneOption')}</option>
                 {COULEURS.map(c => (
                   <option key={c.hex} value={c.hex}>{t(c.key)}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('classes.countryLabel')}</label>
+              <select
+                value={form.pays}
+                onChange={(e) => updateForm('pays', e.target.value)}
+                className="w-full p-2 border rounded"
+              >
+                {paysDisponibles.map(p => (
+                  <option key={p} value={p}>{p}</option>
                 ))}
               </select>
             </div>
@@ -441,6 +480,11 @@ export default function TeacherClassesPage() {
                       ></span>
                     )}
                     {classe.nom}
+                    {classe.pays && (
+                      <span className="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-600 font-medium">
+                        {classe.pays}
+                      </span>
+                    )}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
