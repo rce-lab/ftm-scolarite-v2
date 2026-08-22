@@ -91,29 +91,29 @@ function InscriptionsListContent() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableCode')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableName')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableEmail')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableLevel')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableDate')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableStatus')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('inscriptionsList.tableActions')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableCode')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableName')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableEmail')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableLevel')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableDate')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableStatus')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableActions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {inscriptions.map((inscription) => (
               <tr key={inscription.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">{inscription.student_code}</td>
+                <td className="px-6 py-4 whitespace-nowrap font-mono text-base">{inscription.student_code}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {inscription.prenom} {inscription.nom}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{inscription.email_contact}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-base">{inscription.email_contact}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e]">
                     {inscription.niveau_suggere}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                <td className="px-6 py-4 whitespace-nowrap text-base">
                   {new Date(inscription.created_at).toLocaleDateString('fr-FR')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

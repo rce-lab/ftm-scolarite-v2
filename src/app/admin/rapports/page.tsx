@@ -223,21 +223,21 @@ export default function RapportsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colStudentCode')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colFirstName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colEmail')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colPhone')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colCountry')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colSuggestedLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colFinalLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colStatus')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colAssignedClass')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colPaymentStatus')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colRegistrationDate')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStudentCode')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colFirstName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colEmail')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colPhone')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colCountry')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colSuggestedLevel')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colFinalLevel')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStatus')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAssignedClass')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colPaymentStatus')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colRegistrationDate')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -259,7 +259,7 @@ export default function RapportsPage() {
               ))}
               {inscriptionsFiltrees.length === 0 && (
                 <tr>
-                  <td colSpan={12} className="px-3 py-6 text-center text-gray-500">{t('reports.noData')}</td>
+                  <td colSpan={12} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
                 </tr>
               )}
             </tbody>
@@ -293,18 +293,18 @@ export default function RapportsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colAgeRange')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colDay')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colTime')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colMaxCapacity')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colEnrolledCount')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colTeachers')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colVideoAccount')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colLevel')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAgeRange')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colDay')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colTime')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colMaxCapacity')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colEnrolledCount')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colTeachers')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colVideoAccount')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -323,7 +323,7 @@ export default function RapportsPage() {
               ))}
               {classes.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-3 py-6 text-center text-gray-500">{t('reports.noData')}</td>
+                  <td colSpan={9} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
                 </tr>
               )}
             </tbody>
@@ -357,14 +357,14 @@ export default function RapportsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colCandidateName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colStudentCode')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colAmount')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colDate')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('reports.colMode')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colCandidateName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStudentCode')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAmount')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colDate')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colMode')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -383,7 +383,7 @@ export default function RapportsPage() {
               ))}
               {paiements.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-3 py-6 text-center text-gray-500">{t('reports.noData')}</td>
+                  <td colSpan={5} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
                 </tr>
               )}
             </tbody>

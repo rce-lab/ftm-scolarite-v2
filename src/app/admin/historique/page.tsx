@@ -248,11 +248,11 @@ export default function HistoriquePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-50 rounded-lg p-4 text-center border-l-4 border-l-[#689e4e]">
             <p className="text-3xl font-bold text-[#689e4e]">{uniqueStudentsCount}</p>
-            <p className="text-sm text-gray-600">{t('historique.uniqueStudentsLabel')}</p>
+            <p className="text-base text-gray-600">{t('historique.uniqueStudentsLabel')}</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 text-center border-l-4 border-l-[#689e4e]">
             <p className="text-3xl font-bold text-[#689e4e]">{reenrolledCount}</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-base text-gray-600">
               {t('historique.reenrolledLabel')} ({t('historique.reenrolledPercentSuffix').replace('{percent}', reenrolledPercent)})
             </p>
           </div>
@@ -262,12 +262,12 @@ export default function HistoriquePage() {
         <div>
           <h3 className="font-semibold text-gray-800 mb-2">{t('historique.byYearTitle')}</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <table className="min-w-full divide-y divide-gray-200 text-base">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colYear')}</th>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colCount')}</th>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colGrowth')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colYear')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colCount')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colGrowth')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -289,13 +289,13 @@ export default function HistoriquePage() {
         <div>
           <h3 className="font-semibold text-gray-800 mb-2">{t('historique.byMigrationStatusTitle')}</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <table className="min-w-full divide-y divide-gray-200 text-base">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colYear')}</th>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.statusKeep')}</th>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.statusAbandon')}</th>
-                  <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.statusDoublon')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colYear')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.statusKeep')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.statusAbandon')}</th>
+                  <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.statusDoublon')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -317,11 +317,11 @@ export default function HistoriquePage() {
           <div>
             <h3 className="font-semibold text-gray-800 mb-2">{t('historique.byLevelTitle')}</h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 text-sm">
+              <table className="min-w-full divide-y divide-gray-200 text-base">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colLevel')}</th>
-                    <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colCount')}</th>
+                    <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colLevel')}</th>
+                    <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colCount')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -340,11 +340,11 @@ export default function HistoriquePage() {
           <div>
             <h3 className="font-semibold text-gray-800 mb-2">{t('historique.byCountryTitle')}</h3>
             <div className="overflow-x-auto max-h-80 overflow-y-auto border border-gray-200 rounded">
-              <table className="min-w-full divide-y divide-gray-200 text-sm">
+              <table className="min-w-full divide-y divide-gray-200 text-base">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
-                    <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colCountry')}</th>
-                    <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colCount')}</th>
+                    <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colCountry')}</th>
+                    <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colCount')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -388,7 +388,7 @@ export default function HistoriquePage() {
               <option key={y} value={y}>{y}</option>
             ))}
           </select>
-          <label className="flex items-center gap-2 text-sm px-2">
+          <label className="flex items-center gap-2 text-base px-2">
             <input
               type="checkbox"
               checked={onlyToVerify}
@@ -398,21 +398,21 @@ export default function HistoriquePage() {
           </label>
         </div>
 
-        <p className="text-sm text-gray-500 mb-2">{t('historique.resultsCount').replace('{count}', String(filteredRows.length))}</p>
+        <p className="text-sm text-gray-700 mb-2">{t('historique.resultsCount').replace('{count}', String(filteredRows.length))}</p>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colYear')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colFirstName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colAge')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colCountry')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colMigrationStatus')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colCode')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colReenrolled')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colYear')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colFirstName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colAge')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colCountry')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colLevel')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colMigrationStatus')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colCode')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colReenrolled')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -431,7 +431,7 @@ export default function HistoriquePage() {
               ))}
               {paginatedRows.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-3 py-6 text-center text-gray-500">{t('historique.noResults')}</td>
+                  <td colSpan={9} className="px-3 py-6 text-center text-gray-700">{t('historique.noResults')}</td>
                 </tr>
               )}
             </tbody>
@@ -469,10 +469,10 @@ export default function HistoriquePage() {
           <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
           {t('historique.resolutionTitle')}
         </h2>
-        <p className="text-sm text-gray-600 mb-4">{t('historique.resolutionIntro')}</p>
+        <p className="text-base text-gray-600 mb-4">{t('historique.resolutionIntro')}</p>
 
         {toVerifyGroups.length === 0 ? (
-          <p className="text-gray-500 text-sm">{t('historique.resolutionNoGroups')}</p>
+          <p className="text-gray-700 text-sm">{t('historique.resolutionNoGroups')}</p>
         ) : (
           <div className="space-y-6">
             {toVerifyGroups.map(([eleveId, groupRows], index) => (
@@ -489,15 +489,15 @@ export default function HistoriquePage() {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200 text-sm bg-white rounded">
+                  <table className="min-w-full divide-y divide-gray-200 text-base bg-white rounded">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colName')}</th>
-                        <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colFirstName')}</th>
-                        <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colYear')}</th>
-                        <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colAge')}</th>
-                        <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs">{t('historique.colEmail')}</th>
-                        <th className="px-3 py-2 text-left font-medium text-gray-500 uppercase text-xs"></th>
+                        <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colName')}</th>
+                        <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colFirstName')}</th>
+                        <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colYear')}</th>
+                        <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colAge')}</th>
+                        <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colEmail')}</th>
+                        <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -512,7 +512,7 @@ export default function HistoriquePage() {
                             <button
                               onClick={() => handleSeparate(r)}
                               disabled={processingKey === r.id}
-                              className="px-2 py-1 border border-[#b03c2d] text-[#b03c2d] rounded text-xs hover:bg-red-50 disabled:opacity-50"
+                              className="px-2 py-1 border border-[#b03c2d] text-[#b03c2d] rounded text-sm hover:bg-red-50 disabled:opacity-50"
                             >
                               {t('historique.separateButton')}
                             </button>

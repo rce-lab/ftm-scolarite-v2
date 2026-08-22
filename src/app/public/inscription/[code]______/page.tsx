@@ -108,9 +108,9 @@ export default function InscriptionDetailPage() {
   if (!inscription) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 text-4xl mb-4">❌</div>
+        <div className="text-gray-700 text-4xl mb-4">❌</div>
         <h3 className="text-lg font-medium text-gray-900 mb-1">Inscription non trouvée</h3>
-        <p className="text-gray-500 mb-6">Le code étudiant {params.code} n'existe pas.</p>
+        <p className="text-gray-700 mb-6">Le code étudiant {params.code} n'existe pas.</p>
         <Link 
           href="/admin/inscriptions"
           className="text-blue-600 hover:text-blue-800 font-medium"
@@ -129,7 +129,7 @@ export default function InscriptionDetailPage() {
           <div className="flex items-center space-x-3">
             <button
               onClick={() => router.push('/admin/inscriptions')}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-700 hover:text-gray-700"
             >
               ←
             </button>
@@ -153,7 +153,7 @@ export default function InscriptionDetailPage() {
             {inscription.status === 'rejected' && '❌ Inscription rejetée'}
             {inscription.status === 'payment_pending' && '💰 Paiement en attente'}
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-sm text-gray-700 mt-1">
             Inscrit le {new Date(inscription.created_at).toLocaleDateString('fr-FR')}
           </p>
         </div>
@@ -167,25 +167,25 @@ export default function InscriptionDetailPage() {
             <h2 className="text-lg font-bold text-gray-900 mb-4">Informations personnelles</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Nom</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.nom}</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Prénom</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.prenom}</div>
               </div>
               {inscription.age && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Âge</label>
+                  <label className="block text-base font-medium text-gray-700 mb-1">Âge</label>
                   <div className="p-2 bg-gray-50 rounded border">{inscription.age} ans</div>
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Email</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.email_contact}</div>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Téléphone</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.telephone}</div>
               </div>
             </div>
@@ -196,14 +196,14 @@ export default function InscriptionDetailPage() {
             <h2 className="text-lg font-bold text-gray-900 mb-4">Évaluation et décision</h2>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Niveau suggéré (auto)</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Niveau suggéré (auto)</label>
                 <div className="p-3 bg-blue-50 rounded border border-blue-200">
                   <div className="text-2xl font-bold text-blue-600">{inscription.niveau_suggere}</div>
                   <div className="text-sm text-blue-800">Calculé automatiquement</div>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Niveau définitif</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Niveau définitif</label>
                 <select 
                   value={niveauFinal} 
                   onChange={(e) => setNiveauFinal(e.target.value)}
@@ -215,7 +215,7 @@ export default function InscriptionDetailPage() {
                 </select>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Classe attribuée</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">Classe attribuée</label>
                 <input 
                   type="text" 
                   value={classe}
@@ -223,12 +223,12 @@ export default function InscriptionDetailPage() {
                   placeholder="Ex: M-LUNDI-18H, M-MERCREDI-14H..."
                   className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
-                <p className="text-xs text-gray-500 mt-1">Format recommandé: JOUR-HORAIRE-NIVEAU</p>
+                <p className="text-sm text-gray-700 mt-1">Format recommandé: JOUR-HORAIRE-NIVEAU</p>
               </div>
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Notes administratives</label>
+              <label className="block text-base font-medium text-gray-700 mb-2">Notes administratives</label>
               <textarea 
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -253,7 +253,7 @@ export default function InscriptionDetailPage() {
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4">Statistiques détaillées</h2>
               <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
+                <table className="min-w-full text-base">
                   <thead>
                     <tr className="bg-gray-50">
                       <th className="px-4 py-3 text-left font-medium">Niveau</th>
@@ -281,7 +281,7 @@ export default function InscriptionDetailPage() {
                               style={{ width: `${Math.min(data.pourcentageScore, 100)}%` }}
                             ></div>
                           </div>
-                          <span className="text-xs">{data.pourcentageScore.toFixed(1)}%</span>
+                          <span className="text-sm">{data.pourcentageScore.toFixed(1)}%</span>
                         </td>
                         <td className="px-4 py-3">{data.seuil}</td>
                         <td className="px-4 py-3">

@@ -274,7 +274,7 @@ const handleSubmit = async () => {
             {aucuneNotion === 'oui' && (
               <div className="mt-4 p-3 bg-green-50 rounded">
                 <p className="font-bold">✓ Vous serez classé en niveau A1</p>
-                <p className="text-sm">Pas besoin de remplir la grille complète.</p>
+                <p className="text-base">Pas besoin de remplir la grille complète.</p>
               </div>
             )}
           </div>

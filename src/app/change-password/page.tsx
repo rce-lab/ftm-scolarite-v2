@@ -65,10 +65,10 @@ function ChangePasswordForm() {
           <Image src={logo} alt={t('login.logoAlt')} className="h-20 w-auto" priority />
         </div>
         <h1 className="text-2xl font-bold mb-2 text-center text-[#689e4e]">{t('changePassword.title')}</h1>
-        <p className="text-sm text-gray-600 text-center mb-6">{t('changePassword.subtitle')}</p>
+        <p className="text-base text-gray-600 text-center mb-6">{t('changePassword.subtitle')}</p>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm">{t('changePassword.newPasswordLabel')}</label>
+            <label className="block mb-2 text-base">{t('changePassword.newPasswordLabel')}</label>
             <input
               type="password"
               value={newPassword}
@@ -78,7 +78,7 @@ function ChangePasswordForm() {
             />
           </div>
           <div className="mb-6">
-            <label className="block mb-2 text-sm">{t('changePassword.confirmPasswordLabel')}</label>
+            <label className="block mb-2 text-base">{t('changePassword.confirmPasswordLabel')}</label>
             <input
               type="password"
               value={confirmPassword}

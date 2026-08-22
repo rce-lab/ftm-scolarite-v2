@@ -45,7 +45,7 @@ function ConfirmationContent() {
         <h2 className="text-xl font-bold mb-4">{t('confirmation.studentCodeTitle')}</h2>
         <div className="bg-blue-50 p-4 rounded text-center">
           <p className="text-2xl font-bold text-blue-700">{code}</p>
-          <p className="text-sm text-gray-600 mt-2">{t('confirmation.keepCodeHint')}</p>
+          <p className="text-base text-gray-600 mt-2">{t('confirmation.keepCodeHint')}</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ function ConfirmationContent() {
             <p><strong>{t('confirmation.amountLabel')}</strong> {config.montant_inscription}€</p>
             <p><strong>{t('confirmation.referenceLabel')}</strong> {code}</p>
           </div>
-          <p className="text-sm text-gray-600">{t('confirmation.paymentConfirmationHint')}</p>
+          <p className="text-base text-gray-600">{t('confirmation.paymentConfirmationHint')}</p>
         </div>
       </div>
 

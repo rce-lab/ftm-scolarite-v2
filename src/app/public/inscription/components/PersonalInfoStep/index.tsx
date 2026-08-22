@@ -287,13 +287,13 @@ export default function PersonalInfoStep({
   return (
     <div className="space-y-5">
       <h2 className="text-xl font-bold">{t('personalInfo.title')}</h2>
-      <p className="text-gray-600 text-sm">{t('personalInfo.subtitle')}</p>
+      <p className="text-gray-600 text-base">{t('personalInfo.subtitle')}</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Colonne gauche */}
         <div className="space-y-3">
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.nameLabel')}
             </label>
             <input
@@ -307,11 +307,11 @@ export default function PersonalInfoStep({
               required
               placeholder={t('personalInfo.namePlaceholder')}
             />
-            {errors.nom && <p className="text-xs text-red-500 mt-1">{errors.nom}</p>}
+            {errors.nom && <p className="text-sm text-red-500 mt-1">{errors.nom}</p>}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.firstNameLabel')}
             </label>
             <input
@@ -325,11 +325,11 @@ export default function PersonalInfoStep({
               required
               placeholder={t('personalInfo.firstNamePlaceholder')}
             />
-            {errors.prenom && <p className="text-xs text-red-500 mt-1">{errors.prenom}</p>}
+            {errors.prenom && <p className="text-sm text-red-500 mt-1">{errors.prenom}</p>}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.ageLabel')}
             </label>
             <input
@@ -345,11 +345,11 @@ export default function PersonalInfoStep({
               required
               placeholder={t('personalInfo.agePlaceholder')}
             />
-            {errors.age && <p className="text-xs text-red-500 mt-1">{errors.age}</p>}
+            {errors.age && <p className="text-sm text-red-500 mt-1">{errors.age}</p>}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.countryLabel')}
             </label>
             <select
@@ -366,11 +366,11 @@ export default function PersonalInfoStep({
                 <option key={pays.nom} value={pays.nom}>{pays.nom}</option>
               ))}
             </select>
-            {errors.pays_residence && <p className="text-xs text-red-500 mt-1">{errors.pays_residence}</p>}
+            {errors.pays_residence && <p className="text-sm text-red-500 mt-1">{errors.pays_residence}</p>}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.cityLabel')}
             </label>
             <input
@@ -384,14 +384,14 @@ export default function PersonalInfoStep({
               required
               placeholder={t('personalInfo.cityPlaceholder')}
             />
-            {errors.ville_residence && <p className="text-xs text-red-500 mt-1">{errors.ville_residence}</p>}
+            {errors.ville_residence && <p className="text-sm text-red-500 mt-1">{errors.ville_residence}</p>}
           </div>
         </div>
 
         {/* Colonne droite */}
         <div className="space-y-3">
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.legalGuardianLabel')}{isMinor ? ' *' : ''}
             </label>
             <input
@@ -405,14 +405,14 @@ export default function PersonalInfoStep({
               placeholder={t('personalInfo.legalGuardianPlaceholder')}
             />
             {errors.responsable_legal ? (
-              <p className="text-xs text-red-500 mt-1">{errors.responsable_legal}</p>
+              <p className="text-sm text-red-500 mt-1">{errors.responsable_legal}</p>
             ) : (
-              <p className="text-xs text-gray-500 mt-1">{t('personalInfo.legalGuardianHint')}</p>
+              <p className="text-sm text-gray-700 mt-1">{t('personalInfo.legalGuardianHint')}</p>
             )}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.emailLabel')}
             </label>
             <input
@@ -426,11 +426,11 @@ export default function PersonalInfoStep({
               required
               placeholder={t('personalInfo.emailPlaceholder')}
             />
-            {errors.email_contact && <p className="text-xs text-red-500 mt-1">{errors.email_contact}</p>}
+            {errors.email_contact && <p className="text-sm text-red-500 mt-1">{errors.email_contact}</p>}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.addressLabel')}
             </label>
             <textarea
@@ -443,7 +443,7 @@ export default function PersonalInfoStep({
           </div>
 
           <div>
-            <label className="block mb-1 text-sm">
+            <label className="block mb-1 text-base">
               {t('personalInfo.phoneLabel')}
             </label>
             <div className="flex gap-2">
@@ -467,8 +467,8 @@ export default function PersonalInfoStep({
                 placeholder={t('personalInfo.phonePlaceholder')}
               />
             </div>
-            {errors.telephone && <p className="text-xs text-red-500 mt-1">{errors.telephone}</p>}
-            <p className="text-xs text-gray-500 mt-1">
+            {errors.telephone && <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>}
+            <p className="text-sm text-gray-700 mt-1">
               {t('personalInfo.countryCodeHint')}
             </p>
           </div>
@@ -477,7 +477,7 @@ export default function PersonalInfoStep({
 
       {/* Photo (optionnelle) */}
       <div className="pt-3 border-t border-gray-200">
-        <label className="block mb-1 text-sm">
+        <label className="block mb-1 text-base">
           {t('personalInfo.photoLabel')}
         </label>
 
@@ -490,11 +490,11 @@ export default function PersonalInfoStep({
               className="w-16 h-16 object-cover rounded border border-gray-300"
             />
             <div className="flex flex-col gap-1">
-              {photoUploading && <span className="text-xs text-gray-500">{t('personalInfo.photoUploading')}</span>}
+              {photoUploading && <span className="text-sm text-gray-700">{t('personalInfo.photoUploading')}</span>}
               <button
                 type="button"
                 onClick={handleRemovePhoto}
-                className="text-xs text-red-600 hover:text-red-800 text-left"
+                className="text-sm text-red-600 hover:text-red-800 text-left"
               >
                 {t('personalInfo.removePhotoButton')}
               </button>
@@ -508,11 +508,11 @@ export default function PersonalInfoStep({
               onChange={handlePhotoChange}
               className="w-full text-sm"
             />
-            <p className="text-xs text-gray-500 mt-1">{t('personalInfo.photoHint')}</p>
+            <p className="text-sm text-gray-700 mt-1">{t('personalInfo.photoHint')}</p>
           </>
         )}
 
-        {photoError && <p className="text-xs text-red-500 mt-1">{photoError}</p>}
+        {photoError && <p className="text-sm text-red-500 mt-1">{photoError}</p>}
       </div>
 
       <div className="flex justify-between pt-4">

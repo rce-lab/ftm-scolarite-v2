@@ -172,7 +172,7 @@ export default function ParametresPage() {
       <form onSubmit={handleSave} className="bg-white rounded-lg shadow border border-gray-200 p-6 space-y-4">
         {CHAMPS_CONFIG.map((champ) => (
           <div key={champ.key}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t(champ.labelKey)}</label>
+            <label className="block text-base font-medium text-gray-700 mb-1">{t(champ.labelKey)}</label>
             {champ.type === 'textarea' ? (
               <textarea
                 value={form[champ.key]}
@@ -243,7 +243,7 @@ export default function ParametresPage() {
             </span>
           ))}
           {paysList.length === 0 && (
-            <p className="text-sm text-gray-500">{t('settings.noCountriesYet')}</p>
+            <p className="text-base text-gray-700">{t('settings.noCountriesYet')}</p>
           )}
         </div>
 

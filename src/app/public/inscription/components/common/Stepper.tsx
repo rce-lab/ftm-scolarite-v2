@@ -23,11 +23,11 @@ export default function Stepper({ currentStep, totalSteps = 5 }: StepperProps) {
             <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 ${
               currentStep >= step.number 
                 ? 'bg-blue-600 text-white border-blue-600' 
-                : 'bg-white text-gray-400 border-gray-300'
+                : 'bg-white text-gray-700 border-gray-300'
             }`}>
               {step.number}
             </div>
-            <span className={`text-sm ${currentStep >= step.number ? 'font-medium text-blue-600' : 'text-gray-500'}`}>
+            <span className={`text-sm ${currentStep >= step.number ? 'font-medium text-blue-600' : 'text-gray-700'}`}>
               {step.label}
             </span>
           </div>

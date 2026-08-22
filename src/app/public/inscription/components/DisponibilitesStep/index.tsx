@@ -93,7 +93,7 @@ export default function DisponibilitesStep({
       {/* Jours de disponibilité */}
       <div className="space-y-3">
         <div>
-          <label className="block mb-2 font-medium text-sm">
+          <label className="block mb-2 font-medium text-base">
             {t('availability.daysQuestion')}
           </label>
 
@@ -104,7 +104,7 @@ export default function DisponibilitesStep({
               onChange={(e) => handleTogglePeuImporte(e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded"
             />
-            <span className="text-sm font-medium">{t('availability.anyDayOption')}</span>
+            <span className="text-base font-medium">{t('availability.anyDayOption')}</span>
           </label>
 
           <div className={`grid grid-cols-2 md:grid-cols-3 gap-2 ${peuImporte ? 'opacity-40' : ''}`}>
@@ -133,9 +133,9 @@ export default function DisponibilitesStep({
                       </span>
                     )}
                   </div>
-                  <div className="font-medium text-sm">{jour.label}</div>
+                  <div className="font-medium text-base">{jour.label}</div>
                   {isSelected && (
-                    <div className="text-xs mt-1 text-blue-600">
+                    <div className="text-sm mt-1 text-blue-600">
                       {t('availability.choiceNumber').replace('{position}', String(position))}
                     </div>
                   )}
@@ -145,10 +145,10 @@ export default function DisponibilitesStep({
           </div>
 
           {errors.jours && (
-            <p className="text-xs text-red-500 mt-1">{errors.jours}</p>
+            <p className="text-sm text-red-500 mt-1">{errors.jours}</p>
           )}
 
-          <div className="mt-3 text-xs text-gray-600">
+          <div className="mt-3 text-sm text-gray-600">
             {peuImporte ? (
               <p>{t('availability.anyDaySummary')}</p>
             ) : (
@@ -165,7 +165,7 @@ export default function DisponibilitesStep({
                     </span>
                   )}
                 </p>
-                <p className="mt-1 text-gray-500">
+                <p className="mt-1 text-gray-700">
                   {t('availability.selectionHint')}
                 </p>
               </>
@@ -175,7 +175,7 @@ export default function DisponibilitesStep({
 
         {/* Horaire souhaité */}
         <div className="pt-4 border-t border-gray-200">
-          <label className="block mb-3 font-medium text-sm">
+          <label className="block mb-3 font-medium text-base">
             {t('availability.timeQuestion')}
           </label>
 
@@ -189,7 +189,7 @@ export default function DisponibilitesStep({
                   className="w-4 h-4 text-blue-600 rounded"
                 />
                 <div>
-                  <span className="font-medium text-sm">{t('availability.afternoonOption')}</span>
+                  <span className="font-medium text-base">{t('availability.afternoonOption')}</span>
                 </div>
               </label>
 
@@ -201,7 +201,7 @@ export default function DisponibilitesStep({
                   className="w-4 h-4 text-blue-600 rounded"
                 />
                 <div>
-                  <span className="font-medium text-sm">{t('availability.eveningOption')}</span>
+                  <span className="font-medium text-base">{t('availability.eveningOption')}</span>
                 </div>
               </label>
 
@@ -213,19 +213,19 @@ export default function DisponibilitesStep({
                   className="w-4 h-4 text-blue-600 rounded"
                 />
                 <div>
-                  <span className="font-medium text-sm">{t('availability.otherTimeOption')}</span>
+                  <span className="font-medium text-base">{t('availability.otherTimeOption')}</span>
                 </div>
               </label>
             </div>
 
             {errors.horaires && (
-              <p className="text-xs text-red-500">{errors.horaires}</p>
+              <p className="text-sm text-red-500">{errors.horaires}</p>
             )}
 
             {/* Détail autre horaire */}
             {formData.horaire_autre && (
               <div className="mt-3">
-                <label className="block mb-1 text-sm">
+                <label className="block mb-1 text-base">
                   {t('availability.otherTimeLabel')}
                 </label>
                 <input
@@ -238,7 +238,7 @@ export default function DisponibilitesStep({
                   placeholder={t('availability.otherTimePlaceholder')}
                 />
                 {errors.horaire_autre && (
-                  <p className="text-xs text-red-500 mt-1">{errors.horaire_autre}</p>
+                  <p className="text-sm text-red-500 mt-1">{errors.horaire_autre}</p>
                 )}
               </div>
             )}

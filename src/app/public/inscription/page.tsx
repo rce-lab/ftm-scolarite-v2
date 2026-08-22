@@ -197,7 +197,7 @@ function InscriptionPageContent() {
           <p className="text-gray-600 mt-1">
             FTM - Formation en langue Malagasy
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-700 mt-1">
             Année scolaire {config.annee_scolaire_courante}
           </p>
         </div>

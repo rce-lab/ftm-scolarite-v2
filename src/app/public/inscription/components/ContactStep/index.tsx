@@ -74,86 +74,86 @@ export default function ContactStep({
         <div className="space-y-4">
           {/* Informations personnelles */}
           <div>
-            <h4 className="font-bold text-gray-700 mb-2 text-sm">{t('personalInfo.title')}</h4>
+            <h4 className="font-bold text-gray-700 mb-2 text-base">{t('personalInfo.title')}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
-                <p className="text-xs text-gray-600">{t('contact.nameLabel')}</p>
-                <p className="font-medium text-sm">{formData.nom}</p>
+                <p className="text-sm text-gray-600">{t('contact.nameLabel')}</p>
+                <p className="font-medium text-base">{formData.nom}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.firstNameLabel')}</p>
-                <p className="font-medium text-sm">{formData.prenom}</p>
+                <p className="text-sm text-gray-600">{t('contact.firstNameLabel')}</p>
+                <p className="font-medium text-base">{formData.prenom}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.ageLabel')}</p>
-                <p className="font-medium text-sm">{t('contact.ageYears').replace('{age}', formData.age)}</p>
+                <p className="text-sm text-gray-600">{t('contact.ageLabel')}</p>
+                <p className="font-medium text-base">{t('contact.ageYears').replace('{age}', formData.age)}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.countryLabel')}</p>
-                <p className="font-medium text-sm">{formData.pays_residence}</p>
+                <p className="text-sm text-gray-600">{t('contact.countryLabel')}</p>
+                <p className="font-medium text-base">{formData.pays_residence}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.cityLabel')}</p>
-                <p className="font-medium text-sm">{formData.ville_residence}</p>
+                <p className="text-sm text-gray-600">{t('contact.cityLabel')}</p>
+                <p className="font-medium text-base">{formData.ville_residence}</p>
               </div>
               {formData.responsable_legal && (
                 <div>
-                  <p className="text-xs text-gray-600">{t('personalInfo.legalGuardianLabel')}</p>
-                  <p className="font-medium text-sm">{formData.responsable_legal}</p>
+                  <p className="text-sm text-gray-600">{t('personalInfo.legalGuardianLabel')}</p>
+                  <p className="font-medium text-base">{formData.responsable_legal}</p>
                 </div>
               )}
               <div>
-                <p className="text-xs text-gray-600">{t('contact.emailLabel')}</p>
-                <p className="font-medium text-sm">{formData.email_contact}</p>
+                <p className="text-sm text-gray-600">{t('contact.emailLabel')}</p>
+                <p className="font-medium text-base">{formData.email_contact}</p>
               </div>
               {formData.adresse_postale && (
                 <div>
-                  <p className="text-xs text-gray-600">{t('personalInfo.addressLabel')}</p>
-                  <p className="font-medium text-sm">{formData.adresse_postale}</p>
+                  <p className="text-sm text-gray-600">{t('personalInfo.addressLabel')}</p>
+                  <p className="font-medium text-base">{formData.adresse_postale}</p>
                 </div>
               )}
               <div>
-                <p className="text-xs text-gray-600">{t('contact.phoneLabel')}</p>
-                <p className="font-medium text-sm">{formData.indicatif_pays} {formData.telephone}</p>
+                <p className="text-sm text-gray-600">{t('contact.phoneLabel')}</p>
+                <p className="font-medium text-base">{formData.indicatif_pays} {formData.telephone}</p>
               </div>
             </div>
           </div>
 
           {/* Disponibilités */}
           <div className="pt-3 border-t border-gray-300">
-            <h4 className="font-bold text-gray-700 mb-2 text-sm">{t('contact.availabilityTitle')}</h4>
+            <h4 className="font-bold text-gray-700 mb-2 text-base">{t('contact.availabilityTitle')}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
-                <p className="text-xs text-gray-600">{t('contact.daysLabel')}</p>
-                <p className="font-medium text-sm">{formatJoursPreference()}</p>
+                <p className="text-sm text-gray-600">{t('contact.daysLabel')}</p>
+                <p className="font-medium text-base">{formatJoursPreference()}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.timesLabel')}</p>
-                <p className="font-medium text-sm">{formatHoraires()}</p>
+                <p className="text-sm text-gray-600">{t('contact.timesLabel')}</p>
+                <p className="font-medium text-base">{formatHoraires()}</p>
               </div>
             </div>
           </div>
 
           {/* Motivation */}
           <div className="pt-3 border-t border-gray-300">
-            <h4 className="font-bold text-gray-700 mb-2 text-sm">{t('motivation.title')}</h4>
+            <h4 className="font-bold text-gray-700 mb-2 text-base">{t('motivation.title')}</h4>
             <div className="space-y-2">
               <div>
-                <p className="text-xs text-gray-600">{t('contact.reasonsLabel')}</p>
-                <p className="font-medium text-sm">{formatRaisons()}</p>
+                <p className="text-sm text-gray-600">{t('contact.reasonsLabel')}</p>
+                <p className="font-medium text-base">{formatRaisons()}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.expectationsLabel')}</p>
-                <p className="font-medium text-sm">{formData.attentes_formation}</p>
+                <p className="text-sm text-gray-600">{t('contact.expectationsLabel')}</p>
+                <p className="font-medium text-base">{formData.attentes_formation}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.howKnownLabel')}</p>
-                <p className="font-medium text-sm">{formatConnaitre()}</p>
+                <p className="text-sm text-gray-600">{t('contact.howKnownLabel')}</p>
+                <p className="font-medium text-base">{formatConnaitre()}</p>
               </div>
               {formData.remarques && (
                 <div>
-                  <p className="text-xs text-gray-600">{t('contact.remarksLabel')}</p>
-                  <p className="font-medium text-sm">{formData.remarques}</p>
+                  <p className="text-sm text-gray-600">{t('contact.remarksLabel')}</p>
+                  <p className="font-medium text-base">{formData.remarques}</p>
                 </div>
               )}
             </div>
@@ -163,16 +163,16 @@ export default function ContactStep({
           <div className="pt-3 border-t border-gray-300">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
-                <p className="text-xs text-gray-600">{t('contact.suggestedLevelLabel')}</p>
+                <p className="text-sm text-gray-600">{t('contact.suggestedLevelLabel')}</p>
                 <p className="font-medium text-md">{formData.niveau_suggere || 'A1'}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-600">{t('contact.registrationFeeLabel')}</p>
+                <p className="text-sm text-gray-600">{t('contact.registrationFeeLabel')}</p>
                 <p className="font-medium text-md">{t('contact.perYear').replace('{montant}', String(config?.montant_inscription || 30))}</p>
               </div>
               {Object.keys(formData.competences || {}).length > 1 && (
                 <div>
-                  <p className="text-xs text-gray-600">{t('contact.questionsAnsweredLabel')}</p>
+                  <p className="text-sm text-gray-600">{t('contact.questionsAnsweredLabel')}</p>
                   <p className="font-medium text-md">{t('contact.questionsCount').replace('{n}', String(Object.keys(formData.competences).length))}</p>
                 </div>
               )}

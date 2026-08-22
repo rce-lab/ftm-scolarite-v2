@@ -146,12 +146,12 @@ export default function PaymentsPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableName')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableCode')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableClass')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableEmail')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableExpectedAmount')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.tableAction')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.tableName')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.tableCode')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.tableClass')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.tableEmail')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.tableExpectedAmount')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.tableAction')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -160,10 +160,10 @@ export default function PaymentsPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {inscription.prenom} {inscription.nom}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">{inscription.student_code}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">{inscription.classe_attribuee || '—'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">{inscription.email_contact}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">{montantAttendu}€</td>
+                  <td className="px-6 py-4 whitespace-nowrap font-mono text-base">{inscription.student_code}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base">{inscription.classe_attribuee || '—'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base">{inscription.email_contact}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base">{montantAttendu}€</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => ouvrirConfirmation(inscription)}
@@ -176,7 +176,7 @@ export default function PaymentsPage() {
               ))}
               {enAttente.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-700">
                     {t('payments.noPendingPayments')}
                   </td>
                 </tr>
@@ -191,11 +191,11 @@ export default function PaymentsPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableCandidate')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableCode')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableAmount')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableDate')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('payments.historyTableMode')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.historyTableCandidate')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.historyTableCode')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.historyTableAmount')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.historyTableDate')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('payments.historyTableMode')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -204,21 +204,21 @@ export default function PaymentsPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {paiement.inscriptions?.prenom} {paiement.inscriptions?.nom}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">
+                  <td className="px-6 py-4 whitespace-nowrap font-mono text-base">
                     {paiement.inscriptions?.student_code || '—'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">{paiement.montant}€</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-6 py-4 whitespace-nowrap text-base">{paiement.montant}€</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base">
                     {paiement.date_paiement
                       ? new Date(paiement.date_paiement).toLocaleDateString('fr-FR')
                       : new Date(paiement.created_at).toLocaleDateString('fr-FR')}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm capitalize">{paiement.mode || '—'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base capitalize">{paiement.mode || '—'}</td>
                 </tr>
               ))}
               {historique.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-700">
                     {t('payments.noPaymentsRecorded')}
                   </td>
                 </tr>
@@ -236,13 +236,13 @@ export default function PaymentsPage() {
               <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
               {t('payments.confirmModalTitle')}
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-base text-gray-600 mb-4">
               {inscriptionSelectionnee.prenom} {inscriptionSelectionnee.nom} — {inscriptionSelectionnee.student_code}
             </p>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('payments.amountLabel')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('payments.amountLabel')}</label>
                 <input
                   type="number"
                   value={montant}
@@ -251,7 +251,7 @@ export default function PaymentsPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('payments.paymentModeLabel')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('payments.paymentModeLabel')}</label>
                 <select
                   value={mode}
                   onChange={(e) => setMode(e.target.value)}

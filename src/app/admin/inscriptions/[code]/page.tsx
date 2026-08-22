@@ -154,9 +154,9 @@ export default function InscriptionDetailPage() {
   if (!inscription) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 text-4xl mb-4">❌</div>
+        <div className="text-gray-700 text-4xl mb-4">❌</div>
         <h3 className="text-lg font-medium text-gray-900 mb-1">{t('inscriptionsDetail.notFoundTitle')}</h3>
-        <p className="text-gray-500 mb-6">{t('inscriptionsDetail.notFoundMessage').replace('{code}', String(params.code))}</p>
+        <p className="text-gray-700 mb-6">{t('inscriptionsDetail.notFoundMessage').replace('{code}', String(params.code))}</p>
         <Link
           href="/admin/inscriptions"
           className="text-[#689e4e] hover:text-[#527d3e] font-medium"
@@ -197,7 +197,7 @@ export default function InscriptionDetailPage() {
           }`}>
             {getStatutLabel(inscription.status, { emoji: true })}
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-sm text-gray-700 mt-1">
             {t('inscriptionsDetail.registeredOn').replace('{date}', new Date(inscription.created_at).toLocaleDateString('fr-FR'))}
           </p>
         </div>
@@ -216,25 +216,25 @@ export default function InscriptionDetailPage() {
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldName')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldName')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.nom}</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldFirstName')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldFirstName')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.prenom}</div>
               </div>
               {inscription.age && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldAge')}</label>
+                  <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldAge')}</label>
                   <div className="p-2 bg-gray-50 rounded border">{t('inscriptionsDetail.ageYears').replace('{age}', String(inscription.age))}</div>
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldEmail')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldEmail')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.email_contact}</div>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldPhone')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.fieldPhone')}</label>
                 <div className="p-2 bg-gray-50 rounded border">{inscription.telephone}</div>
               </div>
             </div>
@@ -248,14 +248,14 @@ export default function InscriptionDetailPage() {
             </h2>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.suggestedLevelLabel')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.suggestedLevelLabel')}</label>
                 <div className="p-3 bg-[#689e4e]/10 rounded border border-[#689e4e]/30">
                   <div className="text-2xl font-bold text-[#689e4e]">{inscription.niveau_suggere}</div>
                   <div className="text-sm text-[#527d3e]">{t('inscriptionsDetail.autoCalculated')}</div>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.finalLevelLabel')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.finalLevelLabel')}</label>
                 <select
                   value={niveauFinal}
                   onChange={(e) => setNiveauFinal(e.target.value)}
@@ -267,7 +267,7 @@ export default function InscriptionDetailPage() {
                 </select>
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('inscriptionsDetail.assignedClassLabel')}</label>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.assignedClassLabel')}</label>
                 <select
                   value={classeId}
                   onChange={(e) => handleClasseChange(e.target.value)}
@@ -281,13 +281,13 @@ export default function InscriptionDetailPage() {
                   ))}
                 </select>
                 {classe && (
-                  <p className="text-xs text-gray-500 mt-1">{classe}</p>
+                  <p className="text-sm text-gray-700 mt-1">{classe}</p>
                 )}
               </div>
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">{t('inscriptionsDetail.adminNotesLabel')}</label>
+              <label className="block text-base font-medium text-gray-700 mb-2">{t('inscriptionsDetail.adminNotesLabel')}</label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -315,7 +315,7 @@ export default function InscriptionDetailPage() {
                 {t('inscriptionsDetail.detailedStatsTitle')}
               </h2>
               <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
+                <table className="min-w-full text-base">
                   <thead>
                     <tr className="bg-gray-50">
                       <th className="px-4 py-3 text-left font-medium">{t('inscriptionsDetail.statsTableLevel')}</th>

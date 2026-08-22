@@ -157,11 +157,11 @@ function DeliberationContent() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('deliberation.tableStudent')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('deliberation.tableSuggestedLevel')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('deliberation.tableStatus')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('deliberation.tableDate')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('deliberation.tableActions')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('deliberation.tableStudent')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('deliberation.tableSuggestedLevel')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('deliberation.tableStatus')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('deliberation.tableDate')}</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('deliberation.tableActions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -173,7 +173,7 @@ function DeliberationContent() {
                   >
                     <td className="px-6 py-4">
                       <div className="font-medium">{inscription.prenom} {inscription.nom}</div>
-                      <div className="text-sm text-gray-500">{inscription.email_contact}</div>
+                      <div className="text-base text-gray-700">{inscription.email_contact}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e] font-bold">
@@ -189,7 +189,7 @@ function DeliberationContent() {
                         {getStatutLabel(inscription.status, { emoji: true })}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-6 py-4 text-base">
                       {new Date(inscription.created_at).toLocaleDateString('fr-FR')}
                     </td>
                     <td className="px-6 py-4">
@@ -198,7 +198,7 @@ function DeliberationContent() {
                           e.stopPropagation()
                           setSelectedInscription(inscription)
                         }}
-                        className="text-[#689e4e] hover:text-[#527d3e] text-sm"
+                        className="text-[#689e4e] hover:text-[#527d3e] text-base"
                       >
                         {t('deliberation.deliberateLink')}
                       </button>
@@ -229,18 +229,18 @@ function DeliberationContent() {
                     />
                   )}
                   <h3 className="font-medium mb-2">{selectedInscription.prenom} {selectedInscription.nom}</h3>
-                  <p className="text-sm text-gray-600">{t('deliberation.codeLabel').replace('{code}', selectedInscription.student_code)}</p>
+                  <p className="text-base text-gray-600">{t('deliberation.codeLabel').replace('{code}', selectedInscription.student_code)}</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">{t('deliberation.suggestedLevelLabel')}</label>
+                  <label className="block text-base font-medium mb-1">{t('deliberation.suggestedLevelLabel')}</label>
                   <div className="p-2 bg-[#689e4e]/10 rounded border border-[#689e4e]/30 text-center">
                     <span className="text-xl font-bold text-[#527d3e]">{selectedInscription.niveau_suggere}</span>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">{t('deliberation.finalLevelLabel')}</label>
+                  <label className="block text-base font-medium mb-1">{t('deliberation.finalLevelLabel')}</label>
                   <div className="grid grid-cols-3 gap-1">
                     {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((niveau) => (
                       <button
@@ -256,13 +256,13 @@ function DeliberationContent() {
                       </button>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-sm text-gray-700 mt-1">
                     {t('deliberation.currentLabel').replace('{niveau}', selectedInscription.niveau_definitif || t('deliberation.undefinedLevel'))}
                   </p>
                 </div>
 
                 <div className="pt-4 border-t">
-                  <label className="block text-sm font-medium mb-2">{t('deliberation.finalDecisionLabel')}</label>
+                  <label className="block text-base font-medium mb-2">{t('deliberation.finalDecisionLabel')}</label>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => updateStatus(selectedInscription.id, 'approved')}
@@ -299,7 +299,7 @@ function DeliberationContent() {
             <div className="bg-gray-50 rounded shadow p-6 text-center">
               <div className="text-gray-400 text-4xl mb-4">👨‍🏫</div>
               <h3 className="font-medium mb-2">{t('deliberation.selectStudentTitle')}</h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-base text-gray-600">
                 {t('deliberation.selectStudentHint')}
               </p>
             </div>

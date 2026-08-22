@@ -90,7 +90,7 @@ export default function AdminDashboard() {
           <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
           {t('adminDashboard.title')}
         </h1>
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-700">
           {new Date().toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">📋</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.totalInscriptions')}</p>
+              <p className="text-base font-medium text-gray-600">{t('adminDashboard.totalInscriptions')}</p>
               <p className="text-2xl font-bold text-gray-900">{stats.totalInscriptions}</p>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">⏳</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.pendingReview')}</p>
+              <p className="text-base font-medium text-gray-600">{t('adminDashboard.pendingReview')}</p>
               <p className="text-2xl font-bold text-yellow-600">{stats.pendingReview}</p>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">✅</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.approvedInscriptions')}</p>
+              <p className="text-base font-medium text-gray-600">{t('adminDashboard.approvedInscriptions')}</p>
               <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">💰</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">{t('adminDashboard.paymentsPending')}</p>
+              <p className="text-base font-medium text-gray-600">{t('adminDashboard.paymentsPending')}</p>
               <p className="text-2xl font-bold text-orange-600">{stats.paymentPending}</p>
             </div>
           </div>
@@ -176,18 +176,18 @@ export default function AdminDashboard() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableCode')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableName')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableLevel')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableDate')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableStatus')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('adminDashboard.tableAction')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableCode')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableName')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableLevel')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableDate')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableStatus')}</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableAction')}</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {stats.recentInscriptions.map((inscription) => (
                 <tr key={inscription.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-mono">{inscription.student_code}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-base font-mono">{inscription.student_code}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {inscription.prenom} {inscription.nom}
                   </td>
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
                       {inscription.niveau_suggere}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-base text-gray-700">
                     {new Date(inscription.created_at).toLocaleDateString('fr-FR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -270,9 +270,9 @@ export default function AdminDashboard() {
             {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((niveau) => (
               <div key={niveau} className="text-center p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-[#689e4e]">{niveau}</div>
-                <div className="text-sm text-gray-600 mt-1">{t('adminDashboard.levelTileLabel')}</div>
+                <div className="text-base text-gray-600 mt-1">{t('adminDashboard.levelTileLabel')}</div>
                 <div className="mt-2 text-lg font-bold">0</div>
-                <div className="text-xs text-gray-500">{t('adminDashboard.studentsUnit')}</div>
+                <div className="text-xs text-gray-700">{t('adminDashboard.studentsUnit')}</div>
               </div>
             ))}
           </div>

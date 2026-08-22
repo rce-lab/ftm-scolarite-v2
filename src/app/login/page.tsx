@@ -53,7 +53,7 @@ function LoginForm() {
         <h1 className="text-2xl font-bold mb-6 text-center text-[#689e4e]">{t('login.title')}</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm">{t('login.identifiantLabel')}</label>
+            <label className="block mb-2 text-base">{t('login.identifiantLabel')}</label>
             <input
               type="text"
               value={email}
@@ -64,7 +64,7 @@ function LoginForm() {
             />
           </div>
           <div className="mb-6">
-            <label className="block mb-2 text-sm">{t('login.passwordLabel')}</label>
+            <label className="block mb-2 text-base">{t('login.passwordLabel')}</label>
             <input
               type="password"
               value={password}

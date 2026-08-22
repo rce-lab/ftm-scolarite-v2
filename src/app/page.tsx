@@ -47,11 +47,11 @@ function HomePageContent() {
         <h1 className="text-4xl font-bold text-[#689e4e]">FTM</h1>
         <p className="text-gray-600 mt-1">Fianarana Teny Malagasy</p>
 
-        <p className="text-sm text-gray-500 mt-4">
+        <p className="text-sm text-gray-700 mt-4">
           {t('homepage.schoolYear').replace('{annee}', config.annee_scolaire_courante)}
         </p>
 
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-700 mt-1">
           {config.adresse_association}
         </p>
 

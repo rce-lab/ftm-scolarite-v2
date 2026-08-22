@@ -188,7 +188,7 @@ export default function EnseignantsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">{t('enseignants.lastNameLabel')}</label>
+              <label className="block text-base font-medium mb-1">{t('enseignants.lastNameLabel')}</label>
               <input
                 type="text"
                 value={form.nom}
@@ -198,7 +198,7 @@ export default function EnseignantsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">{t('enseignants.firstNameLabel')}</label>
+              <label className="block text-base font-medium mb-1">{t('enseignants.firstNameLabel')}</label>
               <input
                 type="text"
                 value={form.prenom}
@@ -208,7 +208,7 @@ export default function EnseignantsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">{t('enseignants.emailLabel')}</label>
+              <label className="block text-base font-medium mb-1">{t('enseignants.emailLabel')}</label>
               <input
                 type="email"
                 value={form.email}
@@ -217,7 +217,7 @@ export default function EnseignantsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">{t('enseignants.phoneLabel')}</label>
+              <label className="block text-base font-medium mb-1">{t('enseignants.phoneLabel')}</label>
               <input
                 type="text"
                 value={form.telephone}
@@ -233,10 +233,10 @@ export default function EnseignantsPage() {
                 onChange={(e) => updateForm('actif', e.target.checked)}
                 className="h-4 w-4"
               />
-              <label htmlFor="enseignant-actif" className="text-sm font-medium">{t('enseignants.activeLabel')}</label>
+              <label htmlFor="enseignant-actif" className="text-base font-medium">{t('enseignants.activeLabel')}</label>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">{t('enseignants.remarksLabel')}</label>
+              <label className="block text-base font-medium mb-1">{t('enseignants.remarksLabel')}</label>
               <textarea
                 value={form.remarques}
                 onChange={(e) => updateForm('remarques', e.target.value)}
@@ -246,7 +246,7 @@ export default function EnseignantsPage() {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">{EDIT_TEXTS.classesLabel[language]}</label>
+              <label className="block text-base font-medium mb-1">{EDIT_TEXTS.classesLabel[language]}</label>
               {classesDisponibles.length > 0 ? (
                 <div className="flex flex-wrap gap-3 p-2 border rounded max-h-48 overflow-y-auto">
                   {classesDisponibles.map(classe => (
@@ -262,7 +262,7 @@ export default function EnseignantsPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">{EDIT_TEXTS.noClassesAvailable[language]}</p>
+                <p className="text-base text-gray-700">{EDIT_TEXTS.noClassesAvailable[language]}</p>
               )}
             </div>
           </div>
@@ -298,13 +298,13 @@ export default function EnseignantsPage() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableLastName')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableFirstName')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableEmail')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tablePhone')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableStatus')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('enseignants.tableRemarks')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{EDIT_TEXTS.tableActions[language]}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('enseignants.tableLastName')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('enseignants.tableFirstName')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('enseignants.tableEmail')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('enseignants.tablePhone')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('enseignants.tableStatus')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('enseignants.tableRemarks')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{EDIT_TEXTS.tableActions[language]}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -312,8 +312,8 @@ export default function EnseignantsPage() {
               <tr key={enseignant.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap font-medium">{enseignant.nom}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{enseignant.prenom}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{enseignant.email || '—'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">{enseignant.telephone || '—'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-base">{enseignant.email || '—'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-base">{enseignant.telephone || '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {enseignant.actif ? (
                     <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e] font-bold">
@@ -325,7 +325,7 @@ export default function EnseignantsPage() {
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-4 text-sm max-w-xs">{enseignant.remarques || '—'}</td>
+                <td className="px-6 py-4 text-base max-w-xs">{enseignant.remarques || '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <button
                     type="button"
@@ -339,7 +339,7 @@ export default function EnseignantsPage() {
             ))}
             {enseignants.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-8 text-center text-gray-700">
                   {t('enseignants.noTeachersYet')}
                 </td>
               </tr>

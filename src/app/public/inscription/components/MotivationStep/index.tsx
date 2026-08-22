@@ -51,7 +51,7 @@ export default function MotivationStep({
 
       {/* Raisons de la formation */}
       <div className="space-y-3">
-        <label className="block font-medium text-sm">
+        <label className="block font-medium text-base">
           {t('motivation.reasonsQuestion')}
         </label>
 
@@ -64,7 +64,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.reasonMaternal')}</span>
+              <span className="font-medium text-base">{t('motivation.reasonMaternal')}</span>
             </div>
           </label>
 
@@ -76,7 +76,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.reasonSkills')}</span>
+              <span className="font-medium text-base">{t('motivation.reasonSkills')}</span>
             </div>
           </label>
 
@@ -88,7 +88,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.reasonEnjoyment')}</span>
+              <span className="font-medium text-base">{t('motivation.reasonEnjoyment')}</span>
             </div>
           </label>
 
@@ -100,7 +100,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.otherOption')}</span>
+              <span className="font-medium text-base">{t('motivation.otherOption')}</span>
             </div>
           </label>
         </div>
@@ -108,7 +108,7 @@ export default function MotivationStep({
         {/* Détail autre raison */}
         {formData.raison_autre && (
           <div className="mt-2">
-            <label className="block mb-1 text-xs">
+            <label className="block mb-1 text-sm">
               {t('motivation.otherReasonLabel')}
             </label>
             <input
@@ -124,7 +124,7 @@ export default function MotivationStep({
 
       {/* Attentes de formation */}
       <div className="pt-4 border-t border-gray-200">
-        <label className="block mb-2 font-medium text-sm">
+        <label className="block mb-2 font-medium text-base">
           {t('motivation.expectationsQuestion')}
         </label>
         <textarea
@@ -137,7 +137,7 @@ export default function MotivationStep({
 
       {/* Comment avez-vous connu */}
       <div className="pt-4 border-t border-gray-200">
-        <label className="block mb-2 font-medium text-sm">
+        <label className="block mb-2 font-medium text-base">
           {t('motivation.howKnownQuestion')}
         </label>
 
@@ -150,7 +150,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.knownAcquaintances')}</span>
+              <span className="font-medium text-base">{t('motivation.knownAcquaintances')}</span>
             </div>
           </label>
 
@@ -162,7 +162,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.knownAssociation')}</span>
+              <span className="font-medium text-base">{t('motivation.knownAssociation')}</span>
             </div>
           </label>
 
@@ -174,7 +174,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.knownFormerStudent')}</span>
+              <span className="font-medium text-base">{t('motivation.knownFormerStudent')}</span>
             </div>
           </label>
 
@@ -186,7 +186,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.knownRecommendation')}</span>
+              <span className="font-medium text-base">{t('motivation.knownRecommendation')}</span>
             </div>
           </label>
 
@@ -198,7 +198,7 @@ export default function MotivationStep({
               className="w-4 h-4 text-blue-600 rounded"
             />
             <div>
-              <span className="font-medium text-sm">{t('motivation.otherOption')}</span>
+              <span className="font-medium text-base">{t('motivation.otherOption')}</span>
             </div>
           </label>
         </div>
@@ -206,7 +206,7 @@ export default function MotivationStep({
         {/* Détail autre connaissance */}
         {formData.connaitre_autre && (
           <div className="mt-2">
-            <label className="block mb-1 text-xs">
+            <label className="block mb-1 text-sm">
               {t('motivation.otherKnownLabel')}
             </label>
             <input
@@ -222,7 +222,7 @@ export default function MotivationStep({
 
       {/* Remarques */}
       <div className="pt-4 border-t border-gray-200">
-        <label className="block mb-2 font-medium text-sm">
+        <label className="block mb-2 font-medium text-base">
           {t('motivation.remarksQuestion')}
         </label>
         <textarea

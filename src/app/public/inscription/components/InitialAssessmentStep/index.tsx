@@ -117,7 +117,7 @@ export default function InitialAssessmentStep({
           <p className="text-gray-600 mt-2">
             {t('assessment.autoClassifiedLead')} <strong>A1</strong>.
           </p>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-gray-700 mt-4">
             {t('assessment.redirecting')}
           </p>
         </div>
@@ -135,12 +135,12 @@ export default function InitialAssessmentStep({
         <div className="flex justify-between items-center">
           <button
             onClick={onBack}
-            className="px-3 py-1 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 text-xs"
+            className="px-3 py-1 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
           >
             {t('assessment.backButton')}
           </button>
 
-          <div className="text-xs text-gray-600">
+          <div className="text-sm text-gray-600">
             {t('assessment.questionsAnsweredCount')
               .replace('{n}', String(Object.keys(reponses).length))
               .replace('{total}', String(toutesSousQuestions.length + 1))}
@@ -149,7 +149,7 @@ export default function InitialAssessmentStep({
           <button
             onClick={handleSubmit}
             disabled={!reponseInitiale}
-            className={`px-3 py-1 rounded-lg font-medium text-xs ${
+            className={`px-3 py-1 rounded-lg font-medium text-sm ${
               reponseInitiale
                 ? 'bg-blue-600 text-white hover:bg-blue-700'
                 : 'bg-gray-200 text-gray-500 cursor-not-allowed'
@@ -188,7 +188,7 @@ export default function InitialAssessmentStep({
                     onChange={() => handleReponseInitiale(option.value)}
                     className="w-3 h-3 text-blue-600"
                   />
-                  <span className="text-sm">{option.label}</span>
+                  <span className="text-base">{option.label}</span>
                 </label>
               ))}
             </div>
@@ -203,20 +203,20 @@ export default function InitialAssessmentStep({
             <h3 className="text-xl font-bold text-gray-800 mb-1">
               {t('assessment.gridTitle')}
             </h3>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-base">
               {t('assessment.gridSubtitle')}
             </p>
           </div>
 
           {/* Instructions */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <h4 className="font-bold text-blue-800 mb-1 text-sm">{t('assessment.instructionsTitle')}</h4>
-            <ul className="text-xs text-blue-700 space-y-1">
+            <h4 className="font-bold text-blue-800 mb-1 text-base">{t('assessment.instructionsTitle')}</h4>
+            <ul className="text-sm text-blue-700 space-y-1">
               <li>• <strong>{t('assessment.answerYes')}</strong> : {t('assessment.instructionYesText')}</li>
               <li>• <strong>{t('assessment.answerSomewhat')}</strong> : {t('assessment.instructionSomewhatText')}</li>
               <li>• <strong>{t('assessment.answerNo')}</strong> : {t('assessment.instructionNoText')}</li>
             </ul>
-            <p className="text-xs text-blue-600 mt-2">
+            <p className="text-sm text-blue-600 mt-2">
               <strong>{t('assessment.instructionsNoteLead')}</strong> {t('assessment.instructionsNoteText')}
             </p>
           </div>
@@ -239,17 +239,17 @@ export default function InitialAssessmentStep({
                           {DOMAINE_LABEL_KEYS[sousQuestion.domaine] ? t(DOMAINE_LABEL_KEYS[sousQuestion.domaine]) : sousQuestion.domaine}
                         </span>
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-sm text-gray-600">
                         {t('assessment.competenceLabel').replace('{n}', String(sousQuestion.competenceNumero))}
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-sm text-gray-700">
                       {index + 1}
                     </div>
                   </div>
 
                   <div className="bg-amber-50 border border-amber-100 rounded p-3 mb-3">
-                    <p className="text-gray-800 text-sm">
+                    <p className="text-gray-800 text-base">
                       {t(`assessment.question_${sousQuestion.id}`)}
                     </p>
                   </div>
@@ -266,7 +266,7 @@ export default function InitialAssessmentStep({
                             onChange={() => handleReponseChange(sousQuestion.id, option.value)}
                             className="w-3 h-3 text-blue-600"
                           />
-                          <span className="text-xs">{option.label}</span>
+                          <span className="text-sm">{option.label}</span>
                         </label>
                       ))}
                     </div>
@@ -279,7 +279,7 @@ export default function InitialAssessmentStep({
               <p className="text-gray-600">
                 {t('assessment.noQuestionsFound')}
               </p>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-sm text-gray-700 mt-2">
                 {t('assessment.noQuestionsFoundHint')}
               </p>
             </div>
