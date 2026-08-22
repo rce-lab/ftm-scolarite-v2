@@ -126,7 +126,7 @@ function InscriptionsListContent() {
             {inscriptions.map((inscription) => (
               <tr key={inscription.id} className="group hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap font-mono text-base">{inscription.student_code}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 max-w-[160px] truncate" title={`${inscription.prenom} ${inscription.nom}`}>
                   {inscription.prenom} {inscription.nom}
                 </td>
                 <td className="px-6 py-4 max-w-[220px] truncate text-base" title={inscription.email_contact}>{inscription.email_contact}</td>
