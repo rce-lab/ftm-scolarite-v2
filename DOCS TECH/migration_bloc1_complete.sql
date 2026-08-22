@@ -153,7 +153,7 @@ create index if not exists idx_paiements_inscription on paiements(inscription_id
 
 insert into configuration (key, value) values
   ('frais_inscription', '30'),
-  ('email_notification', 'scolarite_ftm@gmail.com')
+  ('email_notification', 'scolarite.ftm@gmail.com')
 on conflict (key) do nothing;
 
 insert into comptes_visio (nom, type, proprietaire, limite_participants) values

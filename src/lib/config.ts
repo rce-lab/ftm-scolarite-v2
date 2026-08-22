@@ -20,9 +20,9 @@ function getDefaultConfig(): Config {
     montant_inscription: 30,
     annee_scolaire_courante: '2026-2027',
     prefixe_code_etudiant: 'FTM-26',
-    email_communication: 'scolarite_ftm@gmail.com',
-    rib_banque: 'ERREUR CONFIGURATION — contactez scolarite_ftm@gmail.com',
-    beneficiaire: 'ERREUR CONFIGURATION — contactez scolarite_ftm@gmail.com',
+    email_communication: 'scolarite.ftm@gmail.com',
+    rib_banque: 'ERREUR CONFIGURATION — contactez scolarite.ftm@gmail.com',
+    beneficiaire: 'ERREUR CONFIGURATION — contactez scolarite.ftm@gmail.com',
     email_responsable_scolarite: '',
     email_responsable_administratif: '',
     adresse_association: ''

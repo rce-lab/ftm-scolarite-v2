@@ -2,7 +2,7 @@
 'use client'
 
 import { StepProps, FormData } from '../../types'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PAYS } from '../../data/pays'
 import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 import { supabase } from '@/lib/supabase/client'
@@ -22,7 +22,15 @@ export default function PersonalInfoStep({
   onNext,
   onBack
 }: StepProps) {
-  const { t } = usePublicTranslation()
+  const { t, language } = usePublicTranslation()
+
+  const paysTries = useMemo(() => {
+    return [...PAYS].sort((a, b) =>
+      language === 'en'
+        ? a.nomAnglais.localeCompare(b.nomAnglais)
+        : a.nom.localeCompare(b.nom, 'fr')
+    )
+  }, [language])
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [photoUploading, setPhotoUploading] = useState(false)
   const [photoError, setPhotoError] = useState('')
@@ -362,8 +370,10 @@ export default function PersonalInfoStep({
               required
             >
               <option value="">{t('personalInfo.countrySelectPlaceholder')}</option>
-              {PAYS.map((pays) => (
-                <option key={pays.nom} value={pays.nom}>{pays.nom}</option>
+              {paysTries.map((pays) => (
+                <option key={pays.nom} value={pays.nom}>
+                  {language === 'en' ? pays.nomAnglais : pays.nom}
+                </option>
               ))}
             </select>
             {errors.pays_residence && <p className="text-sm text-red-500 mt-1">{errors.pays_residence}</p>}
