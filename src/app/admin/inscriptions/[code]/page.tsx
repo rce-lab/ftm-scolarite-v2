@@ -118,6 +118,7 @@ export default function InscriptionDetailPage() {
         if (classeSelectionnee) {
           sendDecisionEmailAction(
             { ...inscription, niveau_definitif: niveauFinal, classe_id: classeId },
+            'approved',
             classeSelectionnee
           ).catch((err) => console.error('Erreur envoi email décision:', err))
         }
@@ -137,6 +138,14 @@ export default function InscriptionDetailPage() {
 
     if (result.success) {
       alert(t('inscriptionsDetail.statusUpdateSuccessAlert'))
+
+      if (newStatus === 'rejected' && inscription) {
+        const emailResult = await sendDecisionEmailAction(inscription, 'rejected')
+        if (!emailResult.success) {
+          alert("Le statut a bien été mis à jour en \"rejeté\", mais l'email de refus n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.")
+        }
+      }
+
       loadInscription()
     } else {
       alert(t('inscriptionsDetail.statusUpdateErrorAlert'))

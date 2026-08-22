@@ -15,9 +15,10 @@ export async function sendInscriptionNotificationAction(
 
 export async function sendDecisionEmailAction(
   inscription: Parameters<typeof sendDecisionEmail>[0],
-  classe: Parameters<typeof sendDecisionEmail>[1]
+  status: Parameters<typeof sendDecisionEmail>[1],
+  classe?: Parameters<typeof sendDecisionEmail>[2]
 ) {
-  return sendDecisionEmail(inscription, classe)
+  return sendDecisionEmail(inscription, status, classe)
 }
 
 export async function sendPaymentConfirmationAction(

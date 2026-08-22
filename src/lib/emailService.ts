@@ -161,12 +161,58 @@ interface ClasseData {
   heure?: string | null
 }
 
-// Fonction pour annoncer la validation de l'inscription et la classe assignée
+// Fonction pour annoncer la décision du conseil pédagogique (validation ou refus)
 export async function sendDecisionEmail(
   inscription: InscriptionData,
-  classe: ClasseData
+  status: 'approved' | 'rejected',
+  classe?: ClasseData
 ) {
   try {
+    if (status === 'rejected') {
+      await transporter.sendMail({
+        from: FROM_ADDRESS,
+        to: inscription.email_contact,
+        cc: ADMINS_EN_COPIE_CANDIDATS,
+        subject: 'Réponse à votre inscription - FTM Malagasy',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #2563eb; margin-bottom: 10px;">FTM Malagasy</h1>
+              <p style="color: #6b7280;">Apprentissage de la langue malagasy</p>
+            </div>
+
+            <h2 style="color: #1f2937;">Bonjour ${inscription.prenom} ${inscription.nom},</h2>
+            <p style="color: #4b5563; line-height: 1.6;">
+              Nous vous remercions vivement pour l'intérêt que vous avez porté aux cours de Malagasy de la FTM et pour le temps consacré à votre dossier d'inscription.
+            </p>
+            <p style="color: #4b5563; line-height: 1.6;">
+              Après examen par notre conseil pédagogique, nous sommes au regret de vous informer que votre candidature n'a pas pu être retenue cette fois-ci.
+            </p>
+            <p style="color: #4b5563; line-height: 1.6;">
+              Cette décision ne remet aucunement en cause votre motivation, et nous vous encourageons à retenter votre chance lors d'une prochaine session.
+            </p>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+              <p style="color: #6b7280; font-size: 0.9em;">
+                <strong>Site web :</strong> ${process.env.APP_URL || 'https://ftm-malagasy.org'}
+              </p>
+            </div>
+
+            <p style="color: #374151; margin-top: 30px;">
+              Cordialement,<br>
+              <strong>L'équipe FTM Malagasy</strong>
+            </p>
+          </div>
+        `
+      })
+
+      return { success: true }
+    }
+
+    if (!classe) {
+      throw new Error('Une classe est requise pour envoyer un email de validation')
+    }
+
     const horaire = [classe.jour, classe.heure].filter(Boolean).join(' à ')
 
     await transporter.sendMail({
