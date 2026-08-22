@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { getStatutLabel } from '@/lib/statuts'
+import { getStatutLabel, getStatutPaiementLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import SectionDivider from '@/components/SectionDivider'
@@ -48,11 +48,12 @@ export default function AdminDashboard() {
         .select('*', { count: 'exact', head: true })
         .eq('status', 'approved')
 
-      // Paiements en attente
+      // Paiements en attente (validés pédagogiquement, pas encore payés)
       const { count: paymentCount } = await supabase
         .from('inscriptions')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'payment_pending')
+        .eq('status', 'approved')
+        .neq('statut_paiement', 'paye')
 
       // Dernières inscriptions
       const { data: recent } = await supabase
@@ -202,11 +203,13 @@ export default function AdminDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs rounded ${
                       inscription.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
-                      inscription.status === 'approved' ? 'bg-green-100 text-green-800' :
-                      inscription.status === 'payment_pending' ? 'bg-orange-100 text-orange-800' :
-                      'bg-red-100 text-red-800'
+                      inscription.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                      inscription.status === 'approved' && inscription.statut_paiement !== 'paye' ? 'bg-orange-100 text-orange-800' :
+                      'bg-green-100 text-green-800'
                     }`}>
-                      {getStatutLabel(inscription.status)}
+                      {inscription.status === 'approved' && inscription.statut_paiement !== 'paye'
+                        ? getStatutPaiementLabel(inscription.statut_paiement)
+                        : getStatutLabel(inscription.status)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">

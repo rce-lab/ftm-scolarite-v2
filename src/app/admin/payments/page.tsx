@@ -43,7 +43,8 @@ export default function PaymentsPage() {
       const { data, error } = await supabase
         .from('inscriptions')
         .select('*')
-        .or('status.eq.payment_pending,and(status.eq.approved,statut_paiement.neq.paye)')
+        .eq('status', 'approved')
+        .neq('statut_paiement', 'paye')
         .order('created_at', { ascending: false })
 
       if (error) throw error

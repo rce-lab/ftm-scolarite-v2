@@ -8,7 +8,7 @@ import { useTranslation } from '@/lib/i18n/LanguageContext'
 import SectionDivider from '@/components/SectionDivider'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
-const STATUTS = ['pending_review', 'approved', 'rejected', 'payment_pending']
+const STATUTS = ['pending_review', 'approved', 'rejected']
 
 // Construit une chaîne CSV à partir d'un tableau d'objets (en-têtes = clés des objets)
 function toCSV(rows: Record<string, any>[]): string {

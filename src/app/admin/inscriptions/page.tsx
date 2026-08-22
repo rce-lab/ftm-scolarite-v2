@@ -3,7 +3,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { getStatutLabel } from '@/lib/statuts'
+import { getStatutLabel, getStatutPaiementLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -27,7 +27,9 @@ function InscriptionsListContent() {
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (filter !== 'all') {
+      if (filter === 'payment_pending') {
+        query = query.eq('status', 'approved').neq('statut_paiement', 'paye')
+      } else if (filter !== 'all') {
         query = query.eq('status', filter)
       }
 
@@ -73,7 +75,7 @@ function InscriptionsListContent() {
           { value: 'all', label: t('inscriptionsList.filterAll'), count: inscriptions.length },
           { value: 'pending_review', label: t('inscriptionsList.filterPending'), count: inscriptions.filter(i => i.status === 'pending_review').length },
           { value: 'approved', label: t('inscriptionsList.filterApproved'), count: inscriptions.filter(i => i.status === 'approved').length },
-          { value: 'payment_pending', label: t('inscriptionsList.filterPaymentPending'), count: inscriptions.filter(i => i.status === 'payment_pending').length },
+          { value: 'payment_pending', label: t('inscriptionsList.filterPaymentPending'), count: inscriptions.filter(i => i.status === 'approved' && i.statut_paiement !== 'paye').length },
           { value: 'rejected', label: t('inscriptionsList.filterRejected'), count: inscriptions.filter(i => i.status === 'rejected').length }
         ].map((filtre) => (
           <Link
@@ -119,11 +121,13 @@ function InscriptionsListContent() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 py-1 text-xs rounded ${
                     inscription.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
-                    inscription.status === 'approved' ? 'bg-green-100 text-green-800' :
                     inscription.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                    'bg-orange-100 text-orange-800'
+                    inscription.status === 'approved' && inscription.statut_paiement !== 'paye' ? 'bg-orange-100 text-orange-800' :
+                    'bg-green-100 text-green-800'
                   }`}>
-                    {getStatutLabel(inscription.status)}
+                    {inscription.status === 'approved' && inscription.statut_paiement !== 'paye'
+                      ? getStatutPaiementLabel(inscription.statut_paiement)
+                      : getStatutLabel(inscription.status)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
