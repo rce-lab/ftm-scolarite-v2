@@ -35,6 +35,7 @@ export default function PersonalInfoStep({
   const [photoUploading, setPhotoUploading] = useState(false)
   const [photoError, setPhotoError] = useState('')
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null)
+  const [selectedFileName, setSelectedFileName] = useState('')
 
   const ageNum = parseInt(formData.age)
   const isMinor = !isNaN(ageNum) && ageNum < 18
@@ -195,16 +196,19 @@ export default function PersonalInfoStep({
     if (!file) return
 
     setPhotoError('')
+    setSelectedFileName(file.name)
 
     if (!file.type.startsWith('image/')) {
       setPhotoError(t('personalInfo.photoInvalidTypeError'))
       e.target.value = ''
+      setSelectedFileName('')
       return
     }
 
     if (file.size > MAX_PHOTO_SIZE) {
       setPhotoError(t('personalInfo.photoTooLargeError'))
       e.target.value = ''
+      setSelectedFileName('')
       return
     }
 
@@ -239,6 +243,7 @@ export default function PersonalInfoStep({
     }
     setPhotoPreviewUrl(null)
     setPhotoError('')
+    setSelectedFileName('')
     updateFormData('photo_url', '')
   }
 
@@ -512,12 +517,24 @@ export default function PersonalInfoStep({
           </div>
         ) : (
           <>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className="w-full text-sm"
-            />
+            <div className="flex items-center gap-3">
+              <label
+                htmlFor="photo-upload-input"
+                className="px-3 py-1.5 border border-gray-300 rounded text-sm cursor-pointer hover:bg-gray-50"
+              >
+                {t('personalInfo.choosePhotoButton')}
+              </label>
+              <span className="text-sm text-gray-700">
+                {selectedFileName || t('personalInfo.noFileChosenLabel')}
+              </span>
+              <input
+                id="photo-upload-input"
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="sr-only"
+              />
+            </div>
             <p className="text-sm text-gray-700 mt-1">{t('personalInfo.photoHint')}</p>
           </>
         )}

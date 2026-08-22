@@ -23,7 +23,7 @@ import { sendInscriptionNotificationAction } from '@/app/actions/emailActions'
 
 function InscriptionPageContent() {
   const router = useRouter()
-  const { language, setLanguage } = usePublicTranslation()
+  const { t, language, setLanguage } = usePublicTranslation()
   const [config, setConfig] = useState<any>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -193,12 +193,12 @@ function InscriptionPageContent() {
           <div className="flex justify-center mb-4">
             <Image src={logo} alt="Logo FTM" className="h-24 w-auto" priority />
           </div>
-          <h1 className="text-2xl font-bold text-[#689e4e]">Inscription aux cours de Malagasy</h1>
+          <h1 className="text-2xl font-bold text-[#689e4e]">{t('formHeader.title')}</h1>
           <p className="text-gray-600 mt-1">
-            FTM - Formation en langue Malagasy
+            {t('formHeader.subtitle')}
           </p>
           <p className="text-sm text-gray-700 mt-1">
-            Année scolaire {config.annee_scolaire_courante}
+            {t('homepage.schoolYear').replace('{annee}', config.annee_scolaire_courante)}
           </p>
         </div>
 

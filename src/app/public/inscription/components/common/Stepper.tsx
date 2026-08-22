@@ -1,18 +1,22 @@
 // src/app/public/inscription/components/common/Stepper.tsx
 'use client'
 
+import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
+
 interface StepperProps {
   currentStep: number;
   totalSteps?: number;
 }
 
 export default function Stepper({ currentStep, totalSteps = 5 }: StepperProps) {
+  const { t } = usePublicTranslation()
+
   const steps = [
-    { number: 1, label: 'Informations' },
-    { number: 2, label: 'Disponibilités' },
-    { number: 3, label: 'Motivation' },
-    { number: 4, label: 'Évaluation' },
-    { number: 5, label: 'Confirmation' }
+    { number: 1, label: t('stepper.step1') },
+    { number: 2, label: t('stepper.step2') },
+    { number: 3, label: t('stepper.step3') },
+    { number: 4, label: t('stepper.step4') },
+    { number: 5, label: t('stepper.step5') }
   ].slice(0, totalSteps);
 
   return (

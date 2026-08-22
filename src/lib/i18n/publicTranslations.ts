@@ -10,6 +10,19 @@ export interface PublicTranslationEntry {
 }
 
 export const publicTranslations = {
+  formHeader: {
+    title: { fr: 'Inscription aux cours de Malagasy', en: 'Registration for Malagasy classes' },
+    subtitle: { fr: 'FTM - Formation en langue Malagasy', en: 'FTM - Malagasy language course' }
+  },
+
+  stepper: {
+    step1: { fr: 'Informations', en: 'Personal info' },
+    step2: { fr: 'Disponibilités', en: 'Availability' },
+    step3: { fr: 'Motivation', en: 'Motivation' },
+    step4: { fr: 'Évaluation', en: 'Assessment' },
+    step5: { fr: 'Confirmation', en: 'Confirmation' }
+  },
+
   personalInfo: {
     title: { fr: 'Informations personnelles', en: 'Personal information' },
     subtitle: { fr: 'Veuillez remplir tous les champs obligatoires (*)', en: 'Please fill in all required fields (*)' },
@@ -43,6 +56,8 @@ export const publicTranslations = {
     legalGuardianRequiredError: { fr: 'Le responsable légal est requis pour les candidats mineurs (moins de 18 ans)', en: 'A legal guardian is required for candidates under 18' },
 
     photoLabel: { fr: 'Photo (optionnelle)', en: 'Photo (optional)' },
+    choosePhotoButton: { fr: 'Choisir un fichier', en: 'Choose file' },
+    noFileChosenLabel: { fr: 'Aucun fichier choisi', en: 'No file chosen' },
     photoHint: { fr: 'Formats image uniquement, 5 Mo maximum', en: 'Image files only, 5 MB maximum' },
     photoInvalidTypeError: { fr: 'Veuillez sélectionner un fichier image', en: 'Please select an image file' },
     photoTooLargeError: { fr: 'Le fichier est trop volumineux (5 Mo maximum)', en: 'File is too large (5 MB maximum)' },
