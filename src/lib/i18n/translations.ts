@@ -148,6 +148,7 @@ export const translations = {
     tableLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     tableDate: { fr: 'Date', mg: 'Daty' },
     tableStatus: { fr: 'Statut', mg: 'Sata' },
+    tablePayment: { fr: 'Paiement', mg: 'Fandoavam-bola' },
     tableActions: { fr: 'Actions', mg: 'Hetsika' },
     viewLink: { fr: 'Voir →', mg: 'Jereo →' }
   },

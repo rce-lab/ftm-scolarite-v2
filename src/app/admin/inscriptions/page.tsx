@@ -119,6 +119,7 @@ function InscriptionsListContent() {
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableLevel')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableDate')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableStatus')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tablePayment')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase sticky right-0 bg-gray-50 border-l border-gray-200">{t('inscriptionsList.tableActions')}</th>
             </tr>
           </thead>
@@ -142,13 +143,21 @@ function InscriptionsListContent() {
                   <span className={`px-2 py-1 text-xs rounded ${
                     inscription.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800' :
                     inscription.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                    inscription.status === 'approved' && inscription.statut_paiement !== 'paye' ? 'bg-orange-100 text-orange-800' :
                     'bg-green-100 text-green-800'
                   }`}>
-                    {inscription.status === 'approved' && inscription.statut_paiement !== 'paye'
-                      ? getStatutPaiementLabel(inscription.statut_paiement)
-                      : getStatutLabel(inscription.status)}
+                    {getStatutLabel(inscription.status)}
                   </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {inscription.status === 'approved' ? (
+                    <span className={`px-2 py-1 text-xs rounded ${
+                      inscription.statut_paiement !== 'paye' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'
+                    }`}>
+                      {getStatutPaiementLabel(inscription.statut_paiement)}
+                    </span>
+                  ) : (
+                    <span className="text-gray-400">—</span>
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap sticky right-0 bg-white group-hover:bg-gray-50 border-l border-gray-200">
                   <Link
