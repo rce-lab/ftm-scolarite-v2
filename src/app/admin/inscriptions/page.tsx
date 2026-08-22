@@ -109,7 +109,7 @@ function InscriptionsListContent() {
       </div>
 
       {/* Tableau */}
-      <div className="bg-white rounded shadow overflow-hidden">
+      <div className="bg-white rounded shadow overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -119,17 +119,17 @@ function InscriptionsListContent() {
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableLevel')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableDate')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableStatus')}</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableActions')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase sticky right-0 bg-gray-50 border-l border-gray-200">{t('inscriptionsList.tableActions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {inscriptions.map((inscription) => (
-              <tr key={inscription.id} className="hover:bg-gray-50">
+              <tr key={inscription.id} className="group hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap font-mono text-base">{inscription.student_code}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {inscription.prenom} {inscription.nom}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-base">{inscription.email_contact}</td>
+                <td className="px-6 py-4 max-w-[220px] truncate text-base" title={inscription.email_contact}>{inscription.email_contact}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e]">
                     {inscription.niveau_suggere}
@@ -150,7 +150,7 @@ function InscriptionsListContent() {
                       : getStatutLabel(inscription.status)}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap sticky right-0 bg-white group-hover:bg-gray-50 border-l border-gray-200">
                   <Link
                     href={`/admin/inscriptions/${inscription.student_code}`}
                     className="text-[#689e4e] hover:text-[#527d3e] text-sm"
