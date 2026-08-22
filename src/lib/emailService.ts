@@ -74,7 +74,7 @@ export async function sendInscriptionNotification(
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
             <p style="color: #6b7280; font-size: 0.9em;">
               <strong>Contact :</strong> ${adminEmails.join(', ')}<br>
-              <strong>Site web :</strong> ${process.env.APP_URL || 'https://ftm-malagasy.org'}
+              <strong>Site web :</strong> ${process.env.APP_URL || 'https://www.ftmala.fr'}
             </p>
           </div>
           
@@ -194,7 +194,7 @@ export async function sendDecisionEmail(
 
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 0.9em;">
-                <strong>Site web :</strong> ${process.env.APP_URL || 'https://ftm-malagasy.org'}
+                <strong>Site web :</strong> ${process.env.APP_URL || 'https://www.ftmala.fr'}
               </p>
             </div>
 
@@ -249,7 +249,7 @@ export async function sendDecisionEmail(
 
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
             <p style="color: #6b7280; font-size: 0.9em;">
-              <strong>Site web :</strong> ${process.env.APP_URL || 'https://ftm-malagasy.org'}
+              <strong>Site web :</strong> ${process.env.APP_URL || 'https://www.ftmala.fr'}
             </p>
           </div>
 
