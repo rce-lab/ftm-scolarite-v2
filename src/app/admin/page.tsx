@@ -182,7 +182,6 @@ export default function AdminDashboard() {
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableLevel')}</th>
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableDate')}</th>
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableStatus')}</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('adminDashboard.tableAction')}</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -211,14 +210,6 @@ export default function AdminDashboard() {
                         ? getStatutPaiementLabel(inscription.statut_paiement)
                         : getStatutLabel(inscription.status)}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <Link
-                      href={`/admin/inscriptions/${inscription.student_code}`}
-                      className="text-[#689e4e] hover:text-[#527d3e]"
-                    >
-                      {t('adminDashboard.viewLink')}
-                    </Link>
                   </td>
                 </tr>
               ))}
