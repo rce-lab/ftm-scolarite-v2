@@ -121,6 +121,7 @@ export const translations = {
     tableLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     tableDate: { fr: 'Date', mg: 'Daty' },
     tableStatus: { fr: 'Statut', mg: 'Sata' },
+    tablePayment: { fr: 'Paiement', mg: 'Fandoavam-bola' },
     tableAction: { fr: 'Action', mg: 'Hetsika' },
     viewLink: { fr: 'Voir →', mg: 'Jereo →' },
     viewAllInscriptionsLink: { fr: 'Voir toutes les inscriptions →', mg: 'Jereo ny fisoratana anarana rehetra →' },
