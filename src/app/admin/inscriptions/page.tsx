@@ -14,11 +14,16 @@ function InscriptionsListContent() {
   const params = useSearchParams()
   const filter = params.get('filter') || 'all'
   const [inscriptions, setInscriptions] = useState<any[]>([])
+  const [allStatuses, setAllStatuses] = useState<{ status: string; statut_paiement: string | null }[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     loadInscriptions()
   }, [filter])
+
+  useEffect(() => {
+    loadAllStatuses()
+  }, [])
 
   const loadInscriptions = async () => {
     try {
@@ -41,6 +46,21 @@ function InscriptionsListContent() {
       console.error('Erreur:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Compteurs indépendants du filtre actif : toujours calculés sur l'ensemble
+  // complet des inscriptions, jamais sur la liste déjà filtrée côté requête.
+  const loadAllStatuses = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('inscriptions')
+        .select('status, statut_paiement')
+
+      if (error) throw error
+      setAllStatuses(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
     }
   }
 
@@ -72,11 +92,11 @@ function InscriptionsListContent() {
       {/* Filtres */}
       <div className="flex space-x-2">
         {[
-          { value: 'all', label: t('inscriptionsList.filterAll'), count: inscriptions.length },
-          { value: 'pending_review', label: t('inscriptionsList.filterPending'), count: inscriptions.filter(i => i.status === 'pending_review').length },
-          { value: 'approved', label: t('inscriptionsList.filterApproved'), count: inscriptions.filter(i => i.status === 'approved').length },
-          { value: 'payment_pending', label: t('inscriptionsList.filterPaymentPending'), count: inscriptions.filter(i => i.status === 'approved' && i.statut_paiement !== 'paye').length },
-          { value: 'rejected', label: t('inscriptionsList.filterRejected'), count: inscriptions.filter(i => i.status === 'rejected').length }
+          { value: 'all', label: t('inscriptionsList.filterAll'), count: allStatuses.length },
+          { value: 'pending_review', label: t('inscriptionsList.filterPending'), count: allStatuses.filter(i => i.status === 'pending_review').length },
+          { value: 'approved', label: t('inscriptionsList.filterApproved'), count: allStatuses.filter(i => i.status === 'approved').length },
+          { value: 'payment_pending', label: t('inscriptionsList.filterPaymentPending'), count: allStatuses.filter(i => i.status === 'approved' && i.statut_paiement !== 'paye').length },
+          { value: 'rejected', label: t('inscriptionsList.filterRejected'), count: allStatuses.filter(i => i.status === 'rejected').length }
         ].map((filtre) => (
           <Link
             key={filtre.value}
