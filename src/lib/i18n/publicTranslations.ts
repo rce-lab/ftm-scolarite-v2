@@ -199,7 +199,7 @@ export const publicTranslations = {
     ribLabel: { fr: 'RIB/IBAN:', en: 'Bank details (IBAN):' },
     amountLabel: { fr: 'Montant:', en: 'Amount:' },
     referenceLabel: { fr: 'Référence:', en: 'Reference:' },
-    paymentConfirmationHint: { fr: 'Votre place sera confirmée après réception du paiement.', en: 'Your place will be confirmed once payment is received.' },
+    paymentConfirmationHint: { fr: 'Votre place sera confirmée après réception du paiement.', en: 'Your registration will be confirmed once payment is received.' },
     nextStepsTitle: { fr: 'Prochaines étapes', en: 'Next steps' },
     nextStepPay: { fr: 'Effectuez le paiement de {montant}€', en: 'Make the payment of €{montant}' },
     nextStepEmailConfirmation: { fr: 'Recevez une confirmation par email sous 48h', en: 'Receive an email confirmation within 48 hours' },
