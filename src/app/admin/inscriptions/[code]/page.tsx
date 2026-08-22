@@ -141,7 +141,7 @@ export default function InscriptionDetailPage() {
                 {getStatutPaiementLabel(inscription.statut_paiement, { emoji: true })}
               </div>
             ) : (
-              <span className="text-sm text-gray-400">—</span>
+              <span className="text-sm text-gray-700">—</span>
             )}
           </div>
           <p className="text-sm text-gray-700 mt-1">
