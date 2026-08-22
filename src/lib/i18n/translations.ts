@@ -196,6 +196,7 @@ export const translations = {
     actionReject: { fr: "❌ Rejeter l'inscription", mg: '❌ Lavina ny fisoratana anarana' },
     actionPaymentPending: { fr: '💰 Paiement en attente', mg: '💰 Miandry ny fandoavam-bola' },
     actionPaymentConfirmed: { fr: '✅ Paiement confirmé', mg: '✅ Voamarina ny fandoavam-bola' },
+    viewInDeliberationLink: { fr: '👨‍🏫 Voir dans Délibération', mg: "👨‍🏫 Jereo ao amin'ny Fanapahan-kevitra" },
     actionPrint: { fr: '🖨️ Imprimer cette page', mg: '🖨️ Manonta ity pejy ity' },
     actionSendEmail: { fr: '📧 Envoyer un email', mg: '📧 Mandefa mailaka' },
     historyTitle: { fr: 'Historique', mg: 'Tantara' },

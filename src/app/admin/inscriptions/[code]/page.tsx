@@ -3,11 +3,10 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { getStatutLabel } from '@/lib/statuts'
+import { getStatutLabel, getStatutPaiementLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { useParams, useRouter } from 'next/navigation'
 import { calculerStatistiquesDetaillees } from '@/app/public/inscription/data/niveauCalcul'
-import { sendDecisionEmailAction } from '@/app/actions/emailActions'
 import Link from 'next/link'
 import SectionDivider from '@/components/SectionDivider'
 
@@ -18,10 +17,6 @@ export default function InscriptionDetailPage() {
   const [inscription, setInscription] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<any>(null)
-  const [niveauFinal, setNiveauFinal] = useState('')
-  const [classe, setClasse] = useState('')
-  const [classeId, setClasseId] = useState('')
-  const [classesList, setClassesList] = useState<any[]>([])
   const [notes, setNotes] = useState('')
 
   useEffect(() => {
@@ -29,30 +24,6 @@ export default function InscriptionDetailPage() {
       loadInscription()
     }
   }, [params.code])
-
-  useEffect(() => {
-    loadClasses()
-  }, [])
-
-  const loadClasses = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('classes')
-        .select('id, nom, niveau, jour, heure')
-        .order('nom')
-
-      if (error) throw error
-      setClassesList(data || [])
-    } catch (error) {
-      console.error('Erreur:', error)
-    }
-  }
-
-  const handleClasseChange = (id: string) => {
-    setClasseId(id)
-    const selected = classesList.find(c => c.id === id)
-    setClasse(selected ? `${selected.jour} ${selected.heure} - ${selected.niveau} - ${selected.nom}` : '')
-  }
 
   const loadInscription = async () => {
     try {
@@ -65,9 +36,6 @@ export default function InscriptionDetailPage() {
       if (error) throw error
       
       setInscription(data)
-      setNiveauFinal(data.niveau_definitif || data.niveau_suggere || 'A1')
-      setClasse(data.classe_attribuee || '')
-      setClasseId(data.classe_id || '')
       setNotes(data.notes_admin || '')
       
       // Calculer les statistiques détaillées
@@ -102,53 +70,13 @@ export default function InscriptionDetailPage() {
   }
 
   const handleSave = async () => {
-    const classeIdAvant = inscription?.classe_id || null
-
-    const result = await updateInscription({
-      niveau_definitif: niveauFinal,
-      classe_id: classeId || null,
-      classe_attribuee: classe,
-      notes_admin: notes
-    })
+    const result = await updateInscription({ notes_admin: notes })
 
     if (result.success) {
-      // Email de décision uniquement lors de la toute première assignation de classe
-      if (classeId && !classeIdAvant) {
-        const classeSelectionnee = classesList.find(c => c.id === classeId)
-        if (classeSelectionnee) {
-          sendDecisionEmailAction(
-            { ...inscription, niveau_definitif: niveauFinal, classe_id: classeId },
-            'approved',
-            classeSelectionnee
-          ).catch((err) => console.error('Erreur envoi email décision:', err))
-        }
-      }
-
       alert(t('inscriptionsDetail.saveSuccessAlert'))
       loadInscription()
     } else {
       alert(t('inscriptionsDetail.saveErrorAlert'))
-    }
-  }
-
-  const handleStatusChange = async (newStatus: string) => {
-    if (!confirm(t('inscriptionsDetail.statusChangeConfirm').replace('{status}', newStatus))) return
-
-    const result = await updateInscription({ status: newStatus })
-
-    if (result.success) {
-      alert(t('inscriptionsDetail.statusUpdateSuccessAlert'))
-
-      if (newStatus === 'rejected' && inscription) {
-        const emailResult = await sendDecisionEmailAction(inscription, 'rejected')
-        if (!emailResult.success) {
-          alert("Le statut a bien été mis à jour en \"rejeté\", mais l'email de refus n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.")
-        }
-      }
-
-      loadInscription()
-    } else {
-      alert(t('inscriptionsDetail.statusUpdateErrorAlert'))
     }
   }
 
@@ -197,14 +125,24 @@ export default function InscriptionDetailPage() {
             {t('inscriptionsDetail.studentCodeLabel')} <span className="font-mono font-bold">{inscription.student_code}</span>
           </p>
         </div>
-        <div className="text-right">
+        <div className="text-right space-y-2">
           <div className={`px-4 py-2 inline-flex text-sm font-semibold rounded-full border ${
             inscription.status === 'pending_review' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-            inscription.status === 'approved' ? 'bg-green-100 text-green-800 border-green-200' :
             inscription.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-200' :
-            'bg-orange-100 text-orange-800 border-orange-200'
+            'bg-green-100 text-green-800 border-green-200'
           }`}>
             {getStatutLabel(inscription.status, { emoji: true })}
+          </div>
+          <div>
+            {inscription.status === 'approved' ? (
+              <div className={`px-4 py-2 inline-flex text-sm font-semibold rounded-full border ${
+                inscription.statut_paiement !== 'paye' ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-green-100 text-green-800 border-green-200'
+              }`}>
+                {getStatutPaiementLabel(inscription.statut_paiement, { emoji: true })}
+              </div>
+            ) : (
+              <span className="text-sm text-gray-400">—</span>
+            )}
           </div>
           <p className="text-sm text-gray-700 mt-1">
             {t('inscriptionsDetail.registeredOn').replace('{date}', new Date(inscription.created_at).toLocaleDateString('fr-FR'))}
@@ -262,36 +200,6 @@ export default function InscriptionDetailPage() {
                   <div className="text-2xl font-bold text-[#689e4e]">{inscription.niveau_suggere}</div>
                   <div className="text-sm text-[#527d3e]">{t('inscriptionsDetail.autoCalculated')}</div>
                 </div>
-              </div>
-              <div>
-                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.finalLevelLabel')}</label>
-                <select
-                  value={niveauFinal}
-                  onChange={(e) => setNiveauFinal(e.target.value)}
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
-                >
-                  {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(n => (
-                    <option key={n} value={n}>{n}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-span-2">
-                <label className="block text-base font-medium text-gray-700 mb-1">{t('inscriptionsDetail.assignedClassLabel')}</label>
-                <select
-                  value={classeId}
-                  onChange={(e) => handleClasseChange(e.target.value)}
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
-                >
-                  <option value="">{t('inscriptionsDetail.noClassOption')}</option>
-                  {classesList.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.nom} — {c.niveau} — {c.jour} {c.heure}
-                    </option>
-                  ))}
-                </select>
-                {classe && (
-                  <p className="text-sm text-gray-700 mt-1">{classe}</p>
-                )}
               </div>
             </div>
 
@@ -380,44 +288,12 @@ export default function InscriptionDetailPage() {
               {t('inscriptionsDetail.actionsTitle')}
             </h2>
             <div className="space-y-3">
-              {inscription.status === 'pending_review' && (
-                <>
-                  <button
-                    onClick={() => handleStatusChange('approved')}
-                    className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-left"
-                  >
-                    {t('inscriptionsDetail.actionApprove')}
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange('payment_pending')}
-                    className="w-full p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium text-left"
-                  >
-                    {t('inscriptionsDetail.actionMarkPaymentPending')}
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange('rejected')}
-                    className="w-full p-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium text-left"
-                  >
-                    {t('inscriptionsDetail.actionReject')}
-                  </button>
-                </>
-              )}
-              {inscription.status === 'approved' && (
-                <button
-                  onClick={() => handleStatusChange('payment_pending')}
-                  className="w-full p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 font-medium text-left"
-                >
-                  {t('inscriptionsDetail.actionPaymentPending')}
-                </button>
-              )}
-              {inscription.status === 'payment_pending' && (
-                <button
-                  onClick={() => handleStatusChange('approved')}
-                  className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-left"
-                >
-                  {t('inscriptionsDetail.actionPaymentConfirmed')}
-                </button>
-              )}
+              <Link
+                href="/teacher/deliberation"
+                className="block w-full p-3 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium text-left"
+              >
+                {t('inscriptionsDetail.viewInDeliberationLink')}
+              </Link>
               <button
                 onClick={() => window.print()}
                 className="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium text-left"
