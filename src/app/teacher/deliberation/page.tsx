@@ -15,6 +15,7 @@ function DeliberationContent() {
   const router = useRouter()
   const filter = params.get('filter') || 'pending_review'
   const [inscriptions, setInscriptions] = useState<any[]>([])
+  const [allStatuses, setAllStatuses] = useState<{ status: string }[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedInscription, setSelectedInscription] = useState<any>(null)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
@@ -22,6 +23,10 @@ function DeliberationContent() {
   useEffect(() => {
     loadInscriptions()
   }, [filter])
+
+  useEffect(() => {
+    loadAllStatuses()
+  }, [])
 
   useEffect(() => {
     loadPhotoUrl()
@@ -68,6 +73,21 @@ function DeliberationContent() {
     }
   }
 
+  // Compteurs indépendants du filtre actif : toujours calculés sur l'ensemble
+  // complet des inscriptions, jamais sur la liste déjà filtrée côté requête.
+  const loadAllStatuses = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('inscriptions')
+        .select('status')
+
+      if (error) throw error
+      setAllStatuses(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }
+
   const updateStatus = async (id: string, status: string) => {
     try {
       const { error } = await supabase
@@ -83,6 +103,7 @@ function DeliberationContent() {
       
       alert(t('deliberation.statusUpdateAlert').replace('{status}', status))
       loadInscriptions()
+      loadAllStatuses()
       setSelectedInscription(null)
     } catch (error) {
       console.error('Erreur:', error)
@@ -104,6 +125,7 @@ function DeliberationContent() {
       
       alert(t('deliberation.levelUpdateAlert').replace('{niveau}', niveau))
       loadInscriptions()
+      loadAllStatuses()
 
       // Mettre à jour l'inscription sélectionnée
       if (selectedInscription?.id === id) {
@@ -143,7 +165,7 @@ function DeliberationContent() {
             onClick={() => router.push(`/teacher/deliberation?filter=${filtre.value}`)}
             className={`px-4 py-2 rounded ${filter === filtre.value ? filtre.color : 'bg-gray-200 hover:bg-gray-300'}`}
           >
-            {filtre.label} ({inscriptions.filter(i => filter === 'all' ? true : i.status === filtre.value).length})
+            {filtre.label} ({filtre.value === 'all' ? allStatuses.length : allStatuses.filter(i => i.status === filtre.value).length})
           </button>
         ))}
       </div>
@@ -312,19 +334,19 @@ function DeliberationContent() {
               <div className="flex justify-between">
                 <span className="text-gray-600">{t('deliberation.statsPending')}</span>
                 <span className="font-bold text-yellow-600">
-                  {inscriptions.filter(i => i.status === 'pending_review').length}
+                  {allStatuses.filter(i => i.status === 'pending_review').length}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">{t('deliberation.statsApproved')}</span>
                 <span className="font-bold text-green-600">
-                  {inscriptions.filter(i => i.status === 'approved').length}
+                  {allStatuses.filter(i => i.status === 'approved').length}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">{t('deliberation.statsRejected')}</span>
                 <span className="font-bold text-red-600">
-                  {inscriptions.filter(i => i.status === 'rejected').length}
+                  {allStatuses.filter(i => i.status === 'rejected').length}
                 </span>
               </div>
             </div>
