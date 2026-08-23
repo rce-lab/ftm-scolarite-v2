@@ -313,7 +313,23 @@ export const translations = {
     statsRejected: { fr: 'Rejetées:', mg: 'Nolavina:' },
     statusUpdateAlert: { fr: 'Statut mis à jour: {status}', mg: 'Voaova ny sata: {status}' },
     updateErrorAlert: { fr: 'Erreur lors de la mise à jour', mg: 'Hadisoana teo am-panovana' },
-    levelUpdateAlert: { fr: 'Niveau définitif mis à jour: {niveau}', mg: 'Voaova ny ambaratonga farany: {niveau}' }
+    levelUpdateAlert: { fr: 'Niveau définitif mis à jour: {niveau}', mg: 'Voaova ny ambaratonga farany: {niveau}' },
+
+    // Clés ajoutées pour l'assignation de classe + l'aperçu d'email avant envoi.
+    // Traductions malgaches en brouillon, non encore validées par un locuteur natif.
+    assignedClassLabel: { fr: 'Classe assignée', mg: 'Kilasy voatokana' },
+    noClassesAvailable: { fr: 'Aucune classe disponible', mg: 'Tsy misy kilasy azo atolotra' },
+    classMatchBadge: { fr: '✓ Compatible', mg: '✓ Mifanaraka' },
+    validationMissingLevelOrClass: { fr: 'Veuillez assigner un niveau et une classe avant de valider.', mg: "Mba tokony hofaritana aloha ny ambaratonga sy ny kilasy alohan'ny hanamarinana." },
+    modalApproveTitle: { fr: "Aperçu de l'email de validation", mg: "Topi-maso amin'ny mailaka fanamarinana" },
+    modalRejectTitle: { fr: "Aperçu de l'email de refus", mg: "Topi-maso amin'ny mailaka fandavana" },
+    modalSubjectLabel: { fr: 'Sujet', mg: 'Lohateny' },
+    modalBodyLabel: { fr: 'Corps du message (modifiable avant envoi)', mg: 'Votoatin\'ny hafatra (azo ovana alohan\'ny handefasana)' },
+    modalSendButton: { fr: 'Envoyer', mg: 'Alefaso' },
+    modalSendingButton: { fr: 'Envoi en cours...', mg: 'Mandefa...' },
+    modalCancelButton: { fr: 'Annuler', mg: 'Aoka ihany' },
+    modalEmailFailedAlert: { fr: "Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.", mg: "Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady." },
+    modalSuccessAlert: { fr: 'Décision enregistrée et email envoyé avec succès.', mg: 'Voatahiry ny fanapahan-kevitra ary voalefa soa aman-tsara ny mailaka.' }
   },
 
   // Traductions malgaches des clés colorWhite/colorGrayReal/colorNavy/colorGold/colorSilver

@@ -8,6 +8,7 @@ import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import SectionDivider from '@/components/SectionDivider'
+import { sendDecisionEmailAction } from '@/app/actions/emailActions'
 
 function DeliberationContent() {
   const { t } = useTranslation()
@@ -19,6 +20,12 @@ function DeliberationContent() {
   const [loading, setLoading] = useState(true)
   const [selectedInscription, setSelectedInscription] = useState<any>(null)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
+  const [classesList, setClassesList] = useState<any[]>([])
+  const [selectedClasseId, setSelectedClasseId] = useState('')
+  const [modalAction, setModalAction] = useState<'approved' | 'rejected' | null>(null)
+  const [modalSubject, setModalSubject] = useState('')
+  const [modalBody, setModalBody] = useState('')
+  const [modalSending, setModalSending] = useState(false)
 
   useEffect(() => {
     loadInscriptions()
@@ -29,7 +36,15 @@ function DeliberationContent() {
   }, [])
 
   useEffect(() => {
+    loadClasses()
+  }, [])
+
+  useEffect(() => {
     loadPhotoUrl()
+  }, [selectedInscription?.id])
+
+  useEffect(() => {
+    setSelectedClasseId(selectedInscription?.classe_id || '')
   }, [selectedInscription?.id])
 
   const loadPhotoUrl = async () => {
@@ -85,6 +100,129 @@ function DeliberationContent() {
       setAllStatuses(data || [])
     } catch (error) {
       console.error('Erreur:', error)
+    }
+  }
+
+  const loadClasses = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('classes')
+        .select('id, nom, niveau, jour, heure, pays, couleur')
+        .order('nom')
+
+      if (error) throw error
+      setClassesList(data || [])
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }
+
+  // Une classe "correspond" si son niveau égale le niveau définitif assigné
+  // (quand il existe) et si son jour fait partie des disponibilités du
+  // candidat (ou que celui-ci a coché "n'importe quel jour"). L'horaire précis
+  // (classes.heure est une chaîne libre, ex: "18h") n'est pas comparé aux
+  // créneaux booléens horaire_apres_midi/soir/autre de l'inscription : les deux
+  // formats ne correspondent pas de façon fiable, un rapprochement forcé
+  // produirait de faux "compatible" plutôt qu'une aide réelle au tri.
+  const classeCorrespond = (classe: any) => {
+    if (!selectedInscription) return false
+    const niveauOk = !selectedInscription.niveau_definitif || classe.niveau === selectedInscription.niveau_definitif
+    const jours = selectedInscription.jours_preference || []
+    const jourOk = jours.length === 0 || jours.includes('peu_importe') || jours.includes(classe.jour)
+    return niveauOk && jourOk
+  }
+
+  const classesTriees = [...classesList].sort((a, b) => {
+    const aMatch = classeCorrespond(a) ? 0 : 1
+    const bMatch = classeCorrespond(b) ? 0 : 1
+    return aMatch - bMatch
+  })
+
+  // Extrait le motif de refus d'un corps de message édité librement : cherche
+  // une ligne "Motif : ..." et prend tout jusqu'au prochain paragraphe vide.
+  // Si le repère a été supprimé/renommé par l'admin, le corps entier sert de
+  // repli plutôt que de perdre l'information.
+  const extractMotifRejet = (body: string): string => {
+    const match = body.match(/Motif\s*:\s*([\s\S]*?)(?:\n\s*\n|$)/i)
+    return (match ? match[1] : body).trim()
+  }
+
+  const defaultRejectBody = () =>
+    `Nous vous remercions vivement pour l'intérêt que vous avez porté aux cours de Malagasy de la FTM et pour le temps consacré à votre dossier d'inscription.\n\nMotif : [Précisez le motif du refus ici]\n\nCette décision ne remet aucunement en cause votre motivation, et nous vous encourageons à retenter votre chance lors d'une prochaine session.`
+
+  const defaultApproveBody = () =>
+    `Bonne nouvelle ! Votre inscription aux cours de Malagasy a été validée par le conseil pédagogique.`
+
+  const openRejectModal = () => {
+    setModalAction('rejected')
+    setModalSubject('Réponse à votre inscription - FTM Malagasy')
+    setModalBody(defaultRejectBody())
+  }
+
+  const openApproveModal = () => {
+    if (!selectedInscription) return
+    const niveau = selectedInscription.niveau_definitif || selectedInscription.niveau_suggere
+    if (!niveau || !selectedClasseId) {
+      alert(t('deliberation.validationMissingLevelOrClass'))
+      return
+    }
+    setModalAction('approved')
+    setModalSubject('Votre inscription est validée - FTM Malagasy')
+    setModalBody(defaultApproveBody())
+  }
+
+  const closeModal = () => {
+    setModalAction(null)
+    setModalBody('')
+  }
+
+  const handleSendModal = async () => {
+    if (!selectedInscription || !modalAction) return
+    setModalSending(true)
+
+    try {
+      const classeSelectionnee = classesList.find(c => c.id === selectedClasseId)
+
+      const updates: any = { status: modalAction, updated_at: new Date().toISOString() }
+      if (modalAction === 'rejected') {
+        updates.motif_rejet = extractMotifRejet(modalBody)
+      } else {
+        updates.niveau_definitif = selectedInscription.niveau_definitif || selectedInscription.niveau_suggere
+        updates.classe_id = selectedClasseId
+        updates.classe_attribuee = classeSelectionnee
+          ? `${classeSelectionnee.jour} ${classeSelectionnee.heure} - ${classeSelectionnee.niveau} - ${classeSelectionnee.nom}`
+          : ''
+      }
+
+      const { error } = await supabase
+        .from('inscriptions')
+        .update(updates)
+        .eq('id', selectedInscription.id)
+
+      if (error) throw error
+
+      const emailResult = await sendDecisionEmailAction(
+        selectedInscription,
+        modalAction,
+        modalAction === 'approved' ? classeSelectionnee : undefined,
+        modalBody
+      )
+
+      if (emailResult.success) {
+        alert(t('deliberation.modalSuccessAlert'))
+      } else {
+        alert(t('deliberation.modalEmailFailedAlert'))
+      }
+
+      closeModal()
+      loadInscriptions()
+      loadAllStatuses()
+      setSelectedInscription(null)
+    } catch (error) {
+      console.error('Erreur:', error)
+      alert(t('deliberation.updateErrorAlert'))
+    } finally {
+      setModalSending(false)
     }
   }
 
@@ -283,28 +421,70 @@ function DeliberationContent() {
                   </p>
                 </div>
 
+                <div>
+                  <label className="block text-base font-medium mb-1">{t('deliberation.assignedClassLabel')}</label>
+                  {classesList.length === 0 ? (
+                    <p className="text-sm text-gray-700">{t('deliberation.noClassesAvailable')}</p>
+                  ) : (
+                    <div className="space-y-1 max-h-48 overflow-y-auto">
+                      {classesTriees.map((classe) => (
+                        <button
+                          key={classe.id}
+                          onClick={() => setSelectedClasseId(classe.id)}
+                          className={`w-full p-2 rounded border text-left flex items-center gap-2 ${
+                            selectedClasseId === classe.id
+                              ? 'bg-green-600 text-white border-green-700'
+                              : 'bg-gray-100 hover:bg-gray-200'
+                          }`}
+                        >
+                          {classe.couleur && (
+                            <span
+                              className="w-3 h-3 rounded-full flex-shrink-0 border border-black/10"
+                              style={{ backgroundColor: classe.couleur }}
+                            ></span>
+                          )}
+                          <span className="flex-1 text-sm">
+                            {classe.nom} — {classe.niveau} — {classe.jour} {classe.heure}
+                          </span>
+                          {classeCorrespond(classe) && (
+                            <span className={`text-xs ${selectedClasseId === classe.id ? 'text-white' : 'text-[#527d3e]'}`}>
+                              {t('deliberation.classMatchBadge')}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="pt-4 border-t">
                   <label className="block text-base font-medium mb-2">{t('deliberation.finalDecisionLabel')}</label>
                   <div className="flex space-x-2">
-                    <button
-                      onClick={() => updateStatus(selectedInscription.id, 'approved')}
-                      className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
-                    >
-                      {t('deliberation.approveButton')}
-                    </button>
-                    <button
-                      onClick={() => updateStatus(selectedInscription.id, 'rejected')}
-                      className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700"
-                    >
-                      {t('deliberation.rejectButton')}
-                    </button>
+                    {selectedInscription.status !== 'approved' && selectedInscription.status !== 'rejected' && (
+                      <button
+                        onClick={openApproveModal}
+                        className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
+                      >
+                        {t('deliberation.approveButton')}
+                      </button>
+                    )}
+                    {selectedInscription.status !== 'rejected' && (
+                      <button
+                        onClick={openRejectModal}
+                        className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700"
+                      >
+                        {t('deliberation.rejectButton')}
+                      </button>
+                    )}
                   </div>
-                  <button
-                    onClick={() => updateStatus(selectedInscription.id, 'pending_review')}
-                    className="w-full mt-2 bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700"
-                  >
-                    {t('deliberation.resetToPendingButton')}
-                  </button>
+                  {selectedInscription.status !== 'pending_review' && (
+                    <button
+                      onClick={() => updateStatus(selectedInscription.id, 'pending_review')}
+                      className="w-full mt-2 bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700"
+                    >
+                      {t('deliberation.resetToPendingButton')}
+                    </button>
+                  )}
                 </div>
 
                 <div className="pt-4 border-t">
@@ -353,6 +533,52 @@ function DeliberationContent() {
           </div>
         </div>
       </div>
+
+      {modalAction && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow p-6 w-full max-w-xl">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
+              <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+              {modalAction === 'approved' ? t('deliberation.modalApproveTitle') : t('deliberation.modalRejectTitle')}
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('deliberation.modalSubjectLabel')}</label>
+                <div className="p-2 bg-gray-50 rounded border text-sm">{modalSubject}</div>
+              </div>
+              <div>
+                <label className="block text-base font-medium text-gray-700 mb-1">{t('deliberation.modalBodyLabel')}</label>
+                <textarea
+                  value={modalBody}
+                  onChange={(e) => setModalBody(e.target.value)}
+                  rows={10}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={closeModal}
+                disabled={modalSending}
+                className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50"
+              >
+                {t('deliberation.modalCancelButton')}
+              </button>
+              <button
+                onClick={handleSendModal}
+                disabled={modalSending}
+                className={`px-4 py-2 text-white rounded text-sm disabled:opacity-50 ${
+                  modalAction === 'approved' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
+                }`}
+              >
+                {modalSending ? t('deliberation.modalSendingButton') : t('deliberation.modalSendButton')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
