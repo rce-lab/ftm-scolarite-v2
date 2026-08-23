@@ -161,42 +161,21 @@ interface ClasseData {
   heure?: string | null
 }
 
-// Transforme un texte libre (issu d'un textarea admin) en paragraphes HTML,
-// en échappant les caractères spéciaux avant de réintroduire les sauts de ligne.
-function formatCustomBody(text: string): string {
-  const escaped = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-
-  return escaped
-    .split(/\n{2,}/)
-    .map(paragraphe => `<p style="color: #4b5563; line-height: 1.6;">${paragraphe.replace(/\n/g, '<br>')}</p>`)
-    .join('\n')
-}
-
 // Fonction pour annoncer la décision du conseil pédagogique (validation ou refus)
-// customBody, si fourni, remplace le(s) paragraphe(s) variable(s) du template
-// (raison du refus, ou message d'accompagnement pour la validation) — l'en-tête
-// et le pied de page communs à tous les emails restent inchangés.
+// Les deux templates sont entièrement fixes. motifRejet, si fourni et non vide,
+// n'ajoute qu'une ligne "Motif : ..." dans la branche rejected — aucune autre
+// personnalisation du corps du message.
 export async function sendDecisionEmail(
   inscription: InscriptionData,
   status: 'approved' | 'rejected',
   classe?: ClasseData,
-  customBody?: string
+  motifRejet?: string
 ) {
   try {
     if (status === 'rejected') {
-      const corps = customBody ? formatCustomBody(customBody) : `
-            <p style="color: #4b5563; line-height: 1.6;">
-              Nous vous remercions vivement pour l'intérêt que vous avez porté aux cours de Malagasy de la FTM et pour le temps consacré à votre dossier d'inscription.
-            </p>
-            <p style="color: #4b5563; line-height: 1.6;">
-              Après examen par notre conseil pédagogique, nous sommes au regret de vous informer que votre candidature n'a pas pu être retenue cette fois-ci.
-            </p>
-            <p style="color: #4b5563; line-height: 1.6;">
-              Cette décision ne remet aucunement en cause votre motivation, et nous vous encourageons à retenter votre chance lors d'une prochaine session.
-            </p>`
+      const ligneMotif = motifRejet && motifRejet.trim()
+        ? `<p style="color: #4b5563; line-height: 1.6;"><strong>Motif :</strong> ${motifRejet.trim()}</p>`
+        : ''
 
       await transporter.sendMail({
         from: FROM_ADDRESS,
@@ -211,7 +190,16 @@ export async function sendDecisionEmail(
             </div>
 
             <h2 style="color: #1f2937;">Bonjour ${inscription.prenom} ${inscription.nom},</h2>
-            ${corps}
+            <p style="color: #4b5563; line-height: 1.6;">
+              Nous vous remercions vivement pour l'intérêt que vous avez porté aux cours de Malagasy de la FTM et pour le temps consacré à votre dossier d'inscription.
+            </p>
+            <p style="color: #4b5563; line-height: 1.6;">
+              Après examen par notre conseil pédagogique, nous sommes au regret de vous informer que votre candidature n'a pas pu être retenue cette fois-ci.
+            </p>
+            ${ligneMotif}
+            <p style="color: #4b5563; line-height: 1.6;">
+              Cette décision ne remet aucunement en cause votre motivation, et nous vous encourageons à retenter votre chance lors d'une prochaine session.
+            </p>
 
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 0.9em;">
@@ -235,10 +223,6 @@ export async function sendDecisionEmail(
     }
 
     const horaire = [classe.jour, classe.heure].filter(Boolean).join(' à ')
-    const corpsValidation = customBody ? formatCustomBody(customBody) : `
-          <p style="color: #4b5563; line-height: 1.6;">
-            Bonne nouvelle ! Votre inscription aux cours de Malagasy a été validée par le conseil pédagogique.
-          </p>`
 
     await transporter.sendMail({
       from: FROM_ADDRESS,
@@ -253,7 +237,9 @@ export async function sendDecisionEmail(
           </div>
 
           <h2 style="color: #1f2937;">Bonjour ${inscription.prenom} ${inscription.nom},</h2>
-          ${corpsValidation}
+          <p style="color: #4b5563; line-height: 1.6;">
+            Bonne nouvelle ! Votre inscription aux cours de Malagasy a été validée par le conseil pédagogique.
+          </p>
 
           <div style="background: #f8fafc; padding: 20px; margin: 25px 0; border-radius: 8px; border-left: 4px solid #3b82f6;">
             <h3 style="color: #1e40af; margin-top: 0;">Votre classe</h3>

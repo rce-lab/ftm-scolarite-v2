@@ -321,15 +321,14 @@ export const translations = {
     noClassesAvailable: { fr: 'Aucune classe disponible', mg: 'Tsy misy kilasy azo atolotra' },
     classMatchBadge: { fr: '✓ Compatible', mg: '✓ Mifanaraka' },
     validationMissingLevelOrClass: { fr: 'Veuillez assigner un niveau et une classe avant de valider.', mg: "Mba tokony hofaritana aloha ny ambaratonga sy ny kilasy alohan'ny hanamarinana." },
-    modalApproveTitle: { fr: "Aperçu de l'email de validation", mg: "Topi-maso amin'ny mailaka fanamarinana" },
-    modalRejectTitle: { fr: "Aperçu de l'email de refus", mg: "Topi-maso amin'ny mailaka fandavana" },
-    modalSubjectLabel: { fr: 'Sujet', mg: 'Lohateny' },
-    modalBodyLabel: { fr: 'Corps du message (modifiable avant envoi)', mg: 'Votoatin\'ny hafatra (azo ovana alohan\'ny handefasana)' },
+    approveConfirm: { fr: "Confirmer la validation de cette inscription ? Un email sera envoyé au candidat.", mg: "Hamarino ve ny fanamarinana ity fisoratana anarana ity ? Handefasana mailaka ny kandidà." },
+    modalRejectTitle: { fr: "Rejeter l'inscription", mg: "Handà ny fisoratana anarana" },
+    motifRejetLabel: { fr: 'Motif du refus (quelques mots)', mg: 'Antony fandavana (teny vitsivitsy)' },
+    motifRejetPlaceholder: { fr: 'ex: niveau insuffisant, dossier incomplet', mg: 'ohatra: tsy ampy ny ambaratonga, tsy feno ny antontan-taratasy' },
     modalSendButton: { fr: 'Envoyer', mg: 'Alefaso' },
     modalSendingButton: { fr: 'Envoi en cours...', mg: 'Mandefa...' },
     modalCancelButton: { fr: 'Annuler', mg: 'Aoka ihany' },
-    modalEmailFailedAlert: { fr: "Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.", mg: "Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady." },
-    modalSuccessAlert: { fr: 'Décision enregistrée et email envoyé avec succès.', mg: 'Voatahiry ny fanapahan-kevitra ary voalefa soa aman-tsara ny mailaka.' }
+    emailFailedAlert: { fr: "Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.", mg: "Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady." }
   },
 
   // Traductions malgaches des clés colorWhite/colorGrayReal/colorNavy/colorGold/colorSilver

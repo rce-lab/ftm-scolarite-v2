@@ -22,10 +22,9 @@ function DeliberationContent() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [classesList, setClassesList] = useState<any[]>([])
   const [selectedClasseId, setSelectedClasseId] = useState('')
-  const [modalAction, setModalAction] = useState<'approved' | 'rejected' | null>(null)
-  const [modalSubject, setModalSubject] = useState('')
-  const [modalBody, setModalBody] = useState('')
-  const [modalSending, setModalSending] = useState(false)
+  const [rejectModalOpen, setRejectModalOpen] = useState(false)
+  const [motifRejetInput, setMotifRejetInput] = useState('')
+  const [sending, setSending] = useState(false)
 
   useEffect(() => {
     loadInscriptions()
@@ -138,83 +137,51 @@ function DeliberationContent() {
     return aMatch - bMatch
   })
 
-  // Extrait le motif de refus d'un corps de message édité librement : cherche
-  // une ligne "Motif : ..." et prend tout jusqu'au prochain paragraphe vide.
-  // Si le repère a été supprimé/renommé par l'admin, le corps entier sert de
-  // repli plutôt que de perdre l'information.
-  const extractMotifRejet = (body: string): string => {
-    const match = body.match(/Motif\s*:\s*([\s\S]*?)(?:\n\s*\n|$)/i)
-    return (match ? match[1] : body).trim()
-  }
-
-  const defaultRejectBody = () =>
-    `Nous vous remercions vivement pour l'intérêt que vous avez porté aux cours de Malagasy de la FTM et pour le temps consacré à votre dossier d'inscription.\n\nMotif : [Précisez le motif du refus ici]\n\nCette décision ne remet aucunement en cause votre motivation, et nous vous encourageons à retenter votre chance lors d'une prochaine session.`
-
-  const defaultApproveBody = () =>
-    `Bonne nouvelle ! Votre inscription aux cours de Malagasy a été validée par le conseil pédagogique.`
-
   const openRejectModal = () => {
-    setModalAction('rejected')
-    setModalSubject('Réponse à votre inscription - FTM Malagasy')
-    setModalBody(defaultRejectBody())
+    setMotifRejetInput('')
+    setRejectModalOpen(true)
   }
 
-  const openApproveModal = () => {
+  const closeRejectModal = () => {
+    setRejectModalOpen(false)
+    setMotifRejetInput('')
+  }
+
+  const handleApprove = async () => {
     if (!selectedInscription) return
     const niveau = selectedInscription.niveau_definitif || selectedInscription.niveau_suggere
     if (!niveau || !selectedClasseId) {
       alert(t('deliberation.validationMissingLevelOrClass'))
       return
     }
-    setModalAction('approved')
-    setModalSubject('Votre inscription est validée - FTM Malagasy')
-    setModalBody(defaultApproveBody())
-  }
+    if (!confirm(t('deliberation.approveConfirm'))) return
 
-  const closeModal = () => {
-    setModalAction(null)
-    setModalBody('')
-  }
-
-  const handleSendModal = async () => {
-    if (!selectedInscription || !modalAction) return
-    setModalSending(true)
-
+    setSending(true)
     try {
       const classeSelectionnee = classesList.find(c => c.id === selectedClasseId)
 
-      const updates: any = { status: modalAction, updated_at: new Date().toISOString() }
-      if (modalAction === 'rejected') {
-        updates.motif_rejet = extractMotifRejet(modalBody)
-      } else {
-        updates.niveau_definitif = selectedInscription.niveau_definitif || selectedInscription.niveau_suggere
-        updates.classe_id = selectedClasseId
-        updates.classe_attribuee = classeSelectionnee
-          ? `${classeSelectionnee.jour} ${classeSelectionnee.heure} - ${classeSelectionnee.niveau} - ${classeSelectionnee.nom}`
-          : ''
-      }
-
       const { error } = await supabase
         .from('inscriptions')
-        .update(updates)
+        .update({
+          status: 'approved',
+          niveau_definitif: niveau,
+          classe_id: selectedClasseId,
+          classe_attribuee: classeSelectionnee
+            ? `${classeSelectionnee.jour} ${classeSelectionnee.heure} - ${classeSelectionnee.niveau} - ${classeSelectionnee.nom}`
+            : '',
+          updated_at: new Date().toISOString()
+        })
         .eq('id', selectedInscription.id)
 
       if (error) throw error
 
-      const emailResult = await sendDecisionEmailAction(
-        selectedInscription,
-        modalAction,
-        modalAction === 'approved' ? classeSelectionnee : undefined,
-        modalBody
-      )
-
+      const emailResult = await sendDecisionEmailAction(selectedInscription, 'approved', classeSelectionnee)
       if (emailResult.success) {
-        alert(t('deliberation.modalSuccessAlert'))
+        alert(t('deliberation.statusUpdateAlert').replace('{status}', 'approved'))
       } else {
-        alert(t('deliberation.modalEmailFailedAlert'))
+        alert(t('deliberation.emailFailedAlert'))
       }
 
-      closeModal()
       loadInscriptions()
       loadAllStatuses()
       setSelectedInscription(null)
@@ -222,7 +189,44 @@ function DeliberationContent() {
       console.error('Erreur:', error)
       alert(t('deliberation.updateErrorAlert'))
     } finally {
-      setModalSending(false)
+      setSending(false)
+    }
+  }
+
+  const handleSendReject = async () => {
+    if (!selectedInscription) return
+    setSending(true)
+
+    try {
+      const motif = motifRejetInput.trim()
+
+      const { error } = await supabase
+        .from('inscriptions')
+        .update({
+          status: 'rejected',
+          motif_rejet: motif || null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', selectedInscription.id)
+
+      if (error) throw error
+
+      const emailResult = await sendDecisionEmailAction(selectedInscription, 'rejected', undefined, motif || undefined)
+      if (emailResult.success) {
+        alert(t('deliberation.statusUpdateAlert').replace('{status}', 'rejected'))
+      } else {
+        alert(t('deliberation.emailFailedAlert'))
+      }
+
+      closeRejectModal()
+      loadInscriptions()
+      loadAllStatuses()
+      setSelectedInscription(null)
+    } catch (error) {
+      console.error('Erreur:', error)
+      alert(t('deliberation.updateErrorAlert'))
+    } finally {
+      setSending(false)
     }
   }
 
@@ -462,8 +466,9 @@ function DeliberationContent() {
                   <div className="flex space-x-2">
                     {selectedInscription.status !== 'approved' && selectedInscription.status !== 'rejected' && (
                       <button
-                        onClick={openApproveModal}
-                        className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
+                        onClick={handleApprove}
+                        disabled={sending}
+                        className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
                       >
                         {t('deliberation.approveButton')}
                       </button>
@@ -471,7 +476,8 @@ function DeliberationContent() {
                     {selectedInscription.status !== 'rejected' && (
                       <button
                         onClick={openRejectModal}
-                        className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700"
+                        disabled={sending}
+                        className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 disabled:opacity-50"
                       >
                         {t('deliberation.rejectButton')}
                       </button>
@@ -534,46 +540,39 @@ function DeliberationContent() {
         </div>
       </div>
 
-      {modalAction && (
+      {rejectModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow p-6 w-full max-w-xl">
+          <div className="bg-white rounded-lg shadow p-6 w-full max-w-md">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
               <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
-              {modalAction === 'approved' ? t('deliberation.modalApproveTitle') : t('deliberation.modalRejectTitle')}
+              {t('deliberation.modalRejectTitle')}
             </h2>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-base font-medium text-gray-700 mb-1">{t('deliberation.modalSubjectLabel')}</label>
-                <div className="p-2 bg-gray-50 rounded border text-sm">{modalSubject}</div>
-              </div>
-              <div>
-                <label className="block text-base font-medium text-gray-700 mb-1">{t('deliberation.modalBodyLabel')}</label>
-                <textarea
-                  value={modalBody}
-                  onChange={(e) => setModalBody(e.target.value)}
-                  rows={10}
-                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] text-sm"
-                />
-              </div>
+            <div>
+              <label className="block text-base font-medium text-gray-700 mb-1">{t('deliberation.motifRejetLabel')}</label>
+              <input
+                type="text"
+                value={motifRejetInput}
+                onChange={(e) => setMotifRejetInput(e.target.value)}
+                placeholder={t('deliberation.motifRejetPlaceholder')}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] text-sm"
+              />
             </div>
 
             <div className="flex justify-end space-x-3 mt-6">
               <button
-                onClick={closeModal}
-                disabled={modalSending}
+                onClick={closeRejectModal}
+                disabled={sending}
                 className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50"
               >
                 {t('deliberation.modalCancelButton')}
               </button>
               <button
-                onClick={handleSendModal}
-                disabled={modalSending}
-                className={`px-4 py-2 text-white rounded text-sm disabled:opacity-50 ${
-                  modalAction === 'approved' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
-                }`}
+                onClick={handleSendReject}
+                disabled={sending}
+                className="px-4 py-2 text-white rounded text-sm disabled:opacity-50 bg-red-600 hover:bg-red-700"
               >
-                {modalSending ? t('deliberation.modalSendingButton') : t('deliberation.modalSendButton')}
+                {sending ? t('deliberation.modalSendingButton') : t('deliberation.modalSendButton')}
               </button>
             </div>
           </div>
