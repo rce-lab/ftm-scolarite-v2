@@ -16,12 +16,14 @@ export default function AdminDashboard() {
     approved: number
     paymentPending: number
     recentInscriptions: any[]
+    statsByLevel: Record<string, number>
   }>({
     totalInscriptions: 0,
     pendingReview: 0,
     approved: 0,
     paymentPending: 0,
-    recentInscriptions: []
+    recentInscriptions: [],
+    statsByLevel: {}
   })
   const [loading, setLoading] = useState(true)
 
@@ -62,12 +64,28 @@ export default function AdminDashboard() {
         .order('created_at', { ascending: false })
         .limit(5)
 
+      // Répartition par niveau : uniquement les candidats réellement validés
+      // (niveau décidé par le collège), pas les niveau_suggere en attente —
+      // ces stats reflètent la répartition réelle des classes, pas une
+      // simple suggestion algorithmique.
+      const { data: niveaux } = await supabase
+        .from('inscriptions')
+        .select('niveau_definitif')
+        .eq('status', 'approved')
+        .not('niveau_definitif', 'is', null)
+
+      const statsByLevel: Record<string, number> = {}
+      ;(niveaux || []).forEach((i: any) => {
+        statsByLevel[i.niveau_definitif] = (statsByLevel[i.niveau_definitif] || 0) + 1
+      })
+
       setStats({
         totalInscriptions: totalCount || 0,
         pendingReview: pendingCount || 0,
         approved: approvedCount || 0,
         paymentPending: paymentCount || 0,
-        recentInscriptions: recent || []
+        recentInscriptions: recent || [],
+        statsByLevel
       })
     } catch (error) {
       console.error('Erreur:', error)
@@ -274,7 +292,7 @@ export default function AdminDashboard() {
               <div key={niveau} className="text-center p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-[#689e4e]">{niveau}</div>
                 <div className="text-base text-gray-600 mt-1">{t('adminDashboard.levelTileLabel')}</div>
-                <div className="mt-2 text-lg font-bold">0</div>
+                <div className="mt-2 text-lg font-bold">{stats.statsByLevel[niveau] || 0}</div>
                 <div className="text-xs text-gray-700">{t('adminDashboard.studentsUnit')}</div>
               </div>
             ))}
