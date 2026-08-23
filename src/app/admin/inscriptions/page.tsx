@@ -127,10 +127,10 @@ function InscriptionsListContent() {
             {inscriptions.map((inscription) => (
               <tr key={inscription.id} className="group hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap font-mono text-base">{inscription.student_code}</td>
-                <td className="px-6 py-4 max-w-[160px] truncate" title={`${inscription.prenom} ${inscription.nom}`}>
+                <td className="px-6 py-4 max-w-[240px] truncate" title={`${inscription.prenom} ${inscription.nom}`}>
                   {inscription.prenom} {inscription.nom}
                 </td>
-                <td className="px-6 py-4 max-w-[220px] truncate text-base" title={inscription.email_contact}>{inscription.email_contact}</td>
+                <td className="px-6 py-4 max-w-[180px] truncate text-base" title={inscription.email_contact}>{inscription.email_contact}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 py-1 text-xs rounded bg-[#689e4e]/15 text-[#527d3e]">
                     {inscription.niveau_suggere}
