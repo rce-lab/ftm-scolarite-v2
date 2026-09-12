@@ -384,7 +384,7 @@ function DeliberationContent() {
                         <span>{inscription.prenom} {inscription.nom}</span>
                         {inscription.is_reinscription && (
                           <span className="px-2 py-0.5 text-xs rounded bg-violet-100 text-violet-700 font-medium whitespace-nowrap">
-                            Réinscription
+                            {t('deliberation.reinscriptionBadge')}
                           </span>
                         )}
                       </div>
@@ -447,16 +447,16 @@ function DeliberationContent() {
                   <p className="text-base text-gray-600">{t('deliberation.codeLabel').replace('{code}', selectedInscription.student_code)}</p>
                   {selectedInscription.is_reinscription && (
                     <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-violet-100 text-violet-700 font-semibold">
-                      Réinscription
+                      {t('deliberation.reinscriptionBadge')}
                     </span>
                   )}
                 </div>
 
                 {selectedInscription.is_reinscription && (
                   <div className="p-3 bg-violet-50 rounded border border-violet-200">
-                    <h4 className="text-base font-medium mb-2 text-violet-900">Historique de cet élève</h4>
+                    <h4 className="text-base font-medium mb-2 text-violet-900">{t('deliberation.studentHistoryTitle')}</h4>
                     {historiqueEleve.length === 0 ? (
-                      <p className="text-sm text-gray-600">Aucune inscription précédente trouvée dans l'archive.</p>
+                      <p className="text-sm text-gray-600">{t('deliberation.studentHistoryEmpty')}</p>
                     ) : (
                       <ul className="text-sm space-y-1">
                         {historiqueEleve.map((h, i) => (

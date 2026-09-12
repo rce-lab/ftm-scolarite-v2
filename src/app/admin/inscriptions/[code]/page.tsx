@@ -142,7 +142,7 @@ export default function InscriptionDetailPage() {
               {inscription.prenom} {inscription.nom}
               {inscription.is_reinscription && (
                 <span className="px-3 py-1 text-sm rounded-full bg-violet-100 text-violet-700 font-semibold">
-                  Réinscription
+                  {t('inscriptionsDetail.reinscriptionBadge')}
                 </span>
               )}
             </h1>
@@ -151,7 +151,7 @@ export default function InscriptionDetailPage() {
             {t('inscriptionsDetail.studentCodeLabel')} <span className="font-mono font-bold">{inscription.student_code}</span>
             {matricule && (
               <span className="ml-3">
-                Matricule : <span className="font-mono font-bold">{matricule}</span>
+                {t('inscriptionsDetail.matriculeLabel')} <span className="font-mono font-bold">{matricule}</span>
               </span>
             )}
           </p>
@@ -339,16 +339,16 @@ export default function InscriptionDetailPage() {
             <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <span className="w-1 self-stretch bg-violet-500 rounded-sm"></span>
-                Historique de cet élève
+                {t('inscriptionsDetail.studentHistoryTitle')}
               </h2>
               {historiqueEleve.length === 0 ? (
-                <p className="text-sm text-gray-600">Aucune inscription précédente trouvée dans l'archive.</p>
+                <p className="text-sm text-gray-600">{t('inscriptionsDetail.studentHistoryEmpty')}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-left text-gray-600">
-                      <th className="pb-2 font-medium">Année scolaire</th>
-                      <th className="pb-2 font-medium">Niveau</th>
+                      <th className="pb-2 font-medium">{t('inscriptionsDetail.studentHistoryColYear')}</th>
+                      <th className="pb-2 font-medium">{t('inscriptionsDetail.studentHistoryColLevel')}</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -133,7 +133,7 @@ function InscriptionsListContent() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableCode')}</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Matricule</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableMatricule')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableName')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableEmail')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableLevel')}</th>
@@ -155,7 +155,7 @@ function InscriptionsListContent() {
                     <span>{inscription.prenom} {inscription.nom}</span>
                     {inscription.is_reinscription && (
                       <span className="px-2 py-0.5 text-xs rounded bg-violet-100 text-violet-700 font-medium whitespace-nowrap">
-                        Réinscription
+                        {t('inscriptionsList.reinscriptionBadge')}
                       </span>
                     )}
                   </div>

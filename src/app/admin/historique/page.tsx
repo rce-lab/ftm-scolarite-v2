@@ -425,7 +425,7 @@ export default function HistoriquePage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colYear')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">Matricule</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colMatricule')}</th>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colName')}</th>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colFirstName')}</th>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colAge')}</th>

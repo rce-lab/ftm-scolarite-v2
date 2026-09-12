@@ -362,5 +362,96 @@ export const publicTranslations = {
     question_C2_33_1: { fr: 'ECRIRE : Je peux écrire un texte clair, fluide et stylistiquement adapté aux circonstances.', en: 'WRITING: I can write clear, smoothly flowing text in a style appropriate to the circumstances.' },
     question_C2_33_2: { fr: 'ECRIRE : Je peux rédiger des lettres, rapports ou articles complexes, avec une construction claire.', en: 'WRITING: I can write complex letters, reports or articles which help the reader follow a clear structure.' },
     question_C2_33_3: { fr: 'ECRIRE : Dans ma rédaction, ma construction doit permettre au lecteur d\'en saisir et de mémoriser les points importants.', en: 'WRITING: In my writing, the structure should help the reader grasp and remember the important points.' }
+  },
+
+  // Réinscription
+  reinscriptionHeader: {
+    title: { fr: 'Réinscription', en: 'Re-enrollment' },
+    subtitle: {
+      fr: 'Vous avez déjà été élève à la FTM ? Retrouvez votre dossier et réinscrivez-vous en quelques instants.',
+      en: 'Already been a student at FTM? Find your file and re-enroll in just a few moments.'
+    }
+  },
+
+  reinscriptionStepper: {
+    step1: { fr: 'Matricule', en: 'Student ID' },
+    step2: { fr: 'Confirmation', en: 'Confirmation' },
+    step3: { fr: 'Mise à jour', en: 'Update' }
+  },
+
+  reinscriptionMatricule: {
+    title: { fr: 'Retrouvez votre dossier', en: 'Find your file' },
+    intro: {
+      fr: "Saisissez le matricule qui vous a été attribué lors de votre inscription (ou réinscription) précédente à la FTM.",
+      en: 'Enter the student ID you were given during your previous registration (or re-enrollment) at FTM.'
+    },
+    matriculeLabel: { fr: 'Matricule', en: 'Student ID' },
+    matriculePlaceholder: { fr: 'FTM-000125', en: 'FTM-000125' },
+    emptyError: { fr: 'Merci de saisir votre matricule.', en: 'Please enter your student ID.' },
+    formatError: {
+      fr: 'Le matricule doit commencer par "FTM-" (ex : FTM-000125).',
+      en: 'The student ID must start with "FTM-" (e.g. FTM-000125).'
+    },
+    notFoundError: {
+      fr: "Matricule inconnu. Vérifiez le numéro reçu lors de votre inscription précédente, ou contactez la scolarité si vous pensez qu'il s'agit d'une erreur.",
+      en: 'Student ID not found. Check the number you received during your previous registration, or contact the school office if you think this is a mistake.'
+    },
+    genericError: { fr: 'Une erreur est survenue. Merci de réessayer.', en: 'An error occurred. Please try again.' },
+    checkingButton: { fr: 'Vérification...', en: 'Checking...' },
+    continueButton: { fr: 'Continuer', en: 'Continue' }
+  },
+
+  reinscriptionConfirmIdentity: {
+    title: { fr: 'Est-ce bien vous ?', en: 'Is this you?' },
+    intro: {
+      fr: 'Voici les informations retrouvées dans notre dossier. Vérifiez-les avant de continuer.',
+      en: 'Here is the information found in our records. Please check it before continuing.'
+    },
+    lastNameLabel: { fr: 'Nom', en: 'Last name' },
+    firstNameLabel: { fr: 'Prénom', en: 'First name' },
+    emailLabel: { fr: 'Email', en: 'Email' },
+    cityLabel: { fr: 'Ville de résidence', en: 'City of residence' },
+    levelLabel: { fr: 'Dernier niveau connu', en: 'Last known level' },
+    classLabel: { fr: 'Dernière classe connue', en: 'Last known class' },
+    notAvailable: { fr: 'Non disponible', en: 'Not available' },
+    notMeButton: { fr: "Ce n'est pas moi", en: 'This is not me' },
+    confirmButton: { fr: 'Oui, c\'est bien moi', en: 'Yes, this is me' }
+  },
+
+  reinscriptionVariableFields: {
+    title: { fr: 'Vos informations pour cette année', en: 'Your information for this year' },
+    intro: {
+      fr: "Seules les quelques infos qui changent d'une année sur l'autre sont demandées ci-dessous.",
+      en: 'Only the few details that change from year to year are asked below.'
+    },
+    daysLabel: { fr: 'Jours de disponibilité', en: 'Available days' },
+    anyDayOption: { fr: "N'importe quel jour me convient", en: 'Any day works for me' },
+    choiceNumber: { fr: 'Choix n°{n}', en: 'Choice #{n}' },
+    daysRequiredError: { fr: 'Veuillez sélectionner au moins un jour de préférence.', en: 'Please select at least one preferred day.' },
+    timeLabel: { fr: 'Horaire souhaité', en: 'Preferred time' },
+    afternoonOption: { fr: 'Après-midi', en: 'Afternoon' },
+    eveningOption: { fr: 'Soir', en: 'Evening' },
+    otherOption: { fr: 'Autre', en: 'Other' },
+    timeRequiredError: { fr: 'Veuillez sélectionner au moins un horaire souhaité.', en: 'Please select at least one preferred time.' },
+    otherTimePlaceholder: { fr: "Précisez l'horaire", en: 'Please specify the time' },
+    otherTimeRequiredError: { fr: 'Merci de préciser cet horaire.', en: 'Please specify this time.' },
+    sameTeacherLabel: { fr: 'Garder le même enseignant si possible', en: 'Keep the same teacher if possible' },
+    levelFeltLabel: { fr: 'Niveau ressenti', en: 'Perceived level' },
+    levelUnchangedOption: { fr: 'Niveau inchangé (dernier connu : {niveau})', en: 'Unchanged level (last known: {niveau})' },
+    unknownLevel: { fr: 'inconnu', en: 'unknown' },
+    levelReassessOption: { fr: 'Je pense avoir progressé, à réévaluer', en: 'I think I have improved, please reassess' },
+    levelDecisionHint: {
+      fr: "Le niveau définitif sera tranché par l'enseignant lors de la délibération.",
+      en: 'The final level will be decided by the teacher during the review board.'
+    },
+    remarksLabel: { fr: 'Remarques (optionnel)', en: 'Remarks (optional)' },
+    backButton: { fr: 'Retour', en: 'Back' },
+    submittingButton: { fr: 'Envoi en cours...', en: 'Submitting...' },
+    submitButton: { fr: 'Confirmer ma réinscription', en: 'Confirm my re-enrollment' },
+    genericError: { fr: 'Une erreur est survenue. Merci de réessayer.', en: 'An error occurred. Please try again.' }
+  },
+
+  reinscriptionFinal: {
+    redirecting: { fr: 'Redirection en cours...', en: 'Redirecting...' }
   }
 } as const

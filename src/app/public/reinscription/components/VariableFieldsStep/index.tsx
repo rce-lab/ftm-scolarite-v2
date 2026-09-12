@@ -5,6 +5,7 @@ import {
   soumettreReinscription,
   type DerniereInscriptionInfo
 } from '@/app/actions/reinscriptionActions'
+import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 
 interface VariableFieldsStepProps {
   eleveId: string
@@ -13,21 +14,23 @@ interface VariableFieldsStepProps {
   onBack: () => void
 }
 
-const JOURS_OPTIONS = [
-  { value: 'lundi', label: 'Lundi' },
-  { value: 'mardi', label: 'Mardi' },
-  { value: 'mercredi', label: 'Mercredi' },
-  { value: 'jeudi', label: 'Jeudi' },
-  { value: 'vendredi', label: 'Vendredi' },
-  { value: 'samedi', label: 'Samedi' }
-]
-
 export default function VariableFieldsStep({
   eleveId,
   derniereInscription,
   onSubmitted,
   onBack
 }: VariableFieldsStepProps) {
+  const { t } = usePublicTranslation()
+
+  const JOURS_OPTIONS = [
+    { value: 'lundi', label: t('availability.monday') },
+    { value: 'mardi', label: t('availability.tuesday') },
+    { value: 'mercredi', label: t('availability.wednesday') },
+    { value: 'jeudi', label: t('availability.thursday') },
+    { value: 'vendredi', label: t('availability.friday') },
+    { value: 'samedi', label: t('availability.saturday') }
+  ]
+
   const [joursPreference, setJoursPreference] = useState<string[]>([])
   const [horaireApresMidi, setHoraireApresMidi] = useState(false)
   const [horaireSoir, setHoraireSoir] = useState(false)
@@ -41,7 +44,7 @@ export default function VariableFieldsStep({
   const [submitError, setSubmitError] = useState('')
 
   const peuImporte = joursPreference.length === 1 && joursPreference[0] === 'peu_importe'
-  const niveauConnu = derniereInscription?.niveau_calcule || 'inconnu'
+  const niveauConnu = derniereInscription?.niveau_calcule || t('reinscriptionVariableFields.unknownLevel')
 
   const handleTogglePeuImporte = (checked: boolean) => {
     setJoursPreference(checked ? ['peu_importe'] : [])
@@ -60,13 +63,13 @@ export default function VariableFieldsStep({
     const newErrors: Record<string, string> = {}
 
     if (joursPreference.length === 0) {
-      newErrors.jours = 'Veuillez sélectionner au moins un jour de préférence.'
+      newErrors.jours = t('reinscriptionVariableFields.daysRequiredError')
     }
     if (!horaireApresMidi && !horaireSoir && !horaireAutre) {
-      newErrors.horaires = 'Veuillez sélectionner au moins un horaire souhaité.'
+      newErrors.horaires = t('reinscriptionVariableFields.timeRequiredError')
     }
     if (horaireAutre && !horaireAutreDetail.trim()) {
-      newErrors.horaireAutre = 'Merci de préciser cet horaire.'
+      newErrors.horaireAutre = t('reinscriptionVariableFields.otherTimeRequiredError')
     }
 
     setErrors(newErrors)
@@ -100,7 +103,7 @@ export default function VariableFieldsStep({
       onSubmitted(result.code)
     } catch (err: any) {
       console.error('Erreur soumission réinscription:', err)
-      setSubmitError('Une erreur est survenue. Merci de réessayer.')
+      setSubmitError(t('reinscriptionVariableFields.genericError'))
     } finally {
       setIsSubmitting(false)
     }
@@ -109,15 +112,15 @@ export default function VariableFieldsStep({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold">Vos informations pour cette année</h2>
+        <h2 className="text-xl font-bold">{t('reinscriptionVariableFields.title')}</h2>
         <p className="text-gray-600 mt-1">
-          Seules les quelques infos qui changent d'une année sur l'autre sont demandées ci-dessous.
+          {t('reinscriptionVariableFields.intro')}
         </p>
       </div>
 
       {/* Disponibilités */}
       <div className="space-y-3">
-        <label className="block mb-2 font-medium text-base">Jours de disponibilité</label>
+        <label className="block mb-2 font-medium text-base">{t('reinscriptionVariableFields.daysLabel')}</label>
 
         <label className="flex items-center space-x-2 cursor-pointer mb-3">
           <input
@@ -126,7 +129,7 @@ export default function VariableFieldsStep({
             onChange={(e) => handleTogglePeuImporte(e.target.checked)}
             className="w-4 h-4 text-violet-600 rounded"
           />
-          <span className="text-base font-medium">N'importe quel jour me convient</span>
+          <span className="text-base font-medium">{t('reinscriptionVariableFields.anyDayOption')}</span>
         </label>
 
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-2 ${peuImporte ? 'opacity-40' : ''}`}>
@@ -148,7 +151,11 @@ export default function VariableFieldsStep({
                 }`}
               >
                 <div className="font-medium text-base">{jour.label}</div>
-                {isSelected && <div className="text-sm mt-1 text-violet-600">Choix n°{position}</div>}
+                {isSelected && (
+                  <div className="text-sm mt-1 text-violet-600">
+                    {t('reinscriptionVariableFields.choiceNumber').replace('{n}', String(position))}
+                  </div>
+                )}
               </button>
             )
           })}
@@ -156,7 +163,7 @@ export default function VariableFieldsStep({
         {errors.jours && <p className="text-sm text-red-500 mt-1">{errors.jours}</p>}
 
         <div className="pt-2">
-          <label className="block mb-2 font-medium text-base">Horaire souhaité</label>
+          <label className="block mb-2 font-medium text-base">{t('reinscriptionVariableFields.timeLabel')}</label>
           <div className="flex flex-wrap gap-4">
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
@@ -165,7 +172,7 @@ export default function VariableFieldsStep({
                 onChange={(e) => setHoraireApresMidi(e.target.checked)}
                 className="w-4 h-4 text-violet-600 rounded"
               />
-              <span className="text-base font-medium">Après-midi</span>
+              <span className="text-base font-medium">{t('reinscriptionVariableFields.afternoonOption')}</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
@@ -174,7 +181,7 @@ export default function VariableFieldsStep({
                 onChange={(e) => setHoraireSoir(e.target.checked)}
                 className="w-4 h-4 text-violet-600 rounded"
               />
-              <span className="text-base font-medium">Soir</span>
+              <span className="text-base font-medium">{t('reinscriptionVariableFields.eveningOption')}</span>
             </label>
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
@@ -183,7 +190,7 @@ export default function VariableFieldsStep({
                 onChange={(e) => setHoraireAutre(e.target.checked)}
                 className="w-4 h-4 text-violet-600 rounded"
               />
-              <span className="text-base font-medium">Autre</span>
+              <span className="text-base font-medium">{t('reinscriptionVariableFields.otherOption')}</span>
             </label>
           </div>
           {errors.horaires && <p className="text-sm text-red-500 mt-1">{errors.horaires}</p>}
@@ -194,7 +201,7 @@ export default function VariableFieldsStep({
                 type="text"
                 value={horaireAutreDetail}
                 onChange={(e) => setHoraireAutreDetail(e.target.value)}
-                placeholder="Précisez l'horaire"
+                placeholder={t('reinscriptionVariableFields.otherTimePlaceholder')}
                 className={`w-full p-2 border rounded text-sm ${
                   errors.horaireAutre ? 'border-red-500' : 'border-gray-300'
                 }`}
@@ -214,14 +221,14 @@ export default function VariableFieldsStep({
             onChange={(e) => setGarderMemeEnseignant(e.target.checked)}
             className="w-4 h-4 text-violet-600 rounded"
           />
-          <span className="text-base font-medium">Garder le même enseignant si possible</span>
+          <span className="text-base font-medium">{t('reinscriptionVariableFields.sameTeacherLabel')}</span>
         </label>
       </div>
 
       {/* Niveau ressenti */}
       <div className="pt-4 border-t border-gray-200">
         <label className="block mb-2 font-medium text-base" htmlFor="niveau">
-          Niveau ressenti
+          {t('reinscriptionVariableFields.levelFeltLabel')}
         </label>
         <select
           id="niveau"
@@ -229,18 +236,20 @@ export default function VariableFieldsStep({
           onChange={(e) => setNiveauChoice(e.target.value as 'inchange' | 'reevaluer')}
           className="w-full p-2 border border-gray-300 rounded"
         >
-          <option value="inchange">Niveau inchangé (dernier connu : {niveauConnu})</option>
-          <option value="reevaluer">Je pense avoir progressé, à réévaluer</option>
+          <option value="inchange">
+            {t('reinscriptionVariableFields.levelUnchangedOption').replace('{niveau}', niveauConnu)}
+          </option>
+          <option value="reevaluer">{t('reinscriptionVariableFields.levelReassessOption')}</option>
         </select>
         <p className="text-sm text-gray-500 mt-1">
-          Le niveau définitif sera tranché par l'enseignant lors de la délibération.
+          {t('reinscriptionVariableFields.levelDecisionHint')}
         </p>
       </div>
 
       {/* Remarques */}
       <div className="pt-4 border-t border-gray-200">
         <label className="block mb-2 font-medium text-base" htmlFor="remarques">
-          Remarques (optionnel)
+          {t('reinscriptionVariableFields.remarksLabel')}
         </label>
         <textarea
           id="remarques"
@@ -261,7 +270,7 @@ export default function VariableFieldsStep({
           disabled={isSubmitting}
           className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
         >
-          Retour
+          {t('reinscriptionVariableFields.backButton')}
         </button>
 
         <button
@@ -271,7 +280,7 @@ export default function VariableFieldsStep({
             isSubmitting ? 'bg-violet-300 cursor-not-allowed' : 'bg-violet-600 hover:bg-violet-700'
           }`}
         >
-          {isSubmitting ? 'Envoi en cours...' : 'Confirmer ma réinscription'}
+          {isSubmitting ? t('reinscriptionVariableFields.submittingButton') : t('reinscriptionVariableFields.submitButton')}
         </button>
       </div>
     </div>

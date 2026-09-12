@@ -9,8 +9,7 @@ import MatriculeStep from './components/MatriculeStep'
 import ConfirmIdentityStep from './components/ConfirmIdentityStep'
 import VariableFieldsStep from './components/VariableFieldsStep'
 import type { EleveInfo, DerniereInscriptionInfo } from '@/app/actions/reinscriptionActions'
-
-const STEPS = ['Matricule', 'Confirmation', 'Mise à jour']
+import { PublicLanguageProvider, usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 
 // Stepper local à la réinscription : le Stepper partagé (src/app/public/inscription)
 // a 5 étapes avec des libellés propres au formulaire d'inscription classique
@@ -19,10 +18,17 @@ const STEPS = ['Matricule', 'Confirmation', 'Mise à jour']
 // de la nouvelle inscription (aucune couleur dédiée trouvée dans la charte
 // existante — cf. résumé de fin de tâche).
 function ReinscriptionStepper({ currentStep }: { currentStep: number }) {
+  const { t } = usePublicTranslation()
+  const steps = [
+    t('reinscriptionStepper.step1'),
+    t('reinscriptionStepper.step2'),
+    t('reinscriptionStepper.step3')
+  ]
+
   return (
     <div className="mb-8">
       <div className="flex justify-between">
-        {STEPS.map((label, i) => {
+        {steps.map((label, i) => {
           const stepNumber = i + 1
           return (
             <div key={label} className="flex flex-col items-center flex-1">
@@ -48,15 +54,16 @@ function ReinscriptionStepper({ currentStep }: { currentStep: number }) {
         <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-300 -translate-y-1/2" />
         <div
           className="absolute top-1/2 left-0 h-0.5 bg-violet-600 -translate-y-1/2 transition-all duration-300"
-          style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
+          style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
         />
       </div>
     </div>
   )
 }
 
-export default function ReinscriptionPage() {
+function ReinscriptionPageContent() {
   const router = useRouter()
+  const { t, language, setLanguage } = usePublicTranslation()
 
   const [currentStep, setCurrentStep] = useState(1)
   const [matricule, setMatricule] = useState('')
@@ -108,12 +115,20 @@ export default function ReinscriptionPage() {
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow">
         {/* En-tête, même charte que le formulaire d'inscription, accent violet distinctif */}
         <div className="mb-6 text-center border-b-4 border-violet-600 pb-6">
+          <div className="text-right">
+            <button
+              onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+              className="text-sm text-[#689e4e] hover:text-[#527d3e] underline"
+            >
+              {language === 'fr' ? 'English version' : 'Version française'}
+            </button>
+          </div>
           <div className="flex justify-center mb-4">
             <Image src={logo} alt="Logo FTM" className="h-24 w-auto" priority />
           </div>
-          <h1 className="text-2xl font-bold text-[#689e4e]">Réinscription</h1>
+          <h1 className="text-2xl font-bold text-[#689e4e]">{t('reinscriptionHeader.title')}</h1>
           <p className="text-gray-600 mt-1">
-            Vous avez déjà été élève à la FTM ? Retrouvez votre dossier et réinscrivez-vous en quelques instants.
+            {t('reinscriptionHeader.subtitle')}
           </p>
         </div>
 
@@ -142,9 +157,17 @@ export default function ReinscriptionPage() {
         )}
 
         {submitted && (
-          <div className="text-center text-gray-600 py-8">Redirection en cours...</div>
+          <div className="text-center text-gray-600 py-8">{t('reinscriptionFinal.redirecting')}</div>
         )}
       </div>
     </div>
+  )
+}
+
+export default function ReinscriptionPage() {
+  return (
+    <PublicLanguageProvider>
+      <ReinscriptionPageContent />
+    </PublicLanguageProvider>
   )
 }

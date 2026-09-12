@@ -1,6 +1,7 @@
 'use client'
 
 import type { EleveInfo, DerniereInscriptionInfo } from '@/app/actions/reinscriptionActions'
+import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 
 interface ConfirmIdentityStepProps {
   eleve: EleveInfo
@@ -15,21 +16,24 @@ export default function ConfirmIdentityStep({
   onConfirm,
   onReject
 }: ConfirmIdentityStepProps) {
+  const { t } = usePublicTranslation()
+  const notAvailable = t('reinscriptionConfirmIdentity.notAvailable')
+
   const rows: { label: string; value: string }[] = [
-    { label: 'Nom', value: eleve.nom },
-    { label: 'Prénom', value: eleve.prenom },
-    { label: 'Email', value: derniereInscription?.email || 'Non disponible' },
-    { label: 'Ville de résidence', value: derniereInscription?.ville_residence || 'Non disponible' },
-    { label: 'Dernier niveau connu', value: derniereInscription?.niveau_calcule || 'Non disponible' },
-    { label: 'Dernière classe connue', value: derniereInscription?.classe_attribuee || 'Non disponible' }
+    { label: t('reinscriptionConfirmIdentity.lastNameLabel'), value: eleve.nom },
+    { label: t('reinscriptionConfirmIdentity.firstNameLabel'), value: eleve.prenom },
+    { label: t('reinscriptionConfirmIdentity.emailLabel'), value: derniereInscription?.email || notAvailable },
+    { label: t('reinscriptionConfirmIdentity.cityLabel'), value: derniereInscription?.ville_residence || notAvailable },
+    { label: t('reinscriptionConfirmIdentity.levelLabel'), value: derniereInscription?.niveau_calcule || notAvailable },
+    { label: t('reinscriptionConfirmIdentity.classLabel'), value: derniereInscription?.classe_attribuee || notAvailable }
   ]
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold">Est-ce bien vous ?</h2>
+        <h2 className="text-xl font-bold">{t('reinscriptionConfirmIdentity.title')}</h2>
         <p className="text-gray-600 mt-1">
-          Voici les informations retrouvées dans notre dossier. Vérifiez-les avant de continuer.
+          {t('reinscriptionConfirmIdentity.intro')}
         </p>
       </div>
 
@@ -51,14 +55,14 @@ export default function ConfirmIdentityStep({
           onClick={onReject}
           className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50"
         >
-          Ce n'est pas moi
+          {t('reinscriptionConfirmIdentity.notMeButton')}
         </button>
 
         <button
           onClick={onConfirm}
           className="px-4 py-2 rounded text-sm text-white bg-violet-600 hover:bg-violet-700"
         >
-          Oui, c'est bien moi
+          {t('reinscriptionConfirmIdentity.confirmButton')}
         </button>
       </div>
     </div>

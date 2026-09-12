@@ -145,7 +145,7 @@ export default function AdminDashboard() {
               <span className="text-2xl">🧑‍🎓</span>
             </div>
             <div className="ml-4">
-              <p className="text-base font-medium text-gray-600">Élèves uniques</p>
+              <p className="text-base font-medium text-gray-600">{t('adminDashboard.uniqueStudentsLabel')}</p>
               <p className="text-2xl font-bold text-violet-700">{stats.uniqueStudents}</p>
             </div>
           </div>

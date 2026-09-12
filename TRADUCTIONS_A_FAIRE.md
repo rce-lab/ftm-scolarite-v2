@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-08-17 — 15 sections, 383 entrées.
+Généré le 2026-09-12 — 15 sections, 409 entrées.
 
 ---
 
@@ -79,6 +79,7 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | historique.colLevel | Niveau | Ambaratonga |
 | historique.byCountryTitle | Répartition par pays de résidence | Fizarana araka ny firenena ipetrahana |
 | historique.colCountry | Pays | Firenena |
+| historique.colMatricule | Matricule | Matrikiola |
 | historique.searchListTitle | Recherche et liste | Fikarohana sy lisitra |
 | historique.searchPlaceholder | Rechercher par nom ou prénom... | Karohy amin'ny anarana na fanampin'anarana... |
 | historique.filterAllYears | Toutes les années | Taona rehetra |
@@ -125,6 +126,7 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | adminDashboard.tableLevel | Niveau | Lentam-pahaizana |
 | adminDashboard.tableDate | Date | Daty |
 | adminDashboard.tableStatus | Statut | Sata |
+| adminDashboard.tablePayment | Paiement | Fandoavam-bola |
 | adminDashboard.tableAction | Action | Hetsika |
 | adminDashboard.viewLink | Voir → | Jereo → |
 | adminDashboard.viewAllInscriptionsLink | Voir toutes les inscriptions → | Jereo ny fisoratana anarana rehetra → |
@@ -136,6 +138,7 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | adminDashboard.statsByLevelTitle | Statistiques par niveau | Antontan'isa araka ny ambaratonga |
 | adminDashboard.levelTileLabel | Niveau | Lentam-pahaizana |
 | adminDashboard.studentsUnit | étudiants | Mpianatra |
+| adminDashboard.uniqueStudentsLabel | Élèves uniques | Mpianatra tokana |
 
 ## Liste des inscriptions
 
@@ -154,8 +157,11 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | inscriptionsList.tableLevel | Niveau | Lentam-pahaizana |
 | inscriptionsList.tableDate | Date | Daty |
 | inscriptionsList.tableStatus | Statut | Sata |
+| inscriptionsList.tablePayment | Paiement | Fandoavam-bola |
 | inscriptionsList.tableActions | Actions | Hetsika |
 | inscriptionsList.viewLink | Voir → | Jereo → |
+| inscriptionsList.tableMatricule | Matricule | Matrikiola |
+| inscriptionsList.reinscriptionBadge | Réinscription | Fisoratana indray |
 
 ## Détail d'une inscription
 
@@ -201,6 +207,7 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | inscriptionsDetail.actionReject | ❌ Rejeter l'inscription | ❌ Lavina ny fisoratana anarana |
 | inscriptionsDetail.actionPaymentPending | 💰 Paiement en attente | 💰 Miandry ny fandoavam-bola |
 | inscriptionsDetail.actionPaymentConfirmed | ✅ Paiement confirmé | ✅ Voamarina ny fandoavam-bola |
+| inscriptionsDetail.viewInDeliberationLink | 👨‍🏫 Voir dans Délibération | 👨‍🏫 Jereo ao amin'ny Fanapahan-kevitra |
 | inscriptionsDetail.actionPrint | 🖨️ Imprimer cette page | 🖨️ Manonta ity pejy ity |
 | inscriptionsDetail.actionSendEmail | 📧 Envoyer un email | 📧 Mandefa mailaka |
 | inscriptionsDetail.historyTitle | Historique | Tantara |
@@ -216,6 +223,11 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | inscriptionsDetail.statusChangeConfirm | Voulez-vous vraiment changer le statut en "{status}" ? | Tena tianao hovana ho "{status}" ve ny sata ? |
 | inscriptionsDetail.statusUpdateSuccessAlert | Statut mis à jour avec succès | Voaova soa aman-tsara ny sata |
 | inscriptionsDetail.statusUpdateErrorAlert | Erreur lors de la mise à jour | Hadisoana teo am-panovana |
+| inscriptionsDetail.matriculeLabel | Matricule: | Matrikiola: |
+| inscriptionsDetail.reinscriptionBadge | Réinscription | Fisoratana indray |
+| inscriptionsDetail.studentHistoryTitle | Historique de cet élève | Tantaran'ity mpianatra ity |
+| inscriptionsDetail.studentHistoryColYear | Année scolaire | Taom-pianarana |
+| inscriptionsDetail.studentHistoryColLevel | Niveau | Lentam-pahaizana |
 
 ## Suivi des paiements
 
@@ -322,6 +334,20 @@ Généré le 2026-08-17 — 15 sections, 383 entrées.
 | deliberation.statusUpdateAlert | Statut mis à jour: {status} | Voaova ny sata: {status} |
 | deliberation.updateErrorAlert | Erreur lors de la mise à jour | Hadisoana teo am-panovana |
 | deliberation.levelUpdateAlert | Niveau définitif mis à jour: {niveau} | Voaova ny ambaratonga farany: {niveau} |
+| deliberation.assignedClassLabel | Classe assignée | Kilasy voatokana |
+| deliberation.noClassesAvailable | Aucune classe disponible | Tsy misy kilasy azo atolotra |
+| deliberation.classMatchBadge | ✓ Compatible | ✓ Mifanaraka |
+| deliberation.validationMissingLevelOrClass | Veuillez assigner un niveau et une classe avant de valider. | Mba tokony hofaritana aloha ny ambaratonga sy ny kilasy alohan'ny hanamarinana. |
+| deliberation.approveConfirm | Confirmer la validation de cette inscription ? Un email sera envoyé au candidat. | Hamarino ve ny fanamarinana ity fisoratana anarana ity ? Handefasana mailaka ny kandidà. |
+| deliberation.modalRejectTitle | Rejeter l'inscription | Handà ny fisoratana anarana |
+| deliberation.motifRejetLabel | Motif du refus (quelques mots) | Antony fandavana (teny vitsivitsy) |
+| deliberation.motifRejetPlaceholder | ex: niveau insuffisant, dossier incomplet | ohatra: tsy ampy ny ambaratonga, tsy feno ny antontan-taratasy |
+| deliberation.modalSendButton | Envoyer | Alefaso |
+| deliberation.modalSendingButton | Envoi en cours... | Mandefa... |
+| deliberation.modalCancelButton | Annuler | Aoka ihany |
+| deliberation.emailFailedAlert | Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement. | Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady. |
+| deliberation.reinscriptionBadge | Réinscription | Fisoratana indray |
+| deliberation.studentHistoryTitle | Historique de cet élève | Tantaran'ity mpianatra ity |
 
 ## Gestion des classes
 

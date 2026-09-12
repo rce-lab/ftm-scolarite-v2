@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { lookupParMatricule, type EleveInfo, type DerniereInscriptionInfo } from '@/app/actions/reinscriptionActions'
+import { usePublicTranslation } from '@/lib/i18n/PublicLanguageContext'
 
 interface MatriculeStepProps {
   matricule: string
@@ -10,14 +11,15 @@ interface MatriculeStepProps {
 }
 
 export default function MatriculeStep({ matricule, setMatricule, onFound }: MatriculeStepProps) {
+  const { t } = usePublicTranslation()
   const [isChecking, setIsChecking] = useState(false)
   const [error, setError] = useState('')
 
   const validateLocal = (): string => {
     const trimmed = matricule.trim()
-    if (!trimmed) return 'Merci de saisir votre matricule.'
+    if (!trimmed) return t('reinscriptionMatricule.emptyError')
     if (!trimmed.toUpperCase().startsWith('FTM-')) {
-      return 'Le matricule doit commencer par "FTM-" (ex : FTM-000125).'
+      return t('reinscriptionMatricule.formatError')
     }
     return ''
   }
@@ -36,7 +38,7 @@ export default function MatriculeStep({ matricule, setMatricule, onFound }: Matr
       const result = await lookupParMatricule(matricule)
 
       if (!result.found) {
-        setError("Matricule inconnu. Vérifiez le numéro reçu lors de votre inscription précédente, ou contactez la scolarité si vous pensez qu'il s'agit d'une erreur.")
+        setError(t('reinscriptionMatricule.notFoundError'))
         return
       }
 
@@ -48,7 +50,7 @@ export default function MatriculeStep({ matricule, setMatricule, onFound }: Matr
       onFound(result.eleve, result.derniereInscription)
     } catch (err: any) {
       console.error('Erreur lookup matricule:', err)
-      setError('Une erreur est survenue. Merci de réessayer.')
+      setError(t('reinscriptionMatricule.genericError'))
     } finally {
       setIsChecking(false)
     }
@@ -64,15 +66,15 @@ export default function MatriculeStep({ matricule, setMatricule, onFound }: Matr
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold">Retrouvez votre dossier</h2>
+        <h2 className="text-xl font-bold">{t('reinscriptionMatricule.title')}</h2>
         <p className="text-gray-600 mt-1">
-          Saisissez le matricule qui vous a été attribué lors de votre inscription (ou réinscription) précédente à la FTM.
+          {t('reinscriptionMatricule.intro')}
         </p>
       </div>
 
       <div>
         <label className="block mb-1 font-medium text-base" htmlFor="matricule">
-          Matricule
+          {t('reinscriptionMatricule.matriculeLabel')}
         </label>
         <input
           id="matricule"
@@ -80,7 +82,7 @@ export default function MatriculeStep({ matricule, setMatricule, onFound }: Matr
           value={matricule}
           onChange={(e) => setMatricule(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="FTM-000125"
+          placeholder={t('reinscriptionMatricule.matriculePlaceholder')}
           className={`w-full p-2 border rounded ${error ? 'border-red-500' : 'border-gray-300'}`}
           autoFocus
         />
@@ -95,7 +97,7 @@ export default function MatriculeStep({ matricule, setMatricule, onFound }: Matr
             isChecking ? 'bg-violet-300 cursor-not-allowed' : 'bg-violet-600 hover:bg-violet-700'
           }`}
         >
-          {isChecking ? 'Vérification...' : 'Continuer'}
+          {isChecking ? t('reinscriptionMatricule.checkingButton') : t('reinscriptionMatricule.continueButton')}
         </button>
       </div>
     </div>

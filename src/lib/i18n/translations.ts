@@ -75,6 +75,8 @@ export const translations = {
     colLevel: { fr: 'Niveau', mg: 'Ambaratonga' },
     byCountryTitle: { fr: 'Répartition par pays de résidence', mg: 'Fizarana araka ny firenena ipetrahana' },
     colCountry: { fr: 'Pays', mg: 'Firenena' },
+    // Colonne "Matricule" (jointure eleve_uuid = eleve.id) — mg validé par Charles
+    colMatricule: { fr: 'Matricule', mg: 'Matrikiola' },
 
     searchListTitle: { fr: 'Recherche et liste', mg: 'Fikarohana sy lisitra' },
     searchPlaceholder: { fr: 'Rechercher par nom ou prénom...', mg: "Karohy amin'ny anarana na fanampin'anarana..." },
@@ -132,7 +134,9 @@ export const translations = {
     quickActionSettings: { fr: '⚙️ Paramètres', mg: '⚙️ Fanova' },
     statsByLevelTitle: { fr: 'Statistiques par niveau', mg: "Antontan'isa araka ny ambaratonga" },
     levelTileLabel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
-    studentsUnit: { fr: 'étudiants', mg: 'Mpianatra' }
+    studentsUnit: { fr: 'étudiants', mg: 'Mpianatra' },
+    // KPI "Élèves uniques" : valeur mg reprise telle quelle de historique.uniqueStudentsLabel (même texte fr déjà validé)
+    uniqueStudentsLabel: { fr: 'Élèves uniques', mg: 'Mpianatra tokana' }
   },
 
   inscriptionsList: {
@@ -151,7 +155,11 @@ export const translations = {
     tableStatus: { fr: 'Statut', mg: 'Sata' },
     tablePayment: { fr: 'Paiement', mg: 'Fandoavam-bola' },
     tableActions: { fr: 'Actions', mg: 'Hetsika' },
-    viewLink: { fr: 'Voir →', mg: 'Jereo →' }
+    viewLink: { fr: 'Voir →', mg: 'Jereo →' },
+    // Colonne "Matricule" — mg validé par Charles
+    tableMatricule: { fr: 'Matricule', mg: 'Matrikiola' },
+    // Badge "Réinscription" — proposition mg à valider
+    reinscriptionBadge: { fr: 'Réinscription', mg: 'Fisoratana indray' }
   },
 
   inscriptionsDetail: {
@@ -211,7 +219,21 @@ export const translations = {
     saveErrorAlert: { fr: "Erreur lors de l'enregistrement", mg: 'Hadisoana teo am-pitahirizana ny fanovana' },
     statusChangeConfirm: { fr: 'Voulez-vous vraiment changer le statut en "{status}" ?', mg: 'Tena tianao hovana ho "{status}" ve ny sata ?' },
     statusUpdateSuccessAlert: { fr: 'Statut mis à jour avec succès', mg: 'Voaova soa aman-tsara ny sata' },
-    statusUpdateErrorAlert: { fr: 'Erreur lors de la mise à jour', mg: 'Hadisoana teo am-panovana' }
+    statusUpdateErrorAlert: { fr: 'Erreur lors de la mise à jour', mg: 'Hadisoana teo am-panovana' },
+    // Matricule affiché à côté du code étudiant — mg validé par Charles ("Matrikiola")
+    // (distinct de studentCodeLabel.mg "Laharan'ny mpianatra" pour ne pas afficher le même libellé
+    // malgache sur 2 numéros différents côte à côte)
+    matriculeLabel: { fr: 'Matricule:', mg: 'Matrikiola:' },
+    // Badge "Réinscription" — proposition mg à valider
+    reinscriptionBadge: { fr: 'Réinscription', mg: 'Fisoratana indray' },
+    // Encart "Historique de cet élève" (réinscription uniquement) — propositions mg à valider
+    studentHistoryTitle: { fr: 'Historique de cet élève', mg: "Tantaran'ity mpianatra ity" },
+    studentHistoryEmpty: {
+      fr: "Aucune inscription précédente trouvée dans l'archive.",
+      mg: "Tsy nisy fisoratana anarana taloha hita tao amin'ny tahirim-panaka."
+    },
+    studentHistoryColYear: { fr: 'Année scolaire', mg: 'Taom-pianarana' },
+    studentHistoryColLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' }
   },
 
   payments: {
@@ -328,7 +350,15 @@ export const translations = {
     modalSendButton: { fr: 'Envoyer', mg: 'Alefaso' },
     modalSendingButton: { fr: 'Envoi en cours...', mg: 'Mandefa...' },
     modalCancelButton: { fr: 'Annuler', mg: 'Aoka ihany' },
-    emailFailedAlert: { fr: "Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.", mg: "Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady." }
+    emailFailedAlert: { fr: "Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.", mg: "Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady." },
+
+    // Badge "Réinscription" + encart historique élève — propositions mg à valider, cf. résumé de tâche
+    reinscriptionBadge: { fr: 'Réinscription', mg: 'Fisoratana indray' },
+    studentHistoryTitle: { fr: 'Historique de cet élève', mg: "Tantaran'ity mpianatra ity" },
+    studentHistoryEmpty: {
+      fr: "Aucune inscription précédente trouvée dans l'archive.",
+      mg: "Tsy nisy fisoratana anarana taloha hita tao amin'ny tahirim-panaka."
+    }
   },
 
   // Traductions malgaches des clés colorWhite/colorGrayReal/colorNavy/colorGold/colorSilver
