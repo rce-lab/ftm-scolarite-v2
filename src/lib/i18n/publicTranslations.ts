@@ -139,7 +139,20 @@ export const publicTranslations = {
   homepage: {
     schoolYear: { fr: 'Année scolaire {annee}', en: 'School year {annee}' },
     ctaButton: { fr: "S'inscrire maintenant", en: 'Register now' },
-    logoAlt: { fr: 'Logo FTM', en: 'FTM logo' }
+    logoAlt: { fr: 'Logo FTM', en: 'FTM logo' },
+
+    // Page de choix entre nouvelle inscription et réinscription
+    welcomeTitle: { fr: 'Bienvenue à la FTM', en: 'Welcome to FTM' },
+    chooseIntro: { fr: 'Sélectionnez votre situation pour commencer.', en: 'Select your situation to get started.' },
+    newInscriptionTitle: { fr: 'Nouvelle inscription', en: 'New registration' },
+    newInscriptionSubtitle: {
+      fr: "Vous n'avez jamais été élève à la FTM.",
+      en: 'You have never been a student at FTM.'
+    },
+    reinscriptionSubtitle: {
+      fr: 'Vous êtes un ancien élève et avez déjà un matricule FTM.',
+      en: 'You are a former student and already have an FTM student ID.'
+    }
   },
 
   contact: {

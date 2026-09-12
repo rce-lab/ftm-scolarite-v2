@@ -30,7 +30,7 @@ function HomePageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-lg shadow p-8 text-center border-t-4 border-[#b03c2d]">
+      <div className="max-w-2xl w-full bg-white rounded-lg shadow p-8 text-center border-t-4 border-[#b03c2d]">
         <div className="text-right mb-2">
           <button
             onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
@@ -55,12 +55,30 @@ function HomePageContent() {
           {config.adresse_association}
         </p>
 
-        <Link
-          href="/public/inscription"
-          className="inline-block mt-6 bg-[#689e4e] text-white px-6 py-3 rounded font-medium hover:opacity-90"
-        >
-          {t('homepage.ctaButton')}
-        </Link>
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900">{t('homepage.welcomeTitle')}</h2>
+          <p className="text-gray-600 mt-1">{t('homepage.chooseIntro')}</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 text-left">
+            <Link
+              href="/public/inscription"
+              className="block p-5 rounded-lg border-2 border-gray-200 hover:border-[#689e4e] hover:bg-[#689e4e]/5 transition-colors"
+            >
+              <div className="text-2xl mb-2">🆕</div>
+              <div className="font-bold text-[#689e4e]">{t('homepage.newInscriptionTitle')}</div>
+              <p className="text-sm text-gray-600 mt-1">{t('homepage.newInscriptionSubtitle')}</p>
+            </Link>
+
+            <Link
+              href="/public/reinscription"
+              className="block p-5 rounded-lg border-2 border-gray-200 hover:border-violet-600 hover:bg-violet-50 transition-colors"
+            >
+              <div className="text-2xl mb-2">🔄</div>
+              <div className="font-bold text-violet-700">{t('reinscriptionHeader.title')}</div>
+              <p className="text-sm text-gray-600 mt-1">{t('homepage.reinscriptionSubtitle')}</p>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   )
