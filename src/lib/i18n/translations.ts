@@ -132,7 +132,9 @@ export const translations = {
     quickActionStudents: { fr: '👨‍🎓 Gérer les étudiants', mg: '👨‍🎓 Fitantanana ny mpianatra' },
     quickActionPayments: { fr: '💰 Suivi des paiements', mg: '💰 Fanaraha-maso ny fandoavam-bola' },
     quickActionSettings: { fr: '⚙️ Paramètres', mg: '⚙️ Fanova' },
-    statsByLevelTitle: { fr: 'Statistiques par niveau', mg: "Antontan'isa araka ny ambaratonga" },
+    // Titre précisé pour lever l'ambiguïté : ce widget ne compte que les dossiers status='approved'
+    // (cf. diagnostic session précédente), pas tous les niveau_definitif renseignés. mg proposé à valider.
+    statsByLevelTitle: { fr: 'Statistiques par niveau (dossiers validés)', mg: "Antontan'isa araka ny ambaratonga (antontan-taratasy voamarina)" },
     levelTileLabel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     studentsUnit: { fr: 'étudiants', mg: 'Mpianatra' },
     // KPI "Élèves uniques" : valeur mg reprise telle quelle de historique.uniqueStudentsLabel (même texte fr déjà validé)

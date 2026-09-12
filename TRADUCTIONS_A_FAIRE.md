@@ -135,7 +135,7 @@ Généré le 2026-09-12 — 15 sections, 409 entrées.
 | adminDashboard.quickActionStudents | 👨‍🎓 Gérer les étudiants | 👨‍🎓 Fitantanana ny mpianatra |
 | adminDashboard.quickActionPayments | 💰 Suivi des paiements | 💰 Fanaraha-maso ny fandoavam-bola |
 | adminDashboard.quickActionSettings | ⚙️ Paramètres | ⚙️ Fanova |
-| adminDashboard.statsByLevelTitle | Statistiques par niveau | Antontan'isa araka ny ambaratonga |
+| adminDashboard.statsByLevelTitle | Statistiques par niveau (dossiers validés) | Antontan'isa araka ny ambaratonga (antontan-taratasy voamarina) |
 | adminDashboard.levelTileLabel | Niveau | Lentam-pahaizana |
 | adminDashboard.studentsUnit | étudiants | Mpianatra |
 | adminDashboard.uniqueStudentsLabel | Élèves uniques | Mpianatra tokana |
