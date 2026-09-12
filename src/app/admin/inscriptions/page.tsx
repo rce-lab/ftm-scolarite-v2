@@ -15,6 +15,7 @@ function InscriptionsListContent() {
   const filter = params.get('filter') || 'all'
   const [inscriptions, setInscriptions] = useState<any[]>([])
   const [allStatuses, setAllStatuses] = useState<{ status: string; statut_paiement: string | null }[]>([])
+  const [matricules, setMatricules] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -42,11 +43,29 @@ function InscriptionsListContent() {
 
       if (error) throw error
       setInscriptions(data || [])
+      await loadMatricules(data || [])
     } catch (error) {
       console.error('Erreur:', error)
     } finally {
       setLoading(false)
     }
+  }
+
+  // Récupère le matricule de chaque élève lié (eleve_id), pour la colonne "Matricule"
+  const loadMatricules = async (rows: any[]) => {
+    const eleveIds = Array.from(new Set(rows.map((r) => r.eleve_id).filter(Boolean)))
+    if (eleveIds.length === 0) {
+      setMatricules({})
+      return
+    }
+    const { data, error } = await supabase.from('eleve').select('id, matricule').in('id', eleveIds)
+    if (error) {
+      console.error('Erreur chargement matricules:', error)
+      return
+    }
+    const map: Record<string, string> = {}
+    ;(data || []).forEach((e: any) => { map[e.id] = e.matricule })
+    setMatricules(map)
   }
 
   // Compteurs indépendants du filtre actif : toujours calculés sur l'ensemble
@@ -114,6 +133,7 @@ function InscriptionsListContent() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableCode')}</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Matricule</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableName')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableEmail')}</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">{t('inscriptionsList.tableLevel')}</th>
@@ -127,8 +147,18 @@ function InscriptionsListContent() {
             {inscriptions.map((inscription) => (
               <tr key={inscription.id} className="group hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap font-mono text-base">{inscription.student_code}</td>
+                <td className="px-6 py-4 whitespace-nowrap font-mono text-base">
+                  {inscription.eleve_id ? matricules[inscription.eleve_id] || '…' : <span className="text-gray-400">—</span>}
+                </td>
                 <td className="px-6 py-4 max-w-[240px] truncate" title={`${inscription.prenom} ${inscription.nom}`}>
-                  {inscription.prenom} {inscription.nom}
+                  <div className="flex items-center gap-2">
+                    <span>{inscription.prenom} {inscription.nom}</span>
+                    {inscription.is_reinscription && (
+                      <span className="px-2 py-0.5 text-xs rounded bg-violet-100 text-violet-700 font-medium whitespace-nowrap">
+                        Réinscription
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-6 py-4 max-w-[180px] truncate text-base" title={inscription.email_contact}>{inscription.email_contact}</td>
                 <td className="px-6 py-4 whitespace-nowrap">

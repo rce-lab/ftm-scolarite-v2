@@ -12,6 +12,7 @@ export default function AdminDashboard() {
   const { t } = useTranslation()
   const [stats, setStats] = useState<{
     totalInscriptions: number
+    uniqueStudents: number
     pendingReview: number
     approved: number
     paymentPending: number
@@ -19,6 +20,7 @@ export default function AdminDashboard() {
     statsByLevel: Record<string, number>
   }>({
     totalInscriptions: 0,
+    uniqueStudents: 0,
     pendingReview: 0,
     approved: 0,
     paymentPending: 0,
@@ -36,6 +38,12 @@ export default function AdminDashboard() {
       // Total inscriptions
       const { count: totalCount } = await supabase
         .from('inscriptions')
+        .select('*', { count: 'exact', head: true })
+
+      // Élèves uniques (personnes réelles, table `eleve`) — à comparer au total
+      // d'inscriptions ci-dessus pour mesurer la fidélisation.
+      const { count: uniqueStudentsCount } = await supabase
+        .from('eleve')
         .select('*', { count: 'exact', head: true })
 
       // Inscriptions en attente
@@ -81,6 +89,7 @@ export default function AdminDashboard() {
 
       setStats({
         totalInscriptions: totalCount || 0,
+        uniqueStudents: uniqueStudentsCount || 0,
         pendingReview: pendingCount || 0,
         approved: approvedCount || 0,
         paymentPending: paymentCount || 0,
@@ -117,7 +126,7 @@ export default function AdminDashboard() {
       <SectionDivider />
 
       {/* Statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-white p-6 rounded-lg shadow border border-gray-200 border-l-4 border-l-[#689e4e]">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -126,6 +135,18 @@ export default function AdminDashboard() {
             <div className="ml-4">
               <p className="text-base font-medium text-gray-600">{t('adminDashboard.totalInscriptions')}</p>
               <p className="text-2xl font-bold text-gray-900">{stats.totalInscriptions}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 border-l-4 border-l-violet-500">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <span className="text-2xl">🧑‍🎓</span>
+            </div>
+            <div className="ml-4">
+              <p className="text-base font-medium text-gray-600">Élèves uniques</p>
+              <p className="text-2xl font-bold text-violet-700">{stats.uniqueStudents}</p>
             </div>
           </div>
         </div>

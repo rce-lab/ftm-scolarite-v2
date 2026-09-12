@@ -25,6 +25,7 @@ function DeliberationContent() {
   const [rejectModalOpen, setRejectModalOpen] = useState(false)
   const [motifRejetInput, setMotifRejetInput] = useState('')
   const [sending, setSending] = useState(false)
+  const [historiqueEleve, setHistoriqueEleve] = useState<{ annee_scolaire: string; niveau_calcule: string | null }[]>([])
 
   useEffect(() => {
     loadInscriptions()
@@ -45,6 +46,32 @@ function DeliberationContent() {
   useEffect(() => {
     setSelectedClasseId(selectedInscription?.classe_id || '')
   }, [selectedInscription?.id])
+
+  useEffect(() => {
+    loadHistoriqueEleve()
+  }, [selectedInscription?.id])
+
+  // Historique de l'élève (années précédentes), pour aider la décision de
+  // progression sur une réinscription : Maintien / Passage niveau sup / À réévaluer.
+  const loadHistoriqueEleve = async () => {
+    if (!selectedInscription?.is_reinscription || !selectedInscription?.eleve_id) {
+      setHistoriqueEleve([])
+      return
+    }
+    try {
+      const { data, error } = await supabase
+        .from('inscriptions_archive')
+        .select('annee_scolaire, niveau_calcule')
+        .eq('eleve_uuid', selectedInscription.eleve_id)
+        .order('annee_scolaire', { ascending: false })
+
+      if (error) throw error
+      setHistoriqueEleve(data || [])
+    } catch (error) {
+      console.error('Erreur chargement historique élève:', error)
+      setHistoriqueEleve([])
+    }
+  }
 
   const loadPhotoUrl = async () => {
     if (!selectedInscription?.photo_url) {
@@ -175,7 +202,24 @@ function DeliberationContent() {
 
       if (error) throw error
 
-      const emailResult = await sendDecisionEmailAction(selectedInscription, 'approved', classeSelectionnee)
+      // Matricule à mentionner dans l'email de décision : uniquement pour une
+      // 1ère inscription (pas une réinscription, qui le connaît déjà) et
+      // uniquement si un élève est déjà lié à ce stade (eleve_id renseigné).
+      let matriculePourEmail: string | undefined
+      if (selectedInscription.eleve_id && !selectedInscription.is_reinscription) {
+        const { data: eleve } = await supabase
+          .from('eleve')
+          .select('matricule')
+          .eq('id', selectedInscription.eleve_id)
+          .maybeSingle()
+        matriculePourEmail = eleve?.matricule || undefined
+      }
+
+      const emailResult = await sendDecisionEmailAction(
+        { ...selectedInscription, matricule: matriculePourEmail },
+        'approved',
+        classeSelectionnee
+      )
       if (emailResult.success) {
         alert(t('deliberation.statusUpdateAlert').replace('{status}', 'approved'))
       } else {
@@ -336,7 +380,14 @@ function DeliberationContent() {
                     onClick={() => setSelectedInscription(inscription)}
                   >
                     <td className="px-6 py-4">
-                      <div className="font-medium">{inscription.prenom} {inscription.nom}</div>
+                      <div className="font-medium flex items-center gap-2">
+                        <span>{inscription.prenom} {inscription.nom}</span>
+                        {inscription.is_reinscription && (
+                          <span className="px-2 py-0.5 text-xs rounded bg-violet-100 text-violet-700 font-medium whitespace-nowrap">
+                            Réinscription
+                          </span>
+                        )}
+                      </div>
                       <div className="text-base text-gray-700">{inscription.email_contact}</div>
                     </td>
                     <td className="px-6 py-4">
@@ -394,7 +445,30 @@ function DeliberationContent() {
                   )}
                   <h3 className="font-medium mb-2">{selectedInscription.prenom} {selectedInscription.nom}</h3>
                   <p className="text-base text-gray-600">{t('deliberation.codeLabel').replace('{code}', selectedInscription.student_code)}</p>
+                  {selectedInscription.is_reinscription && (
+                    <span className="inline-block mt-2 px-3 py-1 text-sm rounded-full bg-violet-100 text-violet-700 font-semibold">
+                      Réinscription
+                    </span>
+                  )}
                 </div>
+
+                {selectedInscription.is_reinscription && (
+                  <div className="p-3 bg-violet-50 rounded border border-violet-200">
+                    <h4 className="text-base font-medium mb-2 text-violet-900">Historique de cet élève</h4>
+                    {historiqueEleve.length === 0 ? (
+                      <p className="text-sm text-gray-600">Aucune inscription précédente trouvée dans l'archive.</p>
+                    ) : (
+                      <ul className="text-sm space-y-1">
+                        {historiqueEleve.map((h, i) => (
+                          <li key={i} className="flex justify-between">
+                            <span className="text-gray-700">{h.annee_scolaire}</span>
+                            <span className="font-medium">{h.niveau_calcule || '—'}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-base font-medium mb-1">{t('deliberation.suggestedLevelLabel')}</label>

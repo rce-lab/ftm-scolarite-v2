@@ -34,6 +34,11 @@ interface InscriptionData {
   niveau_suggere: string
   student_code: string
   age?: number | null
+  is_reinscription?: boolean
+  // Matricule FTM (table `eleve`), transmis par l'appelant uniquement pour une
+  // 1ère inscription au moment où un élève est déjà lié (eleve_id renseigné) —
+  // voir le résumé de fin de tâche sur l'automatisation manquante.
+  matricule?: string | null
 }
 
 export async function sendInscriptionNotification(
@@ -224,6 +229,13 @@ export async function sendDecisionEmail(
 
     const horaire = [classe.jour, classe.heure].filter(Boolean).join(' à ')
 
+    // Ligne matricule : uniquement pour une 1ère inscription (pas une
+    // réinscription, qui le connaît déjà) et seulement si transmis par l'appelant.
+    const ligneMatricule = !inscription.is_reinscription && inscription.matricule
+      ? `<p><strong>Matricule FTM :</strong> <span style="font-family: monospace; background: #e0e7ff; padding: 2px 6px; border-radius: 4px;">${inscription.matricule}</span></p>
+         <p style="color: #4b5563; line-height: 1.6; margin-top: 8px;">Conservez ce matricule, il vous sera utile pour votre réinscription les années suivantes.</p>`
+      : ''
+
     await transporter.sendMail({
       from: FROM_ADDRESS,
       to: inscription.email_contact,
@@ -246,6 +258,7 @@ export async function sendDecisionEmail(
             <p><strong>Code étudiant :</strong> <span style="font-family: monospace; background: #e0e7ff; padding: 2px 6px; border-radius: 4px;">${inscription.student_code}</span></p>
             <p><strong>Classe assignée :</strong> ${classe.nom}</p>
             ${horaire ? `<p><strong>Horaire :</strong> ${horaire}</p>` : ''}
+            ${ligneMatricule}
           </div>
 
           <div style="background: #fffbeb; padding: 20px; margin: 25px 0; border-radius: 8px; border-left: 4px solid #f59e0b;">

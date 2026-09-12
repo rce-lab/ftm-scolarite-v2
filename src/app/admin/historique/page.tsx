@@ -20,6 +20,7 @@ interface ArchiveRow {
   niveau_calcule: string | null
   statut_migration: string
   eleve_id: string | null
+  eleve_uuid: string | null
   identite_a_verifier: boolean
   code_inscription: string | null
 }
@@ -31,6 +32,7 @@ export default function HistoriquePage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [processingKey, setProcessingKey] = useState<string | null>(null)
+  const [matricules, setMatricules] = useState<Record<string, string>>({})
 
   const [search, setSearch] = useState('')
   const [yearFilter, setYearFilter] = useState('all')
@@ -47,15 +49,33 @@ export default function HistoriquePage() {
       setError(null)
       const { data, error } = await supabase
         .from('inscriptions_archive')
-        .select('id, annee_scolaire, nom, prenom, age, pays_residence, email, niveau_calcule, statut_migration, eleve_id, identite_a_verifier, code_inscription')
+        .select('id, annee_scolaire, nom, prenom, age, pays_residence, email, niveau_calcule, statut_migration, eleve_id, eleve_uuid, identite_a_verifier, code_inscription')
 
       if (error) throw error
       setRows(data || [])
+      await loadMatricules(data || [])
     } catch (err: any) {
       setError(err.message || String(err))
     } finally {
       setLoading(false)
     }
+  }
+
+  // Matricule de chaque élève, en jointure sur eleve_uuid = eleve.id
+  const loadMatricules = async (archiveRows: ArchiveRow[]) => {
+    const eleveIds = Array.from(new Set(archiveRows.map((r) => r.eleve_uuid).filter(Boolean))) as string[]
+    if (eleveIds.length === 0) {
+      setMatricules({})
+      return
+    }
+    const { data, error } = await supabase.from('eleve').select('id, matricule').in('id', eleveIds)
+    if (error) {
+      console.error('Erreur chargement matricules:', error)
+      return
+    }
+    const map: Record<string, string> = {}
+    ;(data || []).forEach((e: any) => { map[e.id] = e.matricule })
+    setMatricules(map)
   }
 
   // Table eleve_id -> ensemble des années scolaires distinctes où il apparaît
@@ -405,6 +425,7 @@ export default function HistoriquePage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colYear')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">Matricule</th>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colName')}</th>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colFirstName')}</th>
                 <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('historique.colAge')}</th>
@@ -419,6 +440,9 @@ export default function HistoriquePage() {
               {paginatedRows.map((r) => (
                 <tr key={r.id} className={r.identite_a_verifier ? 'bg-amber-50' : undefined}>
                   <td className="px-3 py-2 whitespace-nowrap">{r.annee_scolaire}</td>
+                  <td className="px-3 py-2 whitespace-nowrap font-mono">
+                    {r.eleve_uuid ? matricules[r.eleve_uuid] || '…' : <span className="text-gray-400">—</span>}
+                  </td>
                   <td className="px-3 py-2 whitespace-nowrap">{r.nom}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{r.prenom}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{r.age ?? '—'}</td>
@@ -431,7 +455,7 @@ export default function HistoriquePage() {
               ))}
               {paginatedRows.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-3 py-6 text-center text-gray-700">{t('historique.noResults')}</td>
+                  <td colSpan={10} className="px-3 py-6 text-center text-gray-700">{t('historique.noResults')}</td>
                 </tr>
               )}
             </tbody>

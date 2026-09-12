@@ -18,6 +18,8 @@ export default function InscriptionDetailPage() {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<any>(null)
   const [notes, setNotes] = useState('')
+  const [matricule, setMatricule] = useState<string | null>(null)
+  const [historiqueEleve, setHistoriqueEleve] = useState<{ annee_scolaire: string; niveau_calcule: string | null }[]>([])
 
   useEffect(() => {
     if (params.code) {
@@ -37,11 +39,30 @@ export default function InscriptionDetailPage() {
       
       setInscription(data)
       setNotes(data.notes_admin || '')
-      
+
       // Calculer les statistiques détaillées
       if (data.reponses_competences) {
         const statistiques = calculerStatistiquesDetaillees(data.reponses_competences)
         setStats(statistiques)
+      }
+
+      if (data.eleve_id) {
+        const { data: eleve } = await supabase.from('eleve').select('matricule').eq('id', data.eleve_id).maybeSingle()
+        setMatricule(eleve?.matricule || null)
+
+        if (data.is_reinscription) {
+          const { data: archive, error: archiveError } = await supabase
+            .from('inscriptions_archive')
+            .select('annee_scolaire, niveau_calcule')
+            .eq('eleve_uuid', data.eleve_id)
+            .order('annee_scolaire', { ascending: false })
+
+          if (archiveError) {
+            console.error('Erreur chargement historique élève:', archiveError)
+          } else {
+            setHistoriqueEleve(archive || [])
+          }
+        }
       }
     } catch (error) {
       console.error('Erreur:', error)
@@ -119,10 +140,20 @@ export default function InscriptionDetailPage() {
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
               <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
               {inscription.prenom} {inscription.nom}
+              {inscription.is_reinscription && (
+                <span className="px-3 py-1 text-sm rounded-full bg-violet-100 text-violet-700 font-semibold">
+                  Réinscription
+                </span>
+              )}
             </h1>
           </div>
           <p className="text-gray-600 mt-1">
             {t('inscriptionsDetail.studentCodeLabel')} <span className="font-mono font-bold">{inscription.student_code}</span>
+            {matricule && (
+              <span className="ml-3">
+                Matricule : <span className="font-mono font-bold">{matricule}</span>
+              </span>
+            )}
           </p>
         </div>
         <div className="text-right space-y-2">
@@ -302,6 +333,36 @@ export default function InscriptionDetailPage() {
               </button>
             </div>
           </div>
+
+          {/* Historique de cet élève (réinscription uniquement) */}
+          {inscription.is_reinscription && (
+            <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
+                <span className="w-1 self-stretch bg-violet-500 rounded-sm"></span>
+                Historique de cet élève
+              </h2>
+              {historiqueEleve.length === 0 ? (
+                <p className="text-sm text-gray-600">Aucune inscription précédente trouvée dans l'archive.</p>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-gray-600">
+                      <th className="pb-2 font-medium">Année scolaire</th>
+                      <th className="pb-2 font-medium">Niveau</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {historiqueEleve.map((h, i) => (
+                      <tr key={i} className="border-t border-gray-100">
+                        <td className="py-2">{h.annee_scolaire}</td>
+                        <td className="py-2">{h.niveau_calcule || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
 
           {/* Historique */}
           <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
