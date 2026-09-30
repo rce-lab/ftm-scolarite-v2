@@ -319,16 +319,29 @@ function DeliberationContent() {
       if (error) throw error
 
       // Matricule à mentionner dans l'email de décision : uniquement pour une
-      // 1ère inscription (pas une réinscription, qui le connaît déjà) et
-      // uniquement si un élève est déjà lié à ce stade (eleve_id renseigné).
+      // 1ère inscription (pas une réinscription, qui le connaît déjà). Pour un
+      // nouveau candidat pas encore lié à une fiche élève, `creer_eleve_pour_inscription`
+      // (fonction Postgres, matricule séquentiel atomique via `eleve_matricule_seq`)
+      // crée cette fiche à la volée et relie `inscriptions.eleve_id` — avant ce
+      // correctif, cette liaison ne se faisait jamais pour un nouveau candidat et
+      // a dû être rattrapée manuellement pour les approbations déjà passées.
       let matriculePourEmail: string | undefined
-      if (selectedInscription.eleve_id && !selectedInscription.is_reinscription) {
-        const { data: eleve } = await supabase
-          .from('eleve')
-          .select('matricule')
-          .eq('id', selectedInscription.eleve_id)
-          .maybeSingle()
-        matriculePourEmail = eleve?.matricule || undefined
+      if (!selectedInscription.is_reinscription) {
+        if (!selectedInscription.eleve_id) {
+          const { data: eleveCree, error: erreurEleve } = await supabase.rpc(
+            'creer_eleve_pour_inscription',
+            { p_inscription_id: selectedInscription.id }
+          )
+          if (erreurEleve) throw erreurEleve
+          matriculePourEmail = eleveCree?.matricule || undefined
+        } else {
+          const { data: eleve } = await supabase
+            .from('eleve')
+            .select('matricule')
+            .eq('id', selectedInscription.eleve_id)
+            .maybeSingle()
+          matriculePourEmail = eleve?.matricule || undefined
+        }
       }
 
       const emailResult = await sendDecisionEmailAction(
