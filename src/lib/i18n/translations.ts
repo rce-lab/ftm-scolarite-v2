@@ -360,7 +360,76 @@ export const translations = {
     studentHistoryEmpty: {
       fr: "Aucune inscription précédente trouvée dans l'archive.",
       mg: "Tsy nisy fisoratana anarana taloha hita tao amin'ny tahirim-panaka."
-    }
+    },
+
+    // Modif 2 — sélecteur de classe : libellés ajoutés pour la liste déroulante.
+    // Traductions malgaches en brouillon, non encore validées par un locuteur natif.
+    classSelectPlaceholder: { fr: '— Choisir une classe —', mg: '— Misafidiana kilasy —' },
+    classNoTeacherAssigned: { fr: '(enseignant non assigné)', mg: '(tsy misy mpampianatra voatendry)' },
+
+    // Modif 3 — âge et disponibilités déclarées du candidat, affichés pour aider
+    // l'affectation en classe. Traductions malgaches en brouillon.
+    candidateInfoTitle: { fr: "Informations utiles à l'affectation", mg: 'Fampahalalana ilaina amin\'ny fanendrena kilasy' },
+    ageLabel: { fr: 'Âge', mg: 'Taona' },
+    ageValue: { fr: '{n} ans', mg: '{n} taona' },
+    ageUnknown: { fr: 'Non renseigné', mg: 'Tsy voalaza' },
+    preferredDaysLabel: { fr: 'Jours souhaités (ordre de choix)', mg: 'Andro tiana (araka ny safidy)' },
+    preferredDaysAny: { fr: "N'importe quel jour convient", mg: 'Mety avokoa ny andro rehetra' },
+    preferredDaysNone: { fr: 'Aucun jour indiqué', mg: 'Tsy misy andro voalaza' },
+    choiceRankFirst: { fr: '1er choix', mg: 'safidy voalohany' },
+    choiceRankOther: { fr: '{n}e choix', mg: 'safidy faha-{n}' },
+    timeSlotsLabel: { fr: 'Créneaux souhaités', mg: 'Ora tiana' },
+    timeSlotAfternoon: { fr: 'Après-midi', mg: 'Tolakandro' },
+    timeSlotEvening: { fr: 'Soir', mg: 'Hariva' },
+    timeSlotOther: { fr: 'Autre : {detail}', mg: 'Hafa : {detail}' },
+    timeSlotsNone: { fr: 'Aucun créneau indiqué', mg: 'Tsy misy ora voalaza' },
+    preferencesGlobalNote: {
+      fr: "Jours et créneaux sont déclarés séparément par le candidat : le formulaire ne demande aucun couplage jour + heure précis.",
+      mg: "Nolazain'ny kandidà misaraka ny andro sy ny ora : tsy nangatahin'ny taratasy fangatahana ny fifandraisan'ny andro sy ny ora mazava tsara."
+    },
+    dayMonday: { fr: 'Lundi', mg: 'Alatsinainy' },
+    dayTuesday: { fr: 'Mardi', mg: 'Talata' },
+    dayWednesday: { fr: 'Mercredi', mg: 'Alarobia' },
+    dayThursday: { fr: 'Jeudi', mg: 'Alakamisy' },
+    dayFriday: { fr: 'Vendredi', mg: 'Zoma' },
+    daySaturday: { fr: 'Samedi', mg: 'Sabotsy' },
+
+    // Modif 1 — grille de compétences complète (105 compétences CECRL), consultable
+    // et imprimable depuis la fiche candidat. Le texte des compétences lui-même vient
+    // de data/competencesCECRL.ts et n'existe qu'en français : seuls les libellés
+    // d'interface sont traduits ici. Traductions malgaches en brouillon.
+    competenceGridButton: { fr: '📋 Grille de compétences complète', mg: '📋 Takelaka feno momba ny fahaizana' },
+    competenceGridModalTitle: { fr: 'Grille de compétences complète', mg: 'Takelaka feno momba ny fahaizana' },
+    competenceGridSubtitle: { fr: 'Auto-évaluation CECRL — {answered} réponse(s) sur {total} compétences', mg: 'Fanombanan-tena CECRL — valiny {answered} amin\'ny fahaizana {total}' },
+    competenceGridEmpty: {
+      fr: "Ce candidat n'a pas rempli la grille de compétences (elle est optionnelle) : aucune réponse détaillée n'est disponible.",
+      mg: "Tsy nameno ny takelaka momba ny fahaizana ity kandidà ity (tsy voatery izany) : tsy misy valiny amin'ny antsipiriany azo jerena."
+    },
+    competenceGridPrintButton: { fr: '🖨️ Imprimer', mg: '🖨️ Atontaina' },
+    competenceGridCloseButton: { fr: 'Fermer', mg: 'Hidiana' },
+    competenceGridPrintedOn: { fr: 'Édité le {date}', mg: 'Navoaka ny {date}' },
+    competenceGridSummaryTitle: { fr: 'Synthèse par niveau', mg: 'Famintinana isaky ny lentam-pahaizana' },
+    competenceGridColLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
+    competenceGridColAnswered: { fr: 'Répondues', mg: 'Voavaly' },
+    competenceGridColScore: { fr: 'Score', mg: 'Isa azo' },
+    competenceGridColThreshold: { fr: 'Seuil', mg: 'Fetra' },
+    competenceGridThresholdReached: { fr: '✅ Atteint', mg: '✅ Tratra' },
+    competenceGridThresholdNotReached: { fr: '❌ Non atteint', mg: '❌ Tsy tratra' },
+    competenceGridAnswerYes: { fr: 'Oui', mg: 'Eny' },
+    competenceGridAnswerSomewhat: { fr: 'Un peu', mg: 'Kelikely' },
+    competenceGridAnswerNo: { fr: 'Non', mg: 'Tsia' },
+    competenceGridAnswerMissing: { fr: 'Non répondu', mg: 'Tsy novaliana' },
+    competenceGridQuestionLabel: { fr: 'Question {n} — {domaine}', mg: 'Fanontaniana {n} — {domaine}' },
+    competenceGridCompetenceLabel: { fr: 'Compétence {n}', mg: 'Fahaizana {n}' },
+    competenceGridDomainComprendre: { fr: 'COMPRENDRE', mg: 'MAHATAKATRA' },
+    competenceGridDomainParler: { fr: 'PARLER', mg: 'MITENY' },
+    competenceGridDomainEcrire: { fr: 'ECRIRE', mg: 'MANORATRA' },
+    competenceGridLevelA1: { fr: 'DÉCOUVERTE', mg: 'FANOMBOHANA' },
+    competenceGridLevelA2: { fr: 'INTERMÉDIAIRE', mg: 'ANTONONY' },
+    competenceGridLevelB1: { fr: 'SEUIL', mg: 'TOKONANA' },
+    competenceGridLevelB2: { fr: 'AVANCÉ', mg: 'MANDROSO' },
+    competenceGridLevelC1: { fr: 'AUTONOME', mg: 'MAHALEO TENA' },
+    competenceGridLevelC2: { fr: 'MAÎTRISE', mg: 'FAHAIZANA TANTERAKA' }
   },
 
   // Traductions malgaches des clés colorWhite/colorGrayReal/colorNavy/colorGold/colorSilver

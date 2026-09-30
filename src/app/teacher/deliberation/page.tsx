@@ -8,7 +8,18 @@ import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import SectionDivider from '@/components/SectionDivider'
+import GrilleCompetencesModal from '@/components/GrilleCompetencesModal'
 import { sendDecisionEmailAction } from '@/app/actions/emailActions'
+
+// Libellés des jours de préférence du candidat (inscriptions.jours_preference).
+const JOUR_KEYS: Record<string, string> = {
+  lundi: 'deliberation.dayMonday',
+  mardi: 'deliberation.dayTuesday',
+  mercredi: 'deliberation.dayWednesday',
+  jeudi: 'deliberation.dayThursday',
+  vendredi: 'deliberation.dayFriday',
+  samedi: 'deliberation.daySaturday'
+}
 
 function DeliberationContent() {
   const { t } = useTranslation()
@@ -23,6 +34,7 @@ function DeliberationContent() {
   const [classesList, setClassesList] = useState<any[]>([])
   const [selectedClasseId, setSelectedClasseId] = useState('')
   const [rejectModalOpen, setRejectModalOpen] = useState(false)
+  const [grilleModalOpen, setGrilleModalOpen] = useState(false)
   const [motifRejetInput, setMotifRejetInput] = useState('')
   const [sending, setSending] = useState(false)
   const [historiqueEleve, setHistoriqueEleve] = useState<{ annee_scolaire: string; niveau_calcule: string | null }[]>([])
@@ -45,6 +57,9 @@ function DeliberationContent() {
 
   useEffect(() => {
     setSelectedClasseId(selectedInscription?.classe_id || '')
+    // La grille affichée appartient au candidat sélectionné : on la referme quand on
+    // change de candidat, pour ne jamais laisser une grille ouverte sur un autre dossier.
+    setGrilleModalOpen(false)
   }, [selectedInscription?.id])
 
   useEffect(() => {
@@ -129,11 +144,15 @@ function DeliberationContent() {
     }
   }
 
+  // La jointure classe_enseignants → enseignants permet d'afficher le nom de
+  // l'enseignant dans le sélecteur de classe. `role` est un texte libre côté base
+  // (valeurs utilisées : "titulaire", "co-titulaire") et peut être absent : il sert
+  // uniquement à faire remonter le titulaire en tête, jamais à filtrer.
   const loadClasses = async () => {
     try {
       const { data, error } = await supabase
         .from('classes')
-        .select('id, nom, niveau, jour, heure, pays, couleur')
+        .select('id, nom, niveau, jour, heure, pays, classe_enseignants(role, enseignants(id, nom, prenom))')
         .order('nom')
 
       if (error) throw error
@@ -158,11 +177,72 @@ function DeliberationContent() {
     return niveauOk && jourOk
   }
 
-  const classesTriees = [...classesList].sort((a, b) => {
-    const aMatch = classeCorrespond(a) ? 0 : 1
-    const bMatch = classeCorrespond(b) ? 0 : 1
-    return aMatch - bMatch
-  })
+  // Enseignants d'une classe, titulaire(s) d'abord puis les autres rôles. Une classe
+  // sans enseignant lié (C04, C05, C06 et C11 à ce jour) reste listée : on le signale
+  // explicitement au lieu de la masquer du sélecteur.
+  const formatEnseignants = (classe: any) => {
+    const liens = (classe.classe_enseignants || []).filter((ce: any) => ce.enseignants)
+    if (liens.length === 0) return t('deliberation.classNoTeacherAssigned')
+
+    const ordonnes = [...liens].sort((a: any, b: any) => {
+      const aTitulaire = a.role === 'titulaire' ? 0 : 1
+      const bTitulaire = b.role === 'titulaire' ? 0 : 1
+      return aTitulaire - bTitulaire
+    })
+
+    return ordonnes
+      .map((ce: any) => `${ce.enseignants.prenom || ''} ${ce.enseignants.nom || ''}`.trim())
+      .filter((nom: string) => nom.length > 0)
+      .join(', ')
+  }
+
+  // Libellé d'une option du sélecteur de classe. Le ✓ de compatibilité est un simple
+  // préfixe informatif : il n'influence plus l'ordre de la liste, qui reste le tri par
+  // nom de classe renvoyé par la requête (.order('nom')).
+  const libelleOptionClasse = (classe: any) => {
+    const prefixe = classeCorrespond(classe) ? `${t('deliberation.classMatchBadge')} ` : ''
+    const parts = [classe.nom, classe.niveau, `${classe.jour || ''} ${classe.heure || ''}`.trim(), formatEnseignants(classe)]
+    return prefixe + parts.filter((p) => p).join(' — ')
+  }
+
+  const formatAge = () => {
+    const age = selectedInscription?.age
+    if (age === null || age === undefined || age === '') return t('deliberation.ageUnknown')
+    return t('deliberation.ageValue').replace('{n}', String(age))
+  }
+
+  // jours_preference est un tableau jsonb déjà ordonné par rang de choix (3 max),
+  // ou la valeur unique ["peu_importe"].
+  const joursPreferenceOrdonnes = (): { label: string; rang: string | null }[] => {
+    const jours: string[] = selectedInscription?.jours_preference || []
+    if (jours.length === 1 && jours[0] === 'peu_importe') {
+      return [{ label: t('deliberation.preferredDaysAny'), rang: null }]
+    }
+    return jours.map((jour, index) => ({
+      label: JOUR_KEYS[jour] ? t(JOUR_KEYS[jour]) : jour,
+      rang: index === 0
+        ? t('deliberation.choiceRankFirst')
+        : t('deliberation.choiceRankOther').replace('{n}', String(index + 1))
+    }))
+  }
+
+  // Créneaux cochés : préférences globales du candidat, sans couplage avec un jour
+  // précis (le formulaire d'inscription ne le demande pas).
+  const creneauxHoraires = (): string[] => {
+    if (!selectedInscription) return []
+    const creneaux: string[] = []
+    if (selectedInscription.horaire_apres_midi) creneaux.push(t('deliberation.timeSlotAfternoon'))
+    if (selectedInscription.horaire_soir) creneaux.push(t('deliberation.timeSlotEvening'))
+    if (selectedInscription.horaire_autre) {
+      creneaux.push(
+        t('deliberation.timeSlotOther').replace(
+          '{detail}',
+          selectedInscription.horaire_autre_detail || '—'
+        )
+      )
+    }
+    return creneaux
+  }
 
   const openRejectModal = () => {
     setMotifRejetInput('')
@@ -450,6 +530,57 @@ function DeliberationContent() {
                       {t('deliberation.reinscriptionBadge')}
                     </span>
                   )}
+                  <button
+                    onClick={() => setGrilleModalOpen(true)}
+                    className="mt-3 w-full px-3 py-2 border border-[#689e4e] text-[#527d3e] rounded text-sm hover:bg-[#689e4e]/10"
+                  >
+                    {t('deliberation.competenceGridButton')}
+                  </button>
+                </div>
+
+                {/* Âge et disponibilités déclarées : données brutes du candidat, pour que
+                    l'enseignant fasse lui-même le rapprochement fin avec les créneaux
+                    réels des classes (le matching automatique ne compare que niveau + jour). */}
+                <div className="p-3 bg-gray-50 rounded border border-gray-200">
+                  <h4 className="text-base font-medium mb-2">{t('deliberation.candidateInfoTitle')}</h4>
+
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600">{t('deliberation.ageLabel')}</span>
+                    <span className="font-medium">{formatAge()}</span>
+                  </div>
+
+                  <div className="text-sm mb-2">
+                    <span className="text-gray-600">{t('deliberation.preferredDaysLabel')}</span>
+                    {joursPreferenceOrdonnes().length === 0 ? (
+                      <p className="font-medium">{t('deliberation.preferredDaysNone')}</p>
+                    ) : (
+                      <ul className="mt-1 space-y-0.5">
+                        {joursPreferenceOrdonnes().map((jour, i) => (
+                          <li key={i} className="flex justify-between">
+                            <span className="font-medium">{jour.label}</span>
+                            {jour.rang && <span className="text-gray-600">{jour.rang}</span>}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <div className="text-sm">
+                    <span className="text-gray-600">{t('deliberation.timeSlotsLabel')}</span>
+                    {creneauxHoraires().length === 0 ? (
+                      <p className="font-medium">{t('deliberation.timeSlotsNone')}</p>
+                    ) : (
+                      <ul className="mt-1 space-y-0.5">
+                        {creneauxHoraires().map((creneau, i) => (
+                          <li key={i} className="font-medium">{creneau}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-gray-600 mt-2 italic">
+                    {t('deliberation.preferencesGlobalNote')}
+                  </p>
                 </div>
 
                 {selectedInscription.is_reinscription && (
@@ -504,34 +635,18 @@ function DeliberationContent() {
                   {classesList.length === 0 ? (
                     <p className="text-sm text-gray-700">{t('deliberation.noClassesAvailable')}</p>
                   ) : (
-                    <div className="space-y-1 max-h-48 overflow-y-auto">
-                      {classesTriees.map((classe) => (
-                        <button
-                          key={classe.id}
-                          onClick={() => setSelectedClasseId(classe.id)}
-                          className={`w-full p-2 rounded border text-left flex items-center gap-2 ${
-                            selectedClasseId === classe.id
-                              ? 'bg-green-600 text-white border-green-700'
-                              : 'bg-gray-100 hover:bg-gray-200'
-                          }`}
-                        >
-                          {classe.couleur && (
-                            <span
-                              className="w-3 h-3 rounded-full flex-shrink-0 border border-black/10"
-                              style={{ backgroundColor: classe.couleur }}
-                            ></span>
-                          )}
-                          <span className="flex-1 text-sm">
-                            {classe.nom} — {classe.niveau} — {classe.jour} {classe.heure}
-                          </span>
-                          {classeCorrespond(classe) && (
-                            <span className={`text-xs ${selectedClasseId === classe.id ? 'text-white' : 'text-[#527d3e]'}`}>
-                              {t('deliberation.classMatchBadge')}
-                            </span>
-                          )}
-                        </button>
+                    <select
+                      value={selectedClasseId}
+                      onChange={(e) => setSelectedClasseId(e.target.value)}
+                      className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
+                    >
+                      <option value="">{t('deliberation.classSelectPlaceholder')}</option>
+                      {classesList.map((classe) => (
+                        <option key={classe.id} value={classe.id}>
+                          {libelleOptionClasse(classe)}
+                        </option>
                       ))}
-                    </div>
+                    </select>
                   )}
                 </div>
 
@@ -613,6 +728,13 @@ function DeliberationContent() {
           </div>
         </div>
       </div>
+
+      {grilleModalOpen && selectedInscription && (
+        <GrilleCompetencesModal
+          inscription={selectedInscription}
+          onClose={() => setGrilleModalOpen(false)}
+        />
+      )}
 
       {rejectModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

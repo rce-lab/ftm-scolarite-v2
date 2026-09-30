@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-09-12 — 15 sections, 409 entrées.
+Généré le 2026-09-30 — 15 sections, 459 entrées.
 
 ---
 
@@ -348,6 +348,56 @@ Généré le 2026-09-12 — 15 sections, 409 entrées.
 | deliberation.emailFailedAlert | Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement. | Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady. |
 | deliberation.reinscriptionBadge | Réinscription | Fisoratana indray |
 | deliberation.studentHistoryTitle | Historique de cet élève | Tantaran'ity mpianatra ity |
+| deliberation.classSelectPlaceholder | — Choisir une classe — | — Misafidiana kilasy — |
+| deliberation.classNoTeacherAssigned | (enseignant non assigné) | (tsy misy mpampianatra voatendry) |
+| deliberation.candidateInfoTitle | Informations utiles à l'affectation | Fampahalalana ilaina amin'ny fanendrena kilasy |
+| deliberation.ageLabel | Âge | Taona |
+| deliberation.ageValue | {n} ans | {n} taona |
+| deliberation.ageUnknown | Non renseigné | Tsy voalaza |
+| deliberation.preferredDaysLabel | Jours souhaités (ordre de choix) | Andro tiana (araka ny safidy) |
+| deliberation.preferredDaysAny | N'importe quel jour convient | Mety avokoa ny andro rehetra |
+| deliberation.preferredDaysNone | Aucun jour indiqué | Tsy misy andro voalaza |
+| deliberation.choiceRankFirst | 1er choix | safidy voalohany |
+| deliberation.choiceRankOther | {n}e choix | safidy faha-{n} |
+| deliberation.timeSlotsLabel | Créneaux souhaités | Ora tiana |
+| deliberation.timeSlotAfternoon | Après-midi | Tolakandro |
+| deliberation.timeSlotEvening | Soir | Hariva |
+| deliberation.timeSlotOther | Autre : {detail} | Hafa : {detail} |
+| deliberation.timeSlotsNone | Aucun créneau indiqué | Tsy misy ora voalaza |
+| deliberation.dayMonday | Lundi | Alatsinainy |
+| deliberation.dayTuesday | Mardi | Talata |
+| deliberation.dayWednesday | Mercredi | Alarobia |
+| deliberation.dayThursday | Jeudi | Alakamisy |
+| deliberation.dayFriday | Vendredi | Zoma |
+| deliberation.daySaturday | Samedi | Sabotsy |
+| deliberation.competenceGridButton | 📋 Grille de compétences complète | 📋 Takelaka feno momba ny fahaizana |
+| deliberation.competenceGridModalTitle | Grille de compétences complète | Takelaka feno momba ny fahaizana |
+| deliberation.competenceGridSubtitle | Auto-évaluation CECRL — {answered} réponse(s) sur {total} compétences | Fanombanan-tena CECRL — valiny {answered} amin'ny fahaizana {total} |
+| deliberation.competenceGridPrintButton | 🖨️ Imprimer | 🖨️ Atontaina |
+| deliberation.competenceGridCloseButton | Fermer | Hidiana |
+| deliberation.competenceGridPrintedOn | Édité le {date} | Navoaka ny {date} |
+| deliberation.competenceGridSummaryTitle | Synthèse par niveau | Famintinana isaky ny lentam-pahaizana |
+| deliberation.competenceGridColLevel | Niveau | Lentam-pahaizana |
+| deliberation.competenceGridColAnswered | Répondues | Voavaly |
+| deliberation.competenceGridColScore | Score | Isa azo |
+| deliberation.competenceGridColThreshold | Seuil | Fetra |
+| deliberation.competenceGridThresholdReached | ✅ Atteint | ✅ Tratra |
+| deliberation.competenceGridThresholdNotReached | ❌ Non atteint | ❌ Tsy tratra |
+| deliberation.competenceGridAnswerYes | Oui | Eny |
+| deliberation.competenceGridAnswerSomewhat | Un peu | Kelikely |
+| deliberation.competenceGridAnswerNo | Non | Tsia |
+| deliberation.competenceGridAnswerMissing | Non répondu | Tsy novaliana |
+| deliberation.competenceGridQuestionLabel | Question {n} — {domaine} | Fanontaniana {n} — {domaine} |
+| deliberation.competenceGridCompetenceLabel | Compétence {n} | Fahaizana {n} |
+| deliberation.competenceGridDomainComprendre | COMPRENDRE | MAHATAKATRA |
+| deliberation.competenceGridDomainParler | PARLER | MITENY |
+| deliberation.competenceGridDomainEcrire | ECRIRE | MANORATRA |
+| deliberation.competenceGridLevelA1 | DÉCOUVERTE | FANOMBOHANA |
+| deliberation.competenceGridLevelA2 | INTERMÉDIAIRE | ANTONONY |
+| deliberation.competenceGridLevelB1 | SEUIL | TOKONANA |
+| deliberation.competenceGridLevelB2 | AVANCÉ | MANDROSO |
+| deliberation.competenceGridLevelC1 | AUTONOME | MAHALEO TENA |
+| deliberation.competenceGridLevelC2 | MAÎTRISE | FAHAIZANA TANTERAKA |
 
 ## Gestion des classes
 
