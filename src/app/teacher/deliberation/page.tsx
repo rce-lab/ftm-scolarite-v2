@@ -27,7 +27,12 @@ function DeliberationContent() {
   const router = useRouter()
   const filter = params.get('filter') || 'pending_review'
   const [inscriptions, setInscriptions] = useState<any[]>([])
-  const [allStatuses, setAllStatuses] = useState<{ status: string }[]>([])
+  const [allStatuses, setAllStatuses] = useState<{ status: string; is_reinscription: boolean }[]>([])
+  // Sous-filtre du bouton "Dont N réinscriptions" : affine la liste déjà chargée
+  // (pending_review) sur is_reinscription, sans requête supplémentaire. Toujours
+  // remis à false par les 4 onglets de statut, qui portent sur l'ensemble des
+  // candidats (réinscriptions incluses).
+  const [filtreReinscriptionSeule, setFiltreReinscriptionSeule] = useState(false)
   const [loading, setLoading] = useState(true)
   const [selectedInscription, setSelectedInscription] = useState<any>(null)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
@@ -135,7 +140,7 @@ function DeliberationContent() {
     try {
       const { data, error } = await supabase
         .from('inscriptions')
-        .select('status')
+        .select('status, is_reinscription')
 
       if (error) throw error
       setAllStatuses(data || [])
@@ -460,6 +465,13 @@ function DeliberationContent() {
     )
   }
 
+  // Filtrage client du bouton "Dont N réinscriptions" : `inscriptions` reste la
+  // liste telle que chargée par statut (loadInscriptions), ce sous-filtre ne
+  // déclenche pas de nouvelle requête.
+  const inscriptionsAffichees = filtreReinscriptionSeule
+    ? inscriptions.filter((i) => i.is_reinscription)
+    : inscriptions
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
@@ -468,7 +480,7 @@ function DeliberationContent() {
       </h1>
 
       {/* Filtres */}
-      <div className="flex space-x-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6">
         {[
           { value: 'pending_review', label: t('deliberation.filterPending'), color: 'bg-yellow-100 text-yellow-800' },
           { value: 'approved', label: t('deliberation.filterApproved'), color: 'bg-green-100 text-green-800' },
@@ -477,12 +489,31 @@ function DeliberationContent() {
         ].map((filtre) => (
           <button
             key={filtre.value}
-            onClick={() => router.push(`/teacher/deliberation?filter=${filtre.value}`)}
-            className={`px-4 py-2 rounded ${filter === filtre.value ? filtre.color : 'bg-gray-200 hover:bg-gray-300'}`}
+            onClick={() => {
+              setFiltreReinscriptionSeule(false)
+              router.push(`/teacher/deliberation?filter=${filtre.value}`)
+            }}
+            className={`px-4 py-2 rounded ${filter === filtre.value && !filtreReinscriptionSeule ? filtre.color : 'bg-gray-200 hover:bg-gray-300'}`}
           >
             {filtre.label} ({filtre.value === 'all' ? allStatuses.length : allStatuses.filter(i => i.status === filtre.value).length})
           </button>
         ))}
+        {/* Sous-filtre : réinscriptions parmi les dossiers en attente. Bascule toujours
+            sur l'onglet "En attente total" (il n'a de sens que dans cette file). */}
+        <button
+          onClick={() => {
+            setFiltreReinscriptionSeule(true)
+            if (filter !== 'pending_review') {
+              router.push('/teacher/deliberation?filter=pending_review')
+            }
+          }}
+          className={`px-4 py-2 rounded ${filtreReinscriptionSeule ? 'bg-violet-100 text-violet-700' : 'bg-gray-200 hover:bg-gray-300'}`}
+        >
+          {t('deliberation.filterReinscriptionPending').replace(
+            '{n}',
+            String(allStatuses.filter((i) => i.status === 'pending_review' && i.is_reinscription).length)
+          )}
+        </button>
       </div>
 
       <SectionDivider />
@@ -502,7 +533,7 @@ function DeliberationContent() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {inscriptions.map((inscription) => (
+                {inscriptionsAffichees.map((inscription) => (
                   <tr 
                     key={inscription.id} 
                     className={`hover:bg-gray-50 cursor-pointer ${selectedInscription?.id === inscription.id ? 'bg-[#689e4e]/10' : ''}`}

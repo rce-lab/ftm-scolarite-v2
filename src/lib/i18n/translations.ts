@@ -305,7 +305,8 @@ export const translations = {
 
   deliberation: {
     title: { fr: 'Conseil des enseignants - Délibération', mg: 'Filan-kevitry ny mpampianatra - Fifampidinihana' },
-    filterPending: { fr: 'En attente', mg: 'Miandry' },
+    filterPending: { fr: 'En attente total', mg: 'Miandry avokoa' },
+    filterReinscriptionPending: { fr: 'Dont {n} réinscription(s)', mg: 'Anisan\'izany {n} fisoratana indray' },
     filterApproved: { fr: 'Validées', mg: 'Voamarina' },
     filterRejected: { fr: 'Rejetées', mg: 'Nolavina' },
     filterAll: { fr: 'Toutes', mg: 'Rehetra' },

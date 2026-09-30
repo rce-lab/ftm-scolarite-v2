@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-09-30 — 15 sections, 464 entrées.
+Généré le 2026-09-30 — 15 sections, 465 entrées.
 
 ---
 
@@ -301,7 +301,8 @@ Généré le 2026-09-30 — 15 sections, 464 entrées.
 | Clé | Français | Malgache |
 |---|---|---|
 | deliberation.title | Conseil des enseignants - Délibération | Filan-kevitry ny mpampianatra - Fifampidinihana |
-| deliberation.filterPending | En attente | Miandry |
+| deliberation.filterPending | En attente total | Miandry avokoa |
+| deliberation.filterReinscriptionPending | Dont {n} réinscription(s) | Anisan'izany {n} fisoratana indray |
 | deliberation.filterApproved | Validées | Voamarina |
 | deliberation.filterRejected | Rejetées | Nolavina |
 | deliberation.filterAll | Toutes | Rehetra |
