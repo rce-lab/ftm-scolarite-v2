@@ -481,8 +481,32 @@ function DeliberationContent() {
 
       {/* Filtres */}
       <div className="flex flex-wrap gap-2 mb-6">
+        {/* "En attente total" en 1er, puis son sous-filtre réinscriptions juste après
+            (plutôt qu'en fin de liste) : les deux portent sur la même file. */}
+        <button
+          onClick={() => {
+            setFiltreReinscriptionSeule(false)
+            router.push('/teacher/deliberation?filter=pending_review')
+          }}
+          className={`px-4 py-2 rounded ${filter === 'pending_review' && !filtreReinscriptionSeule ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-200 hover:bg-gray-300'}`}
+        >
+          {t('deliberation.filterPending')} ({allStatuses.filter((i) => i.status === 'pending_review').length})
+        </button>
+        <button
+          onClick={() => {
+            setFiltreReinscriptionSeule(true)
+            if (filter !== 'pending_review') {
+              router.push('/teacher/deliberation?filter=pending_review')
+            }
+          }}
+          className={`px-4 py-2 rounded ${filtreReinscriptionSeule ? 'bg-violet-100 text-violet-700' : 'bg-gray-200 hover:bg-gray-300'}`}
+        >
+          {t('deliberation.filterReinscriptionPending').replace(
+            '{n}',
+            String(allStatuses.filter((i) => i.status === 'pending_review' && i.is_reinscription).length)
+          )}
+        </button>
         {[
-          { value: 'pending_review', label: t('deliberation.filterPending'), color: 'bg-yellow-100 text-yellow-800' },
           { value: 'approved', label: t('deliberation.filterApproved'), color: 'bg-green-100 text-green-800' },
           { value: 'rejected', label: t('deliberation.filterRejected'), color: 'bg-red-100 text-red-800' },
           { value: 'all', label: t('deliberation.filterAll'), color: 'bg-gray-100 text-gray-800' }
@@ -498,22 +522,6 @@ function DeliberationContent() {
             {filtre.label} ({filtre.value === 'all' ? allStatuses.length : allStatuses.filter(i => i.status === filtre.value).length})
           </button>
         ))}
-        {/* Sous-filtre : réinscriptions parmi les dossiers en attente. Bascule toujours
-            sur l'onglet "En attente total" (il n'a de sens que dans cette file). */}
-        <button
-          onClick={() => {
-            setFiltreReinscriptionSeule(true)
-            if (filter !== 'pending_review') {
-              router.push('/teacher/deliberation?filter=pending_review')
-            }
-          }}
-          className={`px-4 py-2 rounded ${filtreReinscriptionSeule ? 'bg-violet-100 text-violet-700' : 'bg-gray-200 hover:bg-gray-300'}`}
-        >
-          {t('deliberation.filterReinscriptionPending').replace(
-            '{n}',
-            String(allStatuses.filter((i) => i.status === 'pending_review' && i.is_reinscription).length)
-          )}
-        </button>
       </div>
 
       <SectionDivider />
