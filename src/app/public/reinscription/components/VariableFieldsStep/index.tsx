@@ -31,6 +31,8 @@ export default function VariableFieldsStep({
     { value: 'samedi', label: t('availability.saturday') }
   ]
 
+  const [email, setEmail] = useState(derniereInscription?.email ?? '')
+  const [telephone, setTelephone] = useState(derniereInscription?.telephone ?? '')
   const [joursPreference, setJoursPreference] = useState<string[]>([])
   const [horaireApresMidi, setHoraireApresMidi] = useState(false)
   const [horaireSoir, setHoraireSoir] = useState(false)
@@ -45,6 +47,34 @@ export default function VariableFieldsStep({
 
   const peuImporte = joursPreference.length === 1 && joursPreference[0] === 'peu_importe'
   const niveauConnu = derniereInscription?.niveau_calcule || t('reinscriptionVariableFields.unknownLevel')
+
+  // Validation email (même règle que le formulaire d'inscription classique)
+  const validateEmail = (value: string): string => {
+    if (!value.trim()) return t('reinscriptionVariableFields.emailRequiredError')
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    if (!emailRegex.test(value)) return t('reinscriptionVariableFields.emailInvalidError')
+    return ''
+  }
+
+  // Validation téléphone (même règle que le formulaire d'inscription classique :
+  // longueur minimale, sans imposer de format précis vu la diversité des indicatifs)
+  const validatePhone = (value: string): string => {
+    if (!value.trim()) return t('reinscriptionVariableFields.phoneRequiredError')
+    const digitsOnly = value.replace(/\D/g, '')
+    if (digitsOnly.length < 6) return t('reinscriptionVariableFields.phoneTooShortError')
+    return ''
+  }
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value)
+    setErrors((prev) => ({ ...prev, email: validateEmail(value) }))
+  }
+
+  const handleTelephoneChange = (value: string) => {
+    const formatted = value.replace(/[^\d\s\-+]/g, '')
+    setTelephone(formatted)
+    setErrors((prev) => ({ ...prev, telephone: validatePhone(formatted) }))
+  }
 
   const handleTogglePeuImporte = (checked: boolean) => {
     setJoursPreference(checked ? ['peu_importe'] : [])
@@ -61,6 +91,12 @@ export default function VariableFieldsStep({
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {}
+
+    const emailError = validateEmail(email)
+    if (emailError) newErrors.email = emailError
+
+    const phoneError = validatePhone(telephone)
+    if (phoneError) newErrors.telephone = phoneError
 
     if (joursPreference.length === 0) {
       newErrors.jours = t('reinscriptionVariableFields.daysRequiredError')
@@ -85,6 +121,8 @@ export default function VariableFieldsStep({
     try {
       const result = await soumettreReinscription({
         eleveId,
+        email,
+        telephone,
         joursPreference,
         horaireApresMidi,
         horaireSoir,
@@ -118,8 +156,55 @@ export default function VariableFieldsStep({
         </p>
       </div>
 
-      {/* Disponibilités */}
+      {/* Coordonnées : toujours ré-affichées et modifiables, jamais reprises en
+          silence de l'archive (qui peut être absente ou obsolète) */}
       <div className="space-y-3">
+        <label className="block mb-2 font-medium text-base">{t('reinscriptionVariableFields.contactSectionLabel')}</label>
+        <p className="text-sm text-gray-500 -mt-1">{t('reinscriptionVariableFields.contactSectionHint')}</p>
+
+        <div>
+          <label className="block mb-1 font-medium text-sm" htmlFor="email">
+            {t('reinscriptionVariableFields.emailLabel')}
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => handleEmailChange(e.target.value)}
+            placeholder={t('reinscriptionVariableFields.emailPlaceholder')}
+            className={`w-full p-2 border rounded ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+          />
+          <p className={`text-sm mt-1 ${derniereInscription?.email ? 'text-gray-500' : 'text-amber-600'}`}>
+            {derniereInscription?.email
+              ? t('reinscriptionVariableFields.foundInHistoryBadge')
+              : t('reinscriptionVariableFields.notFoundInHistoryBadge')}
+          </p>
+          {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium text-sm" htmlFor="telephone">
+            {t('reinscriptionVariableFields.phoneLabel')}
+          </label>
+          <input
+            id="telephone"
+            type="tel"
+            value={telephone}
+            onChange={(e) => handleTelephoneChange(e.target.value)}
+            placeholder={t('reinscriptionVariableFields.phonePlaceholder')}
+            className={`w-full p-2 border rounded ${errors.telephone ? 'border-red-500' : 'border-gray-300'}`}
+          />
+          <p className={`text-sm mt-1 ${derniereInscription?.telephone ? 'text-gray-500' : 'text-amber-600'}`}>
+            {derniereInscription?.telephone
+              ? t('reinscriptionVariableFields.foundInHistoryBadge')
+              : t('reinscriptionVariableFields.notFoundInHistoryBadge')}
+          </p>
+          {errors.telephone && <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>}
+        </div>
+      </div>
+
+      {/* Disponibilités */}
+      <div className="space-y-3 pt-4 border-t border-gray-200">
         <label className="block mb-2 font-medium text-base">{t('reinscriptionVariableFields.daysLabel')}</label>
 
         <label className="flex items-center space-x-2 cursor-pointer mb-3">

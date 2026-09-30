@@ -23,6 +23,7 @@ export interface EleveInfo {
 export interface DerniereInscriptionInfo {
   ville_residence: string | null
   email: string | null
+  telephone: string | null
   niveau_calcule: string | null
   classe_attribuee: string | null
 }
@@ -137,6 +138,7 @@ export async function lookupParMatricule(matricule: string): Promise<LookupResul
       ? {
           ville_residence: derniereArchive.ville_residence,
           email: derniereArchive.email,
+          telephone: derniereArchive.telephone,
           niveau_calcule: derniereArchive.niveau_calcule,
           classe_attribuee: derniereArchive.classe_attribuee
         }
@@ -146,6 +148,8 @@ export async function lookupParMatricule(matricule: string): Promise<LookupResul
 
 export interface DonneesReinscription {
   eleveId: string
+  email: string
+  telephone: string
   joursPreference: string[]
   horaireApresMidi: boolean
   horaireSoir: boolean
@@ -222,11 +226,14 @@ export async function soumettreReinscription(
 
       nom: eleve.nom,
       prenom: eleve.prenom,
-      email_contact: derniereArchive?.email ?? null,
+      // Email et téléphone : saisis/confirmés par le candidat à cette étape (cf.
+      // VariableFieldsStep), jamais repris silencieusement de l'archive — celle-ci
+      // n'est pas fiable à 100% (élèves sans ligne d'archive, coordonnées obsolètes).
+      email_contact: donnees.email.trim(),
+      telephone: donnees.telephone.trim(),
       ville_residence: derniereArchive?.ville_residence ?? null,
       pays_residence: derniereArchive?.pays_residence ?? null,
       age: derniereArchive?.age ?? null,
-      telephone: derniereArchive?.telephone ?? null,
       responsable_legal: derniereArchive?.responsable_legal ?? null,
       adresse_postale: '', // non conservée dans l'archive historique
 

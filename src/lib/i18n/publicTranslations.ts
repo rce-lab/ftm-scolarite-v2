@@ -437,6 +437,21 @@ export const publicTranslations = {
       fr: "Seules les quelques infos qui changent d'une année sur l'autre sont demandées ci-dessous.",
       en: 'Only the few details that change from year to year are asked below.'
     },
+    contactSectionLabel: { fr: 'Coordonnées', en: 'Contact details' },
+    contactSectionHint: {
+      fr: "Ces coordonnées ne sont pas toujours fiables d'une année sur l'autre : merci de les vérifier et de les corriger si besoin.",
+      en: "These details are not always reliable from year to year: please check and correct them if needed."
+    },
+    emailLabel: { fr: 'Email *', en: 'Email *' },
+    emailPlaceholder: { fr: 'email@exemple.com', en: 'email@example.com' },
+    emailRequiredError: { fr: "L'email est requis", en: 'Email is required' },
+    emailInvalidError: { fr: 'Email invalide', en: 'Invalid email' },
+    phoneLabel: { fr: 'Téléphone *', en: 'Phone *' },
+    phonePlaceholder: { fr: 'Votre numéro', en: 'Your phone number' },
+    phoneRequiredError: { fr: 'Le téléphone est requis', en: 'Phone number is required' },
+    phoneTooShortError: { fr: 'Numéro de téléphone trop court', en: 'Phone number is too short' },
+    foundInHistoryBadge: { fr: 'Retrouvé dans votre historique', en: 'Found in your history' },
+    notFoundInHistoryBadge: { fr: 'Non retrouvé — merci de le renseigner', en: 'Not found — please fill it in' },
     daysLabel: { fr: 'Jours de disponibilité', en: 'Available days' },
     anyDayOption: { fr: "N'importe quel jour me convient", en: 'Any day works for me' },
     choiceNumber: { fr: 'Choix n°{n}', en: 'Choice #{n}' },
