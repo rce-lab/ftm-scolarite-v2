@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-09-30 — 15 sections, 459 entrées.
+Généré le 2026-09-30 — 15 sections, 464 entrées.
 
 ---
 
@@ -373,7 +373,7 @@ Généré le 2026-09-30 — 15 sections, 459 entrées.
 | deliberation.competenceGridButton | 📋 Grille de compétences complète | 📋 Takelaka feno momba ny fahaizana |
 | deliberation.competenceGridModalTitle | Grille de compétences complète | Takelaka feno momba ny fahaizana |
 | deliberation.competenceGridSubtitle | Auto-évaluation CECRL — {answered} réponse(s) sur {total} compétences | Fanombanan-tena CECRL — valiny {answered} amin'ny fahaizana {total} |
-| deliberation.competenceGridPrintButton | 🖨️ Imprimer | 🖨️ Atontaina |
+| deliberation.competenceGridDownloadButton | 📄 Télécharger le PDF | 📄 Alaina ny PDF |
 | deliberation.competenceGridCloseButton | Fermer | Hidiana |
 | deliberation.competenceGridPrintedOn | Édité le {date} | Navoaka ny {date} |
 | deliberation.competenceGridSummaryTitle | Synthèse par niveau | Famintinana isaky ny lentam-pahaizana |
@@ -389,6 +389,11 @@ Généré le 2026-09-30 — 15 sections, 459 entrées.
 | deliberation.competenceGridAnswerMissing | Non répondu | Tsy novaliana |
 | deliberation.competenceGridQuestionLabel | Question {n} — {domaine} | Fanontaniana {n} — {domaine} |
 | deliberation.competenceGridCompetenceLabel | Compétence {n} | Fahaizana {n} |
+| deliberation.competenceGridColQuestion | Question | Fanontaniana |
+| deliberation.competenceGridColDomain | Domaine | Sehatra |
+| deliberation.competenceGridColNumber | N° | Lah. |
+| deliberation.competenceGridColStatement | Compétence | Fahaizana |
+| deliberation.competenceGridColAnswer | Réponse | Valiny |
 | deliberation.competenceGridDomainComprendre | COMPRENDRE | MAHATAKATRA |
 | deliberation.competenceGridDomainParler | PARLER | MITENY |
 | deliberation.competenceGridDomainEcrire | ECRIRE | MANORATRA |

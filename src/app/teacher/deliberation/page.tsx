@@ -147,12 +147,13 @@ function DeliberationContent() {
   // La jointure classe_enseignants → enseignants permet d'afficher le nom de
   // l'enseignant dans le sélecteur de classe. `role` est un texte libre côté base
   // (valeurs utilisées : "titulaire", "co-titulaire") et peut être absent : il sert
-  // uniquement à faire remonter le titulaire en tête, jamais à filtrer.
+  // uniquement à faire remonter le titulaire en tête, jamais à filtrer. `code`
+  // (format Cxx) est utilisé dans le libellé de l'option, cf. libelleOptionClasse.
   const loadClasses = async () => {
     try {
       const { data, error } = await supabase
         .from('classes')
-        .select('id, nom, niveau, jour, heure, pays, classe_enseignants(role, enseignants(id, nom, prenom))')
+        .select('id, code, nom, niveau, jour, heure, pays, classe_enseignants(role, enseignants(id, nom, prenom))')
         .order('nom')
 
       if (error) throw error
@@ -177,33 +178,68 @@ function DeliberationContent() {
     return niveauOk && jourOk
   }
 
-  // Enseignants d'une classe, titulaire(s) d'abord puis les autres rôles. Une classe
-  // sans enseignant lié (C04, C05, C06 et C11 à ce jour) reste listée : on le signale
-  // explicitement au lieu de la masquer du sélecteur.
-  const formatEnseignants = (classe: any) => {
+  // Enseignants liés à une classe, titulaire(s) d'abord puis les autres rôles. Une
+  // classe sans enseignant lié (C04, C05, C06 et C11 à ce jour) reste listée : on le
+  // signale explicitement plutôt que de la masquer du sélecteur.
+  const enseignantsOrdonnes = (classe: any): { prenom: string; nom: string }[] => {
     const liens = (classe.classe_enseignants || []).filter((ce: any) => ce.enseignants)
-    if (liens.length === 0) return t('deliberation.classNoTeacherAssigned')
-
-    const ordonnes = [...liens].sort((a: any, b: any) => {
-      const aTitulaire = a.role === 'titulaire' ? 0 : 1
-      const bTitulaire = b.role === 'titulaire' ? 0 : 1
-      return aTitulaire - bTitulaire
-    })
-
-    return ordonnes
-      .map((ce: any) => `${ce.enseignants.prenom || ''} ${ce.enseignants.nom || ''}`.trim())
-      .filter((nom: string) => nom.length > 0)
-      .join(', ')
+    return [...liens]
+      .sort((a: any, b: any) => {
+        const aTitulaire = a.role === 'titulaire' ? 0 : 1
+        const bTitulaire = b.role === 'titulaire' ? 0 : 1
+        return aTitulaire - bTitulaire
+      })
+      .map((ce: any) => ({ prenom: ce.enseignants.prenom || '', nom: ce.enseignants.nom || '' }))
+      .filter((e) => e.prenom || e.nom)
   }
 
-  // Libellé d'une option du sélecteur de classe. Le ✓ de compatibilité est un simple
-  // préfixe informatif : il n'influence plus l'ordre de la liste, qui reste le tri par
-  // nom de classe renvoyé par la requête (.order('nom')).
+  // Enseignant principal d'une classe (titulaire en priorité, sinon le premier lien
+  // trouvé) : sert à la fois de tête de libellé et de clé de tri du sélecteur.
+  const enseignantPrincipal = (classe: any) => enseignantsOrdonnes(classe)[0] || null
+
+  // Libellé d'une option du sélecteur de classe, format demandé : "prénom, NOM
+  // enseignant - code classe (Cxx) - nom de la classe (Jour Heure) - niveau". Le ✓ de
+  // compatibilité reste un simple préfixe informatif, cf. classeCorrespond ci-dessus.
   const libelleOptionClasse = (classe: any) => {
     const prefixe = classeCorrespond(classe) ? `${t('deliberation.classMatchBadge')} ` : ''
-    const parts = [classe.nom, classe.niveau, `${classe.jour || ''} ${classe.heure || ''}`.trim(), formatEnseignants(classe)]
+    const [principal, ...autres] = enseignantsOrdonnes(classe)
+    let enseignantLabel = principal ? `${principal.prenom}, ${principal.nom}`.trim() : t('deliberation.classNoTeacherAssigned')
+    if (autres.length > 0) {
+      enseignantLabel += ` (+ ${autres.map((e) => `${e.prenom} ${e.nom}`.trim()).join(', ')})`
+    }
+    const parts = [enseignantLabel, classe.code, classe.nom, classe.niveau]
     return prefixe + parts.filter((p) => p).join(' — ')
   }
+
+  // Ordre naturel de la semaine (lundi → dimanche) : classe.jour est une des valeurs
+  // fixes du formulaire, donc un trigramme de rang plutôt qu'un tri alphabétique, qui
+  // classerait par exemple "Jeudi" avant "Lundi".
+  const ORDRE_JOURS: Record<string, number> = {
+    lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
+  }
+
+  // Tri du sélecteur : prénom de l'enseignant principal d'abord (demande explicite),
+  // puis jour de la semaine en second critère (dans l'ordre du calendrier, pas
+  // alphabétique) — pour départager plusieurs classes d'un même enseignant, et pour
+  // ordonner entre elles les classes sans enseignant lié, repoussées en fin de liste
+  // faute de prénom. À prénom et jour égaux (rare : même enseignant, même jour), on
+  // départage par heure puis, en tout dernier recours, par nom de classe.
+  const classesTrieesParPrenom = [...classesList].sort((a, b) => {
+    const prenomA = enseignantPrincipal(a)?.prenom || ''
+    const prenomB = enseignantPrincipal(b)?.prenom || ''
+    if (!prenomA && prenomB) return 1
+    if (prenomA && !prenomB) return -1
+    if (prenomA && prenomB) {
+      const cmp = prenomA.localeCompare(prenomB, 'fr', { sensitivity: 'base' })
+      if (cmp !== 0) return cmp
+    }
+    const jourA = ORDRE_JOURS[(a.jour || '').toLowerCase()] ?? 99
+    const jourB = ORDRE_JOURS[(b.jour || '').toLowerCase()] ?? 99
+    if (jourA !== jourB) return jourA - jourB
+    const heureCmp = (a.heure || '').localeCompare(b.heure || '')
+    if (heureCmp !== 0) return heureCmp
+    return (a.nom || '').localeCompare(b.nom || '', 'fr', { sensitivity: 'base' })
+  })
 
   const formatAge = () => {
     const age = selectedInscription?.age
@@ -641,7 +677,7 @@ function DeliberationContent() {
                       className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
                     >
                       <option value="">{t('deliberation.classSelectPlaceholder')}</option>
-                      {classesList.map((classe) => (
+                      {classesTrieesParPrenom.map((classe) => (
                         <option key={classe.id} value={classe.id}>
                           {libelleOptionClasse(classe)}
                         </option>

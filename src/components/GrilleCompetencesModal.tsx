@@ -8,6 +8,7 @@ import {
   type SousQuestionCECRL
 } from '@/app/public/inscription/data/competencesCECRL'
 import { calculerStatistiquesDetaillees } from '@/app/public/inscription/data/niveauCalcul'
+import { genererGrillePdfCompetences } from '@/lib/pdf/grilleCompetencesPdf'
 
 type Reponse = 'oui' | 'un_peu' | 'non'
 
@@ -82,33 +83,17 @@ export default function GrilleCompetencesModal({ inscription, onClose }: Props) 
   const libelleDomaine = (domaine: string) =>
     DOMAINE_LABEL_KEYS[domaine] ? t(DOMAINE_LABEL_KEYS[domaine]) : domaine
 
+  // Le PDF est généré et téléchargé directement (jsPDF), pas via l'impression
+  // navigateur : ce chemin s'est révélé peu fiable selon le navigateur et le pilote
+  // d'impression choisi (l'aperçu Chrome était correct, mais le pilote Windows
+  // « Microsoft Print to PDF » produisait un fichier vide — un problème de rendu hors
+  // de portée du CSS de cette page). jsPDF reconstruit le document depuis les mêmes
+  // données que l'affichage ci-dessous, indépendamment de tout moteur d'impression.
+  const telechargerPdf = () => genererGrillePdfCompetences(inscription, t)
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 overflow-y-auto p-4">
-      {/* À l'impression, seule la grille reste visible : le reste de la page
-          (navigation, tableau des inscriptions, panneau de délibération) est masqué. */}
-      <style>{`
-        @media print {
-          body * { visibility: hidden; }
-          #grille-competences, #grille-competences * { visibility: visible; }
-          #grille-competences {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            margin: 0;
-            max-width: none;
-            border-radius: 0;
-            box-shadow: none;
-          }
-          .grille-no-print { display: none !important; }
-          .grille-niveau { break-inside: avoid; page-break-inside: avoid; }
-        }
-      `}</style>
-
-      <div
-        id="grille-competences"
-        className="bg-white rounded-lg shadow w-full max-w-4xl my-4"
-      >
+      <div className="bg-white rounded-lg shadow w-full max-w-4xl my-4">
         <div className="flex justify-between items-start gap-4 p-6 border-b">
           <div>
             <h2 className="text-lg font-bold flex items-center gap-3">
@@ -145,12 +130,12 @@ export default function GrilleCompetencesModal({ inscription, onClose }: Props) 
             </p>
           </div>
 
-          <div className="flex gap-2 grille-no-print">
+          <div className="flex gap-2">
             <button
-              onClick={() => window.print()}
+              onClick={telechargerPdf}
               className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e] whitespace-nowrap"
             >
-              {t('deliberation.competenceGridPrintButton')}
+              {t('deliberation.competenceGridDownloadButton')}
             </button>
             <button
               onClick={onClose}
@@ -214,7 +199,7 @@ export default function GrilleCompetencesModal({ inscription, onClose }: Props) 
 
             {/* Détail des 105 compétences */}
             {niveauxGroupes.map(({ niveau, questions, total }) => (
-              <div key={niveau} className="grille-niveau border border-gray-200 rounded">
+              <div key={niveau} className="border border-gray-200 rounded">
                 <div className="px-3 py-2 bg-[#689e4e]/10 border-b border-gray-200">
                   <h3 className="font-bold text-[#527d3e]">
                     {niveau} — {libelleNiveau(niveau)}{' '}

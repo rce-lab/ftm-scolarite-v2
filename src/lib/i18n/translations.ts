@@ -405,7 +405,10 @@ export const translations = {
       fr: "Ce candidat n'a pas rempli la grille de compétences (elle est optionnelle) : aucune réponse détaillée n'est disponible.",
       mg: "Tsy nameno ny takelaka momba ny fahaizana ity kandidà ity (tsy voatery izany) : tsy misy valiny amin'ny antsipiriany azo jerena."
     },
-    competenceGridPrintButton: { fr: '🖨️ Imprimer', mg: '🖨️ Atontaina' },
+    // Le bouton génère et télécharge directement le PDF (jsPDF), plutôt que de passer
+    // par l'impression navigateur : ce chemin s'est révélé peu fiable selon le
+    // navigateur et le pilote d'impression choisi (voir commentaire dans le composant).
+    competenceGridDownloadButton: { fr: '📄 Télécharger le PDF', mg: '📄 Alaina ny PDF' },
     competenceGridCloseButton: { fr: 'Fermer', mg: 'Hidiana' },
     competenceGridPrintedOn: { fr: 'Édité le {date}', mg: 'Navoaka ny {date}' },
     competenceGridSummaryTitle: { fr: 'Synthèse par niveau', mg: 'Famintinana isaky ny lentam-pahaizana' },
@@ -421,6 +424,12 @@ export const translations = {
     competenceGridAnswerMissing: { fr: 'Non répondu', mg: 'Tsy novaliana' },
     competenceGridQuestionLabel: { fr: 'Question {n} — {domaine}', mg: 'Fanontaniana {n} — {domaine}' },
     competenceGridCompetenceLabel: { fr: 'Compétence {n}', mg: 'Fahaizana {n}' },
+    // En-têtes de colonnes du tableau détaillé du PDF (un niveau par page).
+    competenceGridColQuestion: { fr: 'Question', mg: 'Fanontaniana' },
+    competenceGridColDomain: { fr: 'Domaine', mg: 'Sehatra' },
+    competenceGridColNumber: { fr: 'N°', mg: 'Lah.' },
+    competenceGridColStatement: { fr: 'Compétence', mg: 'Fahaizana' },
+    competenceGridColAnswer: { fr: 'Réponse', mg: 'Valiny' },
     competenceGridDomainComprendre: { fr: 'COMPRENDRE', mg: 'MAHATAKATRA' },
     competenceGridDomainParler: { fr: 'PARLER', mg: 'MITENY' },
     competenceGridDomainEcrire: { fr: 'ECRIRE', mg: 'MANORATRA' },
