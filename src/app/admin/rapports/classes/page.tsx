@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase/client'
 import { getConfig } from '@/lib/config'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
+import { genererRapportPdf } from '@/lib/pdf/rapportPdf'
 
 export default function RapportClassesPage() {
   const { t } = useTranslation()
@@ -21,8 +22,15 @@ export default function RapportClassesPage() {
 
   const chargerDonnees = async () => {
     try {
+      // La jointure classe_enseignants(enseignants(...)) manquait dans la version
+      // précédente (la colonne enseignants restait vide) — même pattern que
+      // teacher/classes/page.tsx et teacher/deliberation/page.tsx.
       const [classesRes, comptagesRes, config] = await Promise.all([
-        supabase.from('classes').select('*, comptes_visio(nom)').order('nom'),
+        supabase
+          .from('classes')
+          .select('id, code, nom, niveau, tranche_age, jour, heure, capacite_max, comptes_visio(nom), classe_enseignants(role, enseignants(id, nom, prenom))')
+          .order('code')
+          .order('nom'),
         supabase.from('inscriptions').select('classe_id'),
         getConfig()
       ])
@@ -47,19 +55,42 @@ export default function RapportClassesPage() {
     }
   }
 
-  const handlePrint = () => window.print()
+  // Enseignants liés à une classe, titulaire(s) d'abord — même convention que le
+  // sélecteur de classe de la délibération (teacher/deliberation/page.tsx). Une
+  // classe sans enseignant lié (C04, C05, C06, C11 au 2026-09-30) reste listée avec
+  // la colonne vide plutôt que masquée.
+  const nomsEnseignants = (classe: any): string => {
+    const liens = (classe.classe_enseignants || []).filter((ce: any) => ce.enseignants)
+    return [...liens]
+      .sort((a: any, b: any) => (a.role === 'titulaire' ? 0 : 1) - (b.role === 'titulaire' ? 0 : 1))
+      .map((ce: any) => `${ce.enseignants.prenom || ''} ${ce.enseignants.nom || ''}`.trim())
+      .filter(Boolean)
+      .join(', ')
+  }
 
-  const classesRows = () => classes.map((c) => ({
-    [t('reports.colName')]: c.nom,
-    [t('reports.colLevel')]: c.niveau || '',
-    [t('reports.colAgeRange')]: c.tranche_age || '',
-    [t('reports.colDay')]: c.jour || '',
-    [t('reports.colTime')]: c.heure || '',
-    [t('reports.colMaxCapacity')]: c.capacite_max ?? '',
-    [t('reports.colEnrolledCount')]: inscritsParClasse[c.id] || 0,
-    [t('reports.colTeachers')]: c.enseignants && c.enseignants.length > 0 ? c.enseignants.join(', ') : '',
-    [t('reports.colVideoAccount')]: c.comptes_visio?.nom || ''
-  }))
+  const colonnes = [
+    t('reports.colClassCode'), t('reports.colName'), t('reports.colLevel'), t('reports.colAgeRange'),
+    t('reports.colDay'), t('reports.colTime'), t('reports.colMaxCapacity'), t('reports.colEnrolledCount'),
+    t('reports.colTeachers'), t('reports.colVideoAccount')
+  ]
+
+  const ligneDe = (c: any): (string | number)[] => [
+    c.code || '', c.nom, c.niveau || '', c.tranche_age || '', c.jour || '', c.heure || '',
+    c.capacite_max ?? '', inscritsParClasse[c.id] || 0, nomsEnseignants(c), c.comptes_visio?.nom || ''
+  ]
+
+  const classesRows = () =>
+    classes.map((c) => Object.fromEntries(colonnes.map((col, idx) => [col, ligneDe(c)[idx]])))
+
+  const telechargerPdf = () => {
+    genererRapportPdf({
+      titre: t('reports.classesTitle'),
+      sousTitre: anneeScolaire ? t('reports.schoolYearLabel').replace('{annee}', anneeScolaire) : undefined,
+      colonnes,
+      lignes: classes.map(ligneDe),
+      nomFichier: `rapport_classes_${new Date().toISOString().slice(0, 10)}.pdf`
+    })
+  }
 
   if (loading) {
     return (
@@ -71,14 +102,7 @@ export default function RapportClassesPage() {
 
   return (
     <div className="space-y-6">
-      <style>{`
-        @media print {
-          nav { display: none !important; }
-          .no-print { display: none !important; }
-        }
-      `}</style>
-
-      <div className="no-print">
+      <div>
         <Link href="/admin/rapports" className="text-sm text-[#689e4e] hover:text-[#527d3e]">
           {t('reports.backToReports')}
         </Link>
@@ -96,7 +120,7 @@ export default function RapportClassesPage() {
             </p>
           )}
         </div>
-        <div className="flex gap-2 no-print">
+        <div className="flex gap-2">
           <button
             onClick={() => downloadCSV('classes', classesRows())}
             className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e]"
@@ -104,10 +128,10 @@ export default function RapportClassesPage() {
             {t('reports.downloadCsvButton')}
           </button>
           <button
-            onClick={handlePrint}
-            className="px-3 py-1.5 border border-gray-300 rounded text-sm hover:bg-gray-50"
+            onClick={telechargerPdf}
+            className="px-3 py-1.5 border border-[#689e4e] text-[#527d3e] rounded text-sm hover:bg-[#689e4e]/10"
           >
-            {t('reports.printButton')}
+            {t('reports.downloadPdfButton')}
           </button>
         </div>
       </div>
@@ -117,34 +141,29 @@ export default function RapportClassesPage() {
           <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAgeRange')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colDay')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colTime')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colMaxCapacity')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colEnrolledCount')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colTeachers')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colVideoAccount')}</th>
+                {colonnes.map((c) => (
+                  <th key={c} className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{c}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {classes.map((c) => (
                 <tr key={c.id}>
-                  <td className="px-3 py-2 whitespace-nowrap font-medium">{c.nom}</td>
+                  <td className="px-3 py-2 whitespace-nowrap font-mono font-medium">{c.code || '—'}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{c.nom}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{c.niveau || '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{c.tranche_age || '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{c.jour || '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{c.heure || '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{c.capacite_max ?? '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{inscritsParClasse[c.id] || 0}</td>
-                  <td className="px-3 py-2 whitespace-nowrap">{c.enseignants && c.enseignants.length > 0 ? c.enseignants.join(', ') : '—'}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{nomsEnseignants(c) || '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{c.comptes_visio?.nom || '—'}</td>
                 </tr>
               ))}
               {classes.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
+                  <td colSpan={colonnes.length} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
                 </tr>
               )}
             </tbody>

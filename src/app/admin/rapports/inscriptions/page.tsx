@@ -8,6 +8,7 @@ import { getConfig } from '@/lib/config'
 import { getStatutLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
+import { genererRapportPdf } from '@/lib/pdf/rapportPdf'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const STATUTS = ['pending_review', 'approved', 'rejected']
@@ -43,8 +44,6 @@ export default function RapportInscriptionsPage() {
     }
   }
 
-  const handlePrint = () => window.print()
-
   const statutPaiementLabel = (statut: string | null) => {
     if (statut === 'paye') return t('reports.paymentStatusPaid')
     return t('reports.paymentStatusPending')
@@ -63,21 +62,34 @@ export default function RapportInscriptionsPage() {
     return matchStatut && matchNiveau && matchType
   })
 
-  const inscriptionsRows = () => inscriptionsFiltrees.map((i) => ({
-    [t('reports.colStudentCode')]: i.student_code,
-    [t('reports.colName')]: i.nom,
-    [t('reports.colFirstName')]: i.prenom,
-    [t('reports.colType')]: typeLabel(i.is_reinscription),
-    [t('reports.colEmail')]: i.email_contact,
-    [t('reports.colPhone')]: i.telephone,
-    [t('reports.colCountry')]: i.pays_residence,
-    [t('reports.colSuggestedLevel')]: i.niveau_suggere,
-    [t('reports.colFinalLevel')]: i.niveau_definitif || '',
-    [t('reports.colStatus')]: getStatutLabel(i.status),
-    [t('reports.colAssignedClass')]: i.classe_attribuee || '',
-    [t('reports.colPaymentStatus')]: statutPaiementLabel(i.statut_paiement),
-    [t('reports.colRegistrationDate')]: new Date(i.created_at).toLocaleDateString('fr-FR')
-  }))
+  // Colonnes communes au tableau à l'écran, au CSV et au PDF — gardées ici en un
+  // seul endroit pour que les trois sorties restent synchronisées.
+  const colonnes = [
+    t('reports.colStudentCode'), t('reports.colName'), t('reports.colFirstName'),
+    t('reports.colType'), t('reports.colEmail'), t('reports.colPhone'), t('reports.colCountry'),
+    t('reports.colSuggestedLevel'), t('reports.colFinalLevel'), t('reports.colStatus'),
+    t('reports.colAssignedClass'), t('reports.colPaymentStatus'), t('reports.colRegistrationDate')
+  ]
+
+  const ligneDe = (i: any): (string | number)[] => [
+    i.student_code, i.nom, i.prenom, typeLabel(i.is_reinscription), i.email_contact, i.telephone,
+    i.pays_residence, i.niveau_suggere, i.niveau_definitif || '', getStatutLabel(i.status),
+    i.classe_attribuee || '', statutPaiementLabel(i.statut_paiement),
+    new Date(i.created_at).toLocaleDateString('fr-FR')
+  ]
+
+  const inscriptionsRows = () =>
+    inscriptionsFiltrees.map((i) => Object.fromEntries(colonnes.map((c, idx) => [c, ligneDe(i)[idx]])))
+
+  const telechargerPdf = () => {
+    genererRapportPdf({
+      titre: t('reports.inscriptionsTitle'),
+      sousTitre: anneeScolaire ? t('reports.schoolYearLabel').replace('{annee}', anneeScolaire) : undefined,
+      colonnes,
+      lignes: inscriptionsFiltrees.map(ligneDe),
+      nomFichier: `rapport_inscriptions_${new Date().toISOString().slice(0, 10)}.pdf`
+    })
+  }
 
   if (loading) {
     return (
@@ -89,14 +101,7 @@ export default function RapportInscriptionsPage() {
 
   return (
     <div className="space-y-6">
-      <style>{`
-        @media print {
-          nav { display: none !important; }
-          .no-print { display: none !important; }
-        }
-      `}</style>
-
-      <div className="no-print">
+      <div>
         <Link href="/admin/rapports" className="text-sm text-[#689e4e] hover:text-[#527d3e]">
           {t('reports.backToReports')}
         </Link>
@@ -114,7 +119,7 @@ export default function RapportInscriptionsPage() {
             </p>
           )}
         </div>
-        <div className="flex gap-2 no-print">
+        <div className="flex gap-2">
           <button
             onClick={() => downloadCSV('inscriptions', inscriptionsRows())}
             className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e]"
@@ -122,16 +127,16 @@ export default function RapportInscriptionsPage() {
             {t('reports.downloadCsvButton')}
           </button>
           <button
-            onClick={handlePrint}
-            className="px-3 py-1.5 border border-gray-300 rounded text-sm hover:bg-gray-50"
+            onClick={telechargerPdf}
+            className="px-3 py-1.5 border border-[#689e4e] text-[#527d3e] rounded text-sm hover:bg-[#689e4e]/10"
           >
-            {t('reports.printButton')}
+            {t('reports.downloadPdfButton')}
           </button>
         </div>
       </div>
 
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <div className="flex gap-3 mb-4 no-print flex-wrap">
+        <div className="flex gap-3 mb-4 flex-wrap">
           <select
             value={typeFiltre}
             onChange={(e) => setTypeFiltre(e.target.value)}
@@ -167,19 +172,9 @@ export default function RapportInscriptionsPage() {
           <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStudentCode')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colFirstName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colType')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colEmail')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colPhone')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colCountry')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colSuggestedLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colFinalLevel')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStatus')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAssignedClass')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colPaymentStatus')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colRegistrationDate')}</th>
+                {colonnes.map((c) => (
+                  <th key={c} className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{c}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -210,7 +205,7 @@ export default function RapportInscriptionsPage() {
               ))}
               {inscriptionsFiltrees.length === 0 && (
                 <tr>
-                  <td colSpan={13} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
+                  <td colSpan={colonnes.length} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
                 </tr>
               )}
             </tbody>

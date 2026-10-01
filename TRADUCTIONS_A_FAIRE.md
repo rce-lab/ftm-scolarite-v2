@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-09-30 — 15 sections, 476 entrées.
+Généré le 2026-10-01 — 15 sections, 477 entrées.
 
 ---
 
@@ -504,7 +504,7 @@ Généré le 2026-09-30 — 15 sections, 476 entrées.
 | reports.backToReports | ← Retour aux rapports | ← Miverina any amin'ny tatitra |
 | reports.schoolYearLabel | Année scolaire {annee} | Taom-pianarana {annee} |
 | reports.downloadCsvButton | Télécharger CSV | Alao CSV |
-| reports.printButton | Imprimer | Manonta |
+| reports.downloadPdfButton | Télécharger PDF | Alao PDF |
 | reports.filterStatus | Statut | Sata |
 | reports.filterAllStatuses | Tous les statuts | Sata rehetra |
 | reports.filterLevel | Niveau | Lentam-pahaizana |
@@ -529,6 +529,7 @@ Généré le 2026-09-30 — 15 sections, 476 entrées.
 | reports.colAssignedClass | Classe attribuée | Kilasy nomena |
 | reports.colPaymentStatus | Statut paiement | Sataon'ny fandoavam-bola |
 | reports.colRegistrationDate | Date d'inscription | Daty nisoratana anarana |
+| reports.colClassCode | Code classe | Kaody kilasy |
 | reports.colLevel | Niveau | Lentam-pahaizana |
 | reports.colAgeRange | Tranche d'âge | Sokajy taona |
 | reports.colDay | Jour | Andro |

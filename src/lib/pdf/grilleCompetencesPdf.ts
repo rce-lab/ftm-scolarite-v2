@@ -18,9 +18,9 @@ import {
   calculerStatistiquesDetaillees,
   type ReponsesUtilisateur
 } from '@/app/public/inscription/data/niveauCalcul'
+import { VERT_FTM, texteAscii, positionApresTableau } from '@/lib/pdf/pdfUtils'
 
 const NIVEAUX_ORDRE = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
-const VERT_FTM: [number, number, number] = [104, 158, 78] // #689e4e, couleur de marque FTM
 
 const NIVEAU_LABEL_KEYS: Record<string, string> = {
   A1: 'deliberation.competenceGridLevelA1',
@@ -49,35 +49,6 @@ const REPONSE_COULEURS: Record<string, [number, number, number]> = {
   oui: [22, 101, 52],
   un_peu: [133, 100, 4],
   non: [153, 27, 27]
-}
-
-// Les polices standard de jsPDF (Helvetica...) n'encodent que le jeu WinAnsi
-// (Latin-1) : un emoji comme celui de `competenceGridThresholdNotReached`
-// ('❌ Non atteint') y est rendu comme un caractère corrompu au lieu d'être
-// affiché. Ces emoji restent utiles à l'écran (boutons, etc.), donc on les
-// retire seulement ici, juste avant l'insertion dans le PDF.
-function texteAscii(valeur: string): string {
-  return (
-    valeur
-      // Emoji hors du plan de base (📄, 🎉...) : toujours une paire de substituts
-      // UTF-16 ; le reste du projet ne compile pas avec le flag d'expression
-      // régulière "u" (cible TypeScript par défaut, antérieure à ES2015), donc on
-      // détecte la paire directement plutôt que d'utiliser \u{...}.
-      .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '')
-      // Emoji et symboles du plan de base (❌, ✅, flèches...) que la police
-      // standard de jsPDF ne sait pas non plus afficher.
-      .replace(/[←-⇿☀-➿⬀-⯿️‍]/g, '')
-      .replace(/\s{2,}/g, ' ')
-      .trim()
-  )
-}
-
-// jspdf-autotable pose `lastAutoTable` sur le document à l'exécution mais ne le
-// déclare pas dans ses types publiés (dts-bundle) : accès typé explicitement plutôt
-// que de désactiver la vérification de type sur tout le fichier.
-function positionApresTableau(doc: jsPDF, repli: number): number {
-  const avecDernierTableau = doc as unknown as { lastAutoTable?: { finalY: number } }
-  return avecDernierTableau.lastAutoTable?.finalY ?? repli
 }
 
 function nomFichier(inscription: any): string {

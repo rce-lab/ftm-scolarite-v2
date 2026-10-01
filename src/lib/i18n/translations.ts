@@ -551,7 +551,7 @@ export const translations = {
     backToReports: { fr: '← Retour aux rapports', mg: "← Miverina any amin'ny tatitra" },
     schoolYearLabel: { fr: 'Année scolaire {annee}', mg: 'Taom-pianarana {annee}' },
     downloadCsvButton: { fr: 'Télécharger CSV', mg: 'Alao CSV' },
-    printButton: { fr: 'Imprimer', mg: 'Manonta' },
+    downloadPdfButton: { fr: 'Télécharger PDF', mg: 'Alao PDF' },
     filterStatus: { fr: 'Statut', mg: 'Sata' },
     filterAllStatuses: { fr: 'Tous les statuts', mg: 'Sata rehetra' },
     filterLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
@@ -578,6 +578,7 @@ export const translations = {
     colPaymentStatus: { fr: 'Statut paiement', mg: "Sataon'ny fandoavam-bola" },
     colRegistrationDate: { fr: "Date d'inscription", mg: 'Daty nisoratana anarana' },
 
+    colClassCode: { fr: 'Code classe', mg: 'Kaody kilasy' },
     colLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     colAgeRange: { fr: "Tranche d'âge", mg: 'Sokajy taona' },
     colDay: { fr: 'Jour', mg: 'Andro' },

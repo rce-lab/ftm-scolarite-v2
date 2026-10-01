@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase/client'
 import { getConfig } from '@/lib/config'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
+import { genererRapportPdf } from '@/lib/pdf/rapportPdf'
 
 export default function RapportPaiementsPage() {
   const { t } = useTranslation()
@@ -36,17 +37,36 @@ export default function RapportPaiementsPage() {
     }
   }
 
-  const handlePrint = () => window.print()
-
-  const paiementsRows = () => paiements.map((p) => ({
-    [t('reports.colCandidateName')]: `${p.inscriptions?.prenom || ''} ${p.inscriptions?.nom || ''}`.trim(),
-    [t('reports.colStudentCode')]: p.inscriptions?.student_code || '',
-    [t('reports.colAmount')]: p.montant,
-    [t('reports.colDate')]: p.date_paiement
+  const dateAffichee = (p: any) =>
+    p.date_paiement
       ? new Date(p.date_paiement).toLocaleDateString('fr-FR')
-      : new Date(p.created_at).toLocaleDateString('fr-FR'),
-    [t('reports.colMode')]: p.mode || ''
-  }))
+      : new Date(p.created_at).toLocaleDateString('fr-FR')
+
+  const colonnes = [
+    t('reports.colCandidateName'), t('reports.colStudentCode'), t('reports.colAmount'),
+    t('reports.colDate'), t('reports.colMode')
+  ]
+
+  const ligneDe = (p: any): (string | number)[] => [
+    `${p.inscriptions?.prenom || ''} ${p.inscriptions?.nom || ''}`.trim(),
+    p.inscriptions?.student_code || '',
+    `${p.montant}€`,
+    dateAffichee(p),
+    p.mode || ''
+  ]
+
+  const paiementsRows = () =>
+    paiements.map((p) => Object.fromEntries(colonnes.map((c, idx) => [c, ligneDe(p)[idx]])))
+
+  const telechargerPdf = () => {
+    genererRapportPdf({
+      titre: t('reports.paymentsTitle'),
+      sousTitre: anneeScolaire ? t('reports.schoolYearLabel').replace('{annee}', anneeScolaire) : undefined,
+      colonnes,
+      lignes: paiements.map(ligneDe),
+      nomFichier: `rapport_paiements_${new Date().toISOString().slice(0, 10)}.pdf`
+    })
+  }
 
   if (loading) {
     return (
@@ -58,14 +78,7 @@ export default function RapportPaiementsPage() {
 
   return (
     <div className="space-y-6">
-      <style>{`
-        @media print {
-          nav { display: none !important; }
-          .no-print { display: none !important; }
-        }
-      `}</style>
-
-      <div className="no-print">
+      <div>
         <Link href="/admin/rapports" className="text-sm text-[#689e4e] hover:text-[#527d3e]">
           {t('reports.backToReports')}
         </Link>
@@ -83,7 +96,7 @@ export default function RapportPaiementsPage() {
             </p>
           )}
         </div>
-        <div className="flex gap-2 no-print">
+        <div className="flex gap-2">
           <button
             onClick={() => downloadCSV('paiements', paiementsRows())}
             className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e]"
@@ -91,10 +104,10 @@ export default function RapportPaiementsPage() {
             {t('reports.downloadCsvButton')}
           </button>
           <button
-            onClick={handlePrint}
-            className="px-3 py-1.5 border border-gray-300 rounded text-sm hover:bg-gray-50"
+            onClick={telechargerPdf}
+            className="px-3 py-1.5 border border-[#689e4e] text-[#527d3e] rounded text-sm hover:bg-[#689e4e]/10"
           >
-            {t('reports.printButton')}
+            {t('reports.downloadPdfButton')}
           </button>
         </div>
       </div>
@@ -104,11 +117,9 @@ export default function RapportPaiementsPage() {
           <table className="min-w-full divide-y divide-gray-200 text-base">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colCandidateName')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStudentCode')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAmount')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colDate')}</th>
-                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colMode')}</th>
+                {colonnes.map((c) => (
+                  <th key={c} className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{c}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -117,17 +128,13 @@ export default function RapportPaiementsPage() {
                   <td className="px-3 py-2 whitespace-nowrap">{p.inscriptions?.prenom} {p.inscriptions?.nom}</td>
                   <td className="px-3 py-2 whitespace-nowrap font-mono">{p.inscriptions?.student_code || '—'}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{p.montant}€</td>
-                  <td className="px-3 py-2 whitespace-nowrap">
-                    {p.date_paiement
-                      ? new Date(p.date_paiement).toLocaleDateString('fr-FR')
-                      : new Date(p.created_at).toLocaleDateString('fr-FR')}
-                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">{dateAffichee(p)}</td>
                   <td className="px-3 py-2 whitespace-nowrap capitalize">{p.mode || '—'}</td>
                 </tr>
               ))}
               {paiements.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
+                  <td colSpan={colonnes.length} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
                 </tr>
               )}
             </tbody>
