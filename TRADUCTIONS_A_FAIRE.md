@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-09-30 — 15 sections, 465 entrées.
+Généré le 2026-09-30 — 15 sections, 476 entrées.
 
 ---
 
@@ -496,15 +496,26 @@ Généré le 2026-09-30 — 15 sections, 465 entrées.
 | Clé | Français | Malgache |
 |---|---|---|
 | reports.title | Rapports | Tatitra |
+| reports.hubIntro | Choisissez un rapport à consulter. | Safidio ny tatitra tianao hojerena. |
 | reports.inscriptionsTitle | Inscriptions | Fisoratana anarana |
 | reports.classesTitle | Classes | Kilasy |
 | reports.paymentsTitle | Paiements | Fandoavam-bola |
+| reports.viewReportButton | Voir le rapport | Jereo ny tatitra |
+| reports.backToReports | ← Retour aux rapports | ← Miverina any amin'ny tatitra |
+| reports.schoolYearLabel | Année scolaire {annee} | Taom-pianarana {annee} |
 | reports.downloadCsvButton | Télécharger CSV | Alao CSV |
 | reports.printButton | Imprimer | Manonta |
 | reports.filterStatus | Statut | Sata |
 | reports.filterAllStatuses | Tous les statuts | Sata rehetra |
 | reports.filterLevel | Niveau | Lentam-pahaizana |
 | reports.filterAllLevels | Tous les niveaux | Lentam-pahaizana rehetra |
+| reports.filterType | Type | Karazana |
+| reports.filterAllTypes | Tous types | Karazana rehetra |
+| reports.filterNewOnly | Nouvelles inscriptions | Fisoratana anarana vaovao |
+| reports.filterReinscriptionOnly | Réinscriptions | Fisoratana indray |
+| reports.colType | Type | Karazana |
+| reports.typeNew | Nouvelle | Vaovao |
+| reports.typeReinscription | Réinscription | Fisoratana indray |
 | reports.noData | Aucune donnée | Tsy misy angona |
 | reports.colStudentCode | Code étudiant | Kaody mpianatra |
 | reports.colName | Nom | Anarana |

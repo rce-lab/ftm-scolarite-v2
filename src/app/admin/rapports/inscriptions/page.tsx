@@ -1,0 +1,222 @@
+// src/app/admin/rapports/inscriptions/page.tsx
+'use client'
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase/client'
+import { getConfig } from '@/lib/config'
+import { getStatutLabel } from '@/lib/statuts'
+import { useTranslation } from '@/lib/i18n/LanguageContext'
+import { downloadCSV } from '@/lib/csv'
+
+const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+const STATUTS = ['pending_review', 'approved', 'rejected']
+
+export default function RapportInscriptionsPage() {
+  const { t } = useTranslation()
+  const [loading, setLoading] = useState(true)
+  const [inscriptions, setInscriptions] = useState<any[]>([])
+  const [anneeScolaire, setAnneeScolaire] = useState('')
+  const [statutFiltre, setStatutFiltre] = useState('all')
+  const [niveauFiltre, setNiveauFiltre] = useState('all')
+  const [typeFiltre, setTypeFiltre] = useState('all')
+
+  useEffect(() => {
+    chargerDonnees()
+  }, [])
+
+  const chargerDonnees = async () => {
+    try {
+      const [inscriptionsRes, config] = await Promise.all([
+        supabase.from('inscriptions').select('*').order('created_at', { ascending: false }),
+        getConfig()
+      ])
+
+      if (inscriptionsRes.error) throw inscriptionsRes.error
+
+      setInscriptions(inscriptionsRes.data || [])
+      setAnneeScolaire(config.annee_scolaire_courante || '')
+    } catch (error) {
+      console.error('Erreur:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handlePrint = () => window.print()
+
+  const statutPaiementLabel = (statut: string | null) => {
+    if (statut === 'paye') return t('reports.paymentStatusPaid')
+    return t('reports.paymentStatusPending')
+  }
+
+  const typeLabel = (estReinscription: boolean) =>
+    estReinscription ? t('reports.typeReinscription') : t('reports.typeNew')
+
+  const inscriptionsFiltrees = inscriptions.filter((i) => {
+    const matchStatut = statutFiltre === 'all' || i.status === statutFiltre
+    const matchNiveau = niveauFiltre === 'all' || i.niveau_suggere === niveauFiltre || i.niveau_definitif === niveauFiltre
+    const matchType =
+      typeFiltre === 'all' ||
+      (typeFiltre === 'reinscription' && i.is_reinscription) ||
+      (typeFiltre === 'nouvelle' && !i.is_reinscription)
+    return matchStatut && matchNiveau && matchType
+  })
+
+  const inscriptionsRows = () => inscriptionsFiltrees.map((i) => ({
+    [t('reports.colStudentCode')]: i.student_code,
+    [t('reports.colName')]: i.nom,
+    [t('reports.colFirstName')]: i.prenom,
+    [t('reports.colType')]: typeLabel(i.is_reinscription),
+    [t('reports.colEmail')]: i.email_contact,
+    [t('reports.colPhone')]: i.telephone,
+    [t('reports.colCountry')]: i.pays_residence,
+    [t('reports.colSuggestedLevel')]: i.niveau_suggere,
+    [t('reports.colFinalLevel')]: i.niveau_definitif || '',
+    [t('reports.colStatus')]: getStatutLabel(i.status),
+    [t('reports.colAssignedClass')]: i.classe_attribuee || '',
+    [t('reports.colPaymentStatus')]: statutPaiementLabel(i.statut_paiement),
+    [t('reports.colRegistrationDate')]: new Date(i.created_at).toLocaleDateString('fr-FR')
+  }))
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      <style>{`
+        @media print {
+          nav { display: none !important; }
+          .no-print { display: none !important; }
+        }
+      `}</style>
+
+      <div className="no-print">
+        <Link href="/admin/rapports" className="text-sm text-[#689e4e] hover:text-[#527d3e]">
+          {t('reports.backToReports')}
+        </Link>
+      </div>
+
+      <div className="flex justify-between items-center flex-wrap gap-2">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
+            {t('reports.inscriptionsTitle')}
+          </h1>
+          {anneeScolaire && (
+            <p className="text-sm text-gray-600 mt-1">
+              {t('reports.schoolYearLabel').replace('{annee}', anneeScolaire)}
+            </p>
+          )}
+        </div>
+        <div className="flex gap-2 no-print">
+          <button
+            onClick={() => downloadCSV('inscriptions', inscriptionsRows())}
+            className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e]"
+          >
+            {t('reports.downloadCsvButton')}
+          </button>
+          <button
+            onClick={handlePrint}
+            className="px-3 py-1.5 border border-gray-300 rounded text-sm hover:bg-gray-50"
+          >
+            {t('reports.printButton')}
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+        <div className="flex gap-3 mb-4 no-print flex-wrap">
+          <select
+            value={typeFiltre}
+            onChange={(e) => setTypeFiltre(e.target.value)}
+            className="p-2 border rounded text-sm"
+          >
+            <option value="all">{t('reports.filterAllTypes')}</option>
+            <option value="nouvelle">{t('reports.filterNewOnly')}</option>
+            <option value="reinscription">{t('reports.filterReinscriptionOnly')}</option>
+          </select>
+          <select
+            value={statutFiltre}
+            onChange={(e) => setStatutFiltre(e.target.value)}
+            className="p-2 border rounded text-sm"
+          >
+            <option value="all">{t('reports.filterAllStatuses')}</option>
+            {STATUTS.map((s) => (
+              <option key={s} value={s}>{getStatutLabel(s)}</option>
+            ))}
+          </select>
+          <select
+            value={niveauFiltre}
+            onChange={(e) => setNiveauFiltre(e.target.value)}
+            className="p-2 border rounded text-sm"
+          >
+            <option value="all">{t('reports.filterAllLevels')}</option>
+            {NIVEAUX.map((n) => (
+              <option key={n} value={n}>{n}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 text-base">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStudentCode')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colFirstName')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colType')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colEmail')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colPhone')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colCountry')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colSuggestedLevel')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colFinalLevel')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colStatus')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colAssignedClass')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colPaymentStatus')}</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{t('reports.colRegistrationDate')}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {inscriptionsFiltrees.map((i) => (
+                <tr key={i.id}>
+                  <td className="px-3 py-2 font-mono whitespace-nowrap">{i.student_code}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.nom}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.prenom}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {i.is_reinscription ? (
+                      <span className="px-2 py-0.5 text-xs rounded-full bg-violet-100 text-violet-700 font-semibold">
+                        {typeLabel(true)}
+                      </span>
+                    ) : (
+                      <span className="text-gray-600">{typeLabel(false)}</span>
+                    )}
+                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.email_contact}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.telephone}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.pays_residence}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.niveau_suggere}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.niveau_definitif || '—'}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{getStatutLabel(i.status)}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{i.classe_attribuee || '—'}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{statutPaiementLabel(i.statut_paiement)}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{new Date(i.created_at).toLocaleDateString('fr-FR')}</td>
+                </tr>
+              ))}
+              {inscriptionsFiltrees.length === 0 && (
+                <tr>
+                  <td colSpan={13} className="px-3 py-6 text-center text-gray-700">{t('reports.noData')}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  )
+}

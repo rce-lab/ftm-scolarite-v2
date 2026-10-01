@@ -531,15 +531,38 @@ export const translations = {
 
   reports: {
     title: { fr: 'Rapports', mg: 'Tatitra' },
+    hubIntro: { fr: 'Choisissez un rapport à consulter.', mg: 'Safidio ny tatitra tianao hojerena.' },
     inscriptionsTitle: { fr: 'Inscriptions', mg: 'Fisoratana anarana' },
+    inscriptionsCardDescription: {
+      fr: 'Liste des candidats inscrits, avec statut, niveau et paiement.',
+      mg: "Lisitry ny mpandray anjara voasoratra anarana, miaraka amin'ny sata, ny lentam-pahaizana ary ny fandoavam-bola."
+    },
     classesTitle: { fr: 'Classes', mg: 'Kilasy' },
+    classesCardDescription: {
+      fr: 'Liste des classes avec enseignants, horaires et effectifs.',
+      mg: "Lisitry ny kilasy miaraka amin'ny mpampianatra, ny ora ary ny isan'ny mpianatra."
+    },
     paymentsTitle: { fr: 'Paiements', mg: 'Fandoavam-bola' },
+    paymentsCardDescription: {
+      fr: 'Liste des paiements enregistrés.',
+      mg: 'Lisitry ny fandoavam-bola voarakitra.'
+    },
+    viewReportButton: { fr: 'Voir le rapport', mg: 'Jereo ny tatitra' },
+    backToReports: { fr: '← Retour aux rapports', mg: "← Miverina any amin'ny tatitra" },
+    schoolYearLabel: { fr: 'Année scolaire {annee}', mg: 'Taom-pianarana {annee}' },
     downloadCsvButton: { fr: 'Télécharger CSV', mg: 'Alao CSV' },
     printButton: { fr: 'Imprimer', mg: 'Manonta' },
     filterStatus: { fr: 'Statut', mg: 'Sata' },
     filterAllStatuses: { fr: 'Tous les statuts', mg: 'Sata rehetra' },
     filterLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     filterAllLevels: { fr: 'Tous les niveaux', mg: 'Lentam-pahaizana rehetra' },
+    filterType: { fr: 'Type', mg: 'Karazana' },
+    filterAllTypes: { fr: 'Tous types', mg: 'Karazana rehetra' },
+    filterNewOnly: { fr: 'Nouvelles inscriptions', mg: 'Fisoratana anarana vaovao' },
+    filterReinscriptionOnly: { fr: 'Réinscriptions', mg: 'Fisoratana indray' },
+    colType: { fr: 'Type', mg: 'Karazana' },
+    typeNew: { fr: 'Nouvelle', mg: 'Vaovao' },
+    typeReinscription: { fr: 'Réinscription', mg: 'Fisoratana indray' },
     noData: { fr: 'Aucune donnée', mg: 'Tsy misy angona' },
 
     colStudentCode: { fr: 'Code étudiant', mg: 'Kaody mpianatra' },
