@@ -556,6 +556,7 @@ export const translations = {
     filterAllStatuses: { fr: 'Tous les statuts', mg: 'Sata rehetra' },
     filterLevel: { fr: 'Niveau', mg: 'Lentam-pahaizana' },
     filterAllLevels: { fr: 'Tous les niveaux', mg: 'Lentam-pahaizana rehetra' },
+    filterAllYears: { fr: 'Toutes les années', mg: 'Taona rehetra' },
     filterType: { fr: 'Type', mg: 'Karazana' },
     filterAllTypes: { fr: 'Tous types', mg: 'Karazana rehetra' },
     filterNewOnly: { fr: 'Nouvelles inscriptions', mg: 'Fisoratana anarana vaovao' },

@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-01 — 15 sections, 477 entrées.
+Généré le 2026-10-01 — 15 sections, 478 entrées.
 
 ---
 
@@ -509,6 +509,7 @@ Généré le 2026-10-01 — 15 sections, 477 entrées.
 | reports.filterAllStatuses | Tous les statuts | Sata rehetra |
 | reports.filterLevel | Niveau | Lentam-pahaizana |
 | reports.filterAllLevels | Tous les niveaux | Lentam-pahaizana rehetra |
+| reports.filterAllYears | Toutes les années | Taona rehetra |
 | reports.filterType | Type | Karazana |
 | reports.filterAllTypes | Tous types | Karazana rehetra |
 | reports.filterNewOnly | Nouvelles inscriptions | Fisoratana anarana vaovao |
