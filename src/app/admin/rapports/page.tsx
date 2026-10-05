@@ -2,7 +2,7 @@
 // Page d'accueil des rapports : avant, cette page affichait les 3 rapports empilés
 // sur une seule page. Elle sert maintenant de hub — un clic sur une carte mène au
 // rapport dédié, chacun avec sa propre URL, son titre et ses propres paramètres
-// (cf. src/app/admin/rapports/{inscriptions,classes,paiements}/page.tsx).
+// (cf. src/app/admin/rapports/{inscriptions,classes,paiements,deliberations}/page.tsx).
 'use client'
 
 import Link from 'next/link'
@@ -33,6 +33,12 @@ const RAPPORTS: RapportCard[] = [
     icon: '💰',
     titleKey: 'reports.paymentsTitle',
     descriptionKey: 'reports.paymentsCardDescription'
+  },
+  {
+    href: '/admin/rapports/deliberations',
+    icon: '🧑‍🏫',
+    titleKey: 'reports.deliberationsTitle',
+    descriptionKey: 'reports.deliberationsCardDescription'
   }
 ]
 
@@ -47,7 +53,7 @@ export default function RapportsHubPage() {
       </h1>
       <p className="text-gray-600">{t('reports.hubIntro')}</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {RAPPORTS.map((rapport) => (
           <Link
             key={rapport.href}

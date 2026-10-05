@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-01 — 15 sections, 478 entrées.
+Généré le 2026-10-05 — 15 sections, 501 entrées.
 
 ---
 
@@ -545,6 +545,29 @@ Généré le 2026-10-01 — 15 sections, 478 entrées.
 | reports.colMode | Mode | Fomba |
 | reports.paymentStatusPending | En attente | Miandry |
 | reports.paymentStatusPaid | Payé | Voaloa |
+| reports.deliberationsTitle | Délibérations du jour | Fanapahan-kevitry ny andro |
+| reports.filterSessionDate | Date de séance | Datin'ny fivoriana |
+| reports.sessionLabel | Séance du {date} | Fivoriana tamin'ny {date} |
+| reports.blockNew | Nouveaux inscrits | Mpianatra vaovao voasoratra |
+| reports.blockReinscription | Réinscrits | Nisoratra anarana indray |
+| reports.colBlock | Bloc | Sokajy |
+| reports.toConfirmTitle | Points à confirmer | Teboka hamafisina |
+| reports.noneToConfirm | Aucun point à confirmer | Tsy misy teboka hamafisina |
+| reports.summaryExamined | Élèves examinés | Mpianatra nodinihina |
+| reports.summaryProcessed | Traités | Vita |
+| reports.summaryPending | En attente | Miandry |
+| reports.summaryNew | Nouveaux | Vaovao |
+| reports.summaryReinscription | Réinscrits | Nisoratra indray |
+| reports.colMatricule | Matricule | Matrikiola |
+| reports.colAge | Âge | Taona |
+| reports.colRetainedLevel | Niveau retenu | Lentam-pahaizana voatana |
+| reports.colRemark | Remarque | Fanamarihana |
+| reports.remarkPendingDecision | Décision en attente | Miandry fanapahan-kevitra |
+| reports.statusApproved | Validé | Voamarina |
+| reports.statusRejected | Rejeté | Nolavina |
+| reports.statusPending | En attente | Miandry |
+| reports.statusPaymentPending | Paiement en attente | Miandry ny fandoavam-bola |
+| reports.legendPending | En bleu : dossier en attente de décision | Manga : antontan-taratasy miandry fanapahan-kevitra |
 
 ## Email de notification interne (nouvelle inscription)
 

@@ -595,7 +595,48 @@ export const translations = {
     colMode: { fr: 'Mode', mg: 'Fomba' },
 
     paymentStatusPending: { fr: 'En attente', mg: 'Miandry' },
-    paymentStatusPaid: { fr: 'Payé', mg: 'Voaloa' }
+    paymentStatusPaid: { fr: 'Payé', mg: 'Voaloa' },
+
+    // Rapport « Délibérations du jour » — mg proposé à valider (sauf Matricule/Âge/statuts, repris de clés validées)
+    deliberationsTitle: { fr: 'Délibérations du jour', mg: 'Fanapahan-kevitry ny andro' },
+    deliberationsCardDescription: {
+      fr: "Inscrits et réinscrits traités lors d'une séance du conseil des enseignants, avec niveau et classe attribuée.",
+      mg: "Ireo voasoratra sy nisoratra indray nodinihina nandritra ny fivorian'ny filankevitry ny mpampianatra, miaraka amin'ny lentam-pahaizana sy ny kilasy nomena."
+    },
+    filterSessionDate: { fr: 'Date de séance', mg: "Datin'ny fivoriana" },
+    sessionDateHint: {
+      fr: 'Dossiers mis à jour ce jour-là, de 00:00 à 23:59 (heure locale : {fuseau}).',
+      mg: "Antontan-taratasy novaina tamin'io andro io, 00:00 ka hatramin'ny 23:59 (ora eo an-toerana : {fuseau})."
+    },
+    sessionLabel: { fr: 'Séance du {date}', mg: "Fivoriana tamin'ny {date}" },
+    blockNew: { fr: 'Nouveaux inscrits', mg: 'Mpianatra vaovao voasoratra' },
+    blockReinscription: { fr: 'Réinscrits', mg: 'Nisoratra anarana indray' },
+    colBlock: { fr: 'Bloc', mg: 'Sokajy' },
+    toConfirmTitle: { fr: 'Points à confirmer', mg: 'Teboka hamafisina' },
+    noneToConfirm: { fr: 'Aucun point à confirmer', mg: 'Tsy misy teboka hamafisina' },
+    summaryExamined: { fr: 'Élèves examinés', mg: 'Mpianatra nodinihina' },
+    summaryProcessed: { fr: 'Traités', mg: 'Vita' },
+    summaryPending: { fr: 'En attente', mg: 'Miandry' },
+    summaryNew: { fr: 'Nouveaux', mg: 'Vaovao' },
+    summaryReinscription: { fr: 'Réinscrits', mg: 'Nisoratra indray' },
+    colMatricule: { fr: 'Matricule', mg: 'Matrikiola' },
+    colAge: { fr: 'Âge', mg: 'Taona' },
+    colRetainedLevel: { fr: 'Niveau retenu', mg: 'Lentam-pahaizana voatana' },
+    colRemark: { fr: 'Remarque', mg: 'Fanamarihana' },
+    remarkLevelGap: {
+      fr: "Niveau de l'élève ({eleve}) différent du niveau de la classe ({classe})",
+      mg: "Tsy mitovy ny lentam-pahaizan'ny mpianatra ({eleve}) sy ny an'ny kilasy ({classe})"
+    },
+    remarkPendingDecision: { fr: 'Décision en attente', mg: 'Miandry fanapahan-kevitra' },
+    statusApproved: { fr: 'Validé', mg: 'Voamarina' },
+    statusRejected: { fr: 'Rejeté', mg: 'Nolavina' },
+    statusPending: { fr: 'En attente', mg: 'Miandry' },
+    statusPaymentPending: { fr: 'Paiement en attente', mg: 'Miandry ny fandoavam-bola' },
+    legendPending: { fr: 'En bleu : dossier en attente de décision', mg: 'Manga : antontan-taratasy miandry fanapahan-kevitra' },
+    legendLevelChanged: {
+      fr: 'En ambre : niveau retenu différent du niveau suggéré',
+      mg: "Volomboasary : lentam-pahaizana voatana tsy mitovy amin'ny voatolotra"
+    }
   },
 
   emailAdminNotification: {
