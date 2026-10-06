@@ -23,9 +23,15 @@ interface LigneDeliberation {
   classe: string
   niveauClasse: string
   enseignants: string
+  // Clés du tri par défaut (enseignant titulaire → code classe)
+  titulaire: string
+  codeClasse: string
   status: string
   isReinscription: boolean
 }
+
+type CleBloc = 'nouveaux' | 'reinscrits'
+type SensTri = 'asc' | 'desc'
 
 // Date du jour au format yyyy-mm-dd en heure locale du navigateur (toISOString
 // donnerait la date UTC, décalée le soir à Québec ou le matin à Madagascar).
@@ -50,6 +56,8 @@ export default function RapportDeliberationsPage() {
   const [loading, setLoading] = useState(true)
   const [dateSeance, setDateSeance] = useState(aujourdhuiLocal())
   const [lignes, setLignes] = useState<LigneDeliberation[]>([])
+  // Tri courant par bloc ; absent = tri par défaut
+  const [tris, setTris] = useState<Partial<Record<CleBloc, { colonne: number; sens: SensTri }>>>({})
   const fuseau = Intl.DateTimeFormat().resolvedOptions().timeZone
 
   useEffect(() => {
@@ -106,6 +114,8 @@ export default function RapportDeliberationsPage() {
             classe: classe ? [classe.code, classe.nom].filter(Boolean).join(' — ') : '',
             niveauClasse: classe?.niveau || '',
             enseignants: classe ? nomsEnseignants(classe) : '',
+            titulaire: classe ? nomTitulaire(classe) : '',
+            codeClasse: classe?.code || '',
             status: i.status || '',
             isReinscription: !!i.is_reinscription
           }
@@ -126,6 +136,13 @@ export default function RapportDeliberationsPage() {
       .map((ce: any) => `${ce.enseignants.prenom || ''} ${ce.enseignants.nom || ''}`.trim())
       .filter(Boolean)
       .join(', ')
+  }
+
+  // Titulaire seul (clé du tri par défaut) ; à défaut, le premier enseignant lié
+  const nomTitulaire = (classe: any): string => {
+    const liens = (classe.classe_enseignants || []).filter((ce: any) => ce.enseignants)
+    const lien = liens.find((ce: any) => ce.role === 'titulaire') || liens[0]
+    return lien ? `${lien.enseignants.prenom || ''} ${lien.enseignants.nom || ''}`.trim() : ''
   }
 
   const enAttente = (l: LigneDeliberation) => l.status === 'pending_review'
@@ -156,17 +173,6 @@ export default function RapportDeliberationsPage() {
   const parNom = (a: LigneDeliberation, b: LigneDeliberation) =>
     a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }) || a.prenom.localeCompare(b.prenom, 'fr', { sensitivity: 'base' })
 
-  // Dossiers traités (validés, ou rejetés) triés par nom, puis dossiers en attente
-  const lignesDuBloc = (reinscription: boolean): LigneDeliberation[] => {
-    const bloc = lignes.filter((l) => l.isReinscription === reinscription)
-    return [...bloc.filter((l) => !enAttente(l)).sort(parNom), ...bloc.filter(enAttente).sort(parNom)]
-  }
-
-  const blocs = [
-    { cle: 'nouveaux', titre: t('reports.blockNew'), lignes: lignesDuBloc(false) },
-    { cle: 'reinscrits', titre: t('reports.blockReinscription'), lignes: lignesDuBloc(true) }
-  ]
-
   const synthese = [
     { libelle: t('reports.summaryExamined'), valeur: lignes.length },
     { libelle: t('reports.summaryProcessed'), valeur: lignes.filter((l) => !enAttente(l)).length },
@@ -185,6 +191,52 @@ export default function RapportDeliberationsPage() {
   const ligneDe = (l: LigneDeliberation): (string | number)[] => [
     l.matricule, l.nom, l.prenom, l.age ?? '', l.niveauSuggere, l.niveauRetenu,
     l.classe, l.enseignants, libelleStatut(l.status), remarque(l)
+  ]
+
+  // Insensible à la casse et aux accents ; numeric : tri naturel des codes (C02 avant C10)
+  const comparer = (a: string, b: string) => a.localeCompare(b, 'fr', { sensitivity: 'base', numeric: true })
+
+  // Tri par défaut : enseignant titulaire → code classe → prénom → nom ; dossiers sans
+  // classe attribuée (en attente) en dernier
+  const triParDefaut = (a: LigneDeliberation, b: LigneDeliberation) =>
+    (a.classe ? 0 : 1) - (b.classe ? 0 : 1) ||
+    comparer(a.titulaire, b.titulaire) ||
+    comparer(a.codeClasse, b.codeClasse) ||
+    comparer(a.prenom, b.prenom) ||
+    comparer(a.nom, b.nom)
+
+  // Tri par colonne (valeurs telles qu'affichées) ; cellules vides toujours en dernier,
+  // départage par le tri par défaut pour un ordre stable
+  const triParColonne = (colonne: number, sens: SensTri) => (a: LigneDeliberation, b: LigneDeliberation) => {
+    const va = ligneDe(a)[colonne]
+    const vb = ligneDe(b)[colonne]
+    const videA = va === '' || va === null
+    const videB = vb === '' || vb === null
+    if (videA || videB) return videA === videB ? triParDefaut(a, b) : videA ? 1 : -1
+    const ordre = typeof va === 'number' && typeof vb === 'number' ? va - vb : comparer(String(va), String(vb))
+    return (sens === 'asc' ? ordre : -ordre) || triParDefaut(a, b)
+  }
+
+  const lignesDuBloc = (cle: CleBloc, reinscription: boolean): LigneDeliberation[] => {
+    const tri = tris[cle]
+    return lignes
+      .filter((l) => l.isReinscription === reinscription)
+      .sort(tri ? triParColonne(tri.colonne, tri.sens) : triParDefaut)
+  }
+
+  // 1er clic = croissant, 2e = décroissant ; une autre colonne remplace le tri
+  const cliquerEnTete = (cle: CleBloc, colonne: number) => {
+    setTris((courants) => {
+      const tri = courants[cle]
+      const sens: SensTri = tri && tri.colonne === colonne && tri.sens === 'asc' ? 'desc' : 'asc'
+      return { ...courants, [cle]: { colonne, sens } }
+    })
+  }
+
+  // Ordre affiché à l'écran — repris tel quel par les exports CSV et PDF
+  const blocs: { cle: CleBloc; titre: string; lignes: LigneDeliberation[] }[] = [
+    { cle: 'nouveaux', titre: t('reports.blockNew'), lignes: lignesDuBloc('nouveaux', false) },
+    { cle: 'reinscrits', titre: t('reports.blockReinscription'), lignes: lignesDuBloc('reinscrits', true) }
   ]
 
   // Points à confirmer : écarts de niveau élève/classe, puis dossiers en attente
@@ -315,14 +367,36 @@ export default function RapportDeliberationsPage() {
 
           {blocs.map((bloc) => (
             <div key={bloc.cle} className="bg-white rounded-lg shadow border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">{bloc.titre} ({bloc.lignes.length})</h2>
+              <div className="flex justify-between items-center flex-wrap gap-2 mb-4">
+                <h2 className="text-lg font-bold text-gray-900">{bloc.titre} ({bloc.lignes.length})</h2>
+                <button
+                  onClick={() => setTris((courants) => ({ ...courants, [bloc.cle]: undefined }))}
+                  disabled={!tris[bloc.cle]}
+                  className="px-3 py-1 border border-gray-300 text-gray-700 rounded text-sm hover:bg-gray-100 disabled:opacity-50"
+                >
+                  {t('reports.resetSortButton')}
+                </button>
+              </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 text-base">
                   <thead className="bg-gray-50">
                     <tr>
-                      {colonnes.map((c) => (
-                        <th key={c} className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm">{c}</th>
-                      ))}
+                      {colonnes.map((c, idx) => {
+                        const tri = tris[bloc.cle]
+                        const actif = tri?.colonne === idx
+                        return (
+                          <th
+                            key={c}
+                            onClick={() => cliquerEnTete(bloc.cle, idx)}
+                            title={t('reports.sortColumnHint')}
+                            aria-sort={actif ? (tri.sens === 'asc' ? 'ascending' : 'descending') : 'none'}
+                            className="px-3 py-2 text-left font-medium text-gray-700 uppercase text-sm cursor-pointer select-none hover:bg-gray-100 whitespace-nowrap"
+                          >
+                            {c}
+                            {actif && <span className="ml-1 text-[#689e4e]">{tri.sens === 'asc' ? '▲' : '▼'}</span>}
+                          </th>
+                        )
+                      })}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">

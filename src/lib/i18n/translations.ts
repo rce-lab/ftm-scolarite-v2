@@ -633,6 +633,9 @@ export const translations = {
     statusPending: { fr: 'En attente', mg: 'Miandry' },
     statusPaymentPending: { fr: 'Paiement en attente', mg: 'Miandry ny fandoavam-bola' },
     legendPending: { fr: 'En bleu : dossier en attente de décision', mg: 'Manga : antontan-taratasy miandry fanapahan-kevitra' },
+    // Tri des tableaux du rapport Délibérations — mg proposé à valider
+    resetSortButton: { fr: 'Réinitialiser le tri', mg: 'Averina ny filaharana voalohany' },
+    sortColumnHint: { fr: 'Cliquer pour trier (croissant / décroissant)', mg: 'Tsindrio raha handahatra (miakatra / midina)' },
     legendLevelChanged: {
       fr: 'En ambre : niveau retenu différent du niveau suggéré',
       mg: "Volomboasary : lentam-pahaizana voatana tsy mitovy amin'ny voatolotra"

@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-05 — 15 sections, 501 entrées.
+Généré le 2026-10-06 — 15 sections, 503 entrées.
 
 ---
 
@@ -568,6 +568,8 @@ Généré le 2026-10-05 — 15 sections, 501 entrées.
 | reports.statusPending | En attente | Miandry |
 | reports.statusPaymentPending | Paiement en attente | Miandry ny fandoavam-bola |
 | reports.legendPending | En bleu : dossier en attente de décision | Manga : antontan-taratasy miandry fanapahan-kevitra |
+| reports.resetSortButton | Réinitialiser le tri | Averina ny filaharana voalohany |
+| reports.sortColumnHint | Cliquer pour trier (croissant / décroissant) | Tsindrio raha handahatra (miakatra / midina) |
 
 ## Email de notification interne (nouvelle inscription)
 
