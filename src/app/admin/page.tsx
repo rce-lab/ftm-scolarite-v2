@@ -7,8 +7,13 @@ import { getStatutLabel, getStatutPaiementLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
-export default function AdminDashboard() {
+// Tableau de bord : lecture seule par nature (aucune action d'écriture), toujours
+// 'full' pour tout rôle qui y a accès (cf. src/lib/permissions.ts) — RequireAccess
+// sert ici surtout à rediriger un rôle inconnu/non chargé et à afficher le spinner
+// de chargement, pas à désactiver quoi que ce soit.
+function AdminDashboardContent() {
   const { t } = useTranslation()
   const [stats, setStats] = useState<{
     totalInscriptions: number
@@ -321,5 +326,13 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AdminDashboard() {
+  return (
+    <RequireAccess ecran="dashboard">
+      {() => <AdminDashboardContent />}
+    </RequireAccess>
   )
 }

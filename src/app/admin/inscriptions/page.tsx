@@ -8,7 +8,12 @@ import { useTranslation } from '@/lib/i18n/LanguageContext'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
+// Liste des inscriptions : aucune action d'écriture sur cet écran (la validation se
+// fait sur la fiche /admin/inscriptions/[code] ou en délibération) — readOnly n'a
+// donc rien à désactiver ici, mais RequireAccess reste nécessaire pour le contrôle
+// d'accès (redirection si rôle inconnu, affichage du bandeau "lecture seule").
 function InscriptionsListContent() {
   const { t } = useTranslation()
   const params = useSearchParams()
@@ -208,12 +213,16 @@ function InscriptionsListContent() {
 
 export default function InscriptionsListPage() {
   return (
-    <Suspense fallback={
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
-      </div>
-    }>
-      <InscriptionsListContent />
-    </Suspense>
+    <RequireAccess ecran="inscriptions">
+      {() => (
+        <Suspense fallback={
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
+          </div>
+        }>
+          <InscriptionsListContent />
+        </Suspense>
+      )}
+    </RequireAccess>
   )
 }

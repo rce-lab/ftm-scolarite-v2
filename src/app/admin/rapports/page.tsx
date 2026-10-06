@@ -7,6 +7,7 @@
 
 import Link from 'next/link'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import RequireAccess from '@/components/RequireAccess'
 
 interface RapportCard {
   href: string
@@ -42,7 +43,7 @@ const RAPPORTS: RapportCard[] = [
   }
 ]
 
-export default function RapportsHubPage() {
+function RapportsHubContent() {
   const { t } = useTranslation()
 
   return (
@@ -70,5 +71,16 @@ export default function RapportsHubPage() {
         ))}
       </div>
     </div>
+  )
+}
+
+// Rapports : toujours 'full' pour tout rôle qui y a accès (jamais 'view' dans
+// ROLE_PERMISSIONS) — RequireAccess sert ici au spinner de chargement et à la
+// redirection d'un rôle inconnu, pas à une désactivation d'actions d'écriture.
+export default function RapportsHubPage() {
+  return (
+    <RequireAccess ecran="reports">
+      {() => <RapportsHubContent />}
+    </RequireAccess>
   )
 }

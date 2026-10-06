@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import SectionDivider from '@/components/SectionDivider'
 import GrilleCompetencesModal from '@/components/GrilleCompetencesModal'
+import RequireAccess from '@/components/RequireAccess'
 import { sendDecisionEmailAction } from '@/app/actions/emailActions'
 
 // Libellés des jours de préférence du candidat (inscriptions.jours_preference).
@@ -21,7 +22,7 @@ const JOUR_KEYS: Record<string, string> = {
   samedi: 'deliberation.daySaturday'
 }
 
-function DeliberationContent() {
+function DeliberationContent({ readOnly }: { readOnly: boolean }) {
   const { t } = useTranslation()
   const params = useSearchParams()
   const router = useRouter()
@@ -703,11 +704,13 @@ function DeliberationContent() {
                       <button
                         key={niveau}
                         onClick={() => updateNiveauDefinitif(selectedInscription.id, niveau)}
+                        disabled={readOnly}
+                        title={readOnly ? t('access.readOnlyActionTooltip') : undefined}
                         className={`p-2 text-center rounded border ${
                           selectedInscription.niveau_definitif === niveau
                             ? 'bg-green-600 text-white border-green-700'
                             : 'bg-gray-100 hover:bg-gray-200'
-                        }`}
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
                         {niveau}
                       </button>
@@ -726,7 +729,8 @@ function DeliberationContent() {
                     <select
                       value={selectedClasseId}
                       onChange={(e) => setSelectedClasseId(e.target.value)}
-                      className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
+                      disabled={readOnly}
+                      className="w-full p-2 border rounded text-sm focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] disabled:bg-gray-100 disabled:text-gray-500"
                     >
                       <option value="">{t('deliberation.classSelectPlaceholder')}</option>
                       {classesTrieesParPrenom.map((classe) => (
@@ -738,37 +742,39 @@ function DeliberationContent() {
                   )}
                 </div>
 
-                <div className="pt-4 border-t">
-                  <label className="block text-base font-medium mb-2">{t('deliberation.finalDecisionLabel')}</label>
-                  <div className="flex space-x-2">
-                    {selectedInscription.status !== 'approved' && selectedInscription.status !== 'rejected' && (
+                {!readOnly && (
+                  <div className="pt-4 border-t">
+                    <label className="block text-base font-medium mb-2">{t('deliberation.finalDecisionLabel')}</label>
+                    <div className="flex space-x-2">
+                      {selectedInscription.status !== 'approved' && selectedInscription.status !== 'rejected' && (
+                        <button
+                          onClick={handleApprove}
+                          disabled={sending}
+                          className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+                        >
+                          {t('deliberation.approveButton')}
+                        </button>
+                      )}
+                      {selectedInscription.status !== 'rejected' && (
+                        <button
+                          onClick={openRejectModal}
+                          disabled={sending}
+                          className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 disabled:opacity-50"
+                        >
+                          {t('deliberation.rejectButton')}
+                        </button>
+                      )}
+                    </div>
+                    {selectedInscription.status !== 'pending_review' && (
                       <button
-                        onClick={handleApprove}
-                        disabled={sending}
-                        className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+                        onClick={() => updateStatus(selectedInscription.id, 'pending_review')}
+                        className="w-full mt-2 bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700"
                       >
-                        {t('deliberation.approveButton')}
-                      </button>
-                    )}
-                    {selectedInscription.status !== 'rejected' && (
-                      <button
-                        onClick={openRejectModal}
-                        disabled={sending}
-                        className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 disabled:opacity-50"
-                      >
-                        {t('deliberation.rejectButton')}
+                        {t('deliberation.resetToPendingButton')}
                       </button>
                     )}
                   </div>
-                  {selectedInscription.status !== 'pending_review' && (
-                    <button
-                      onClick={() => updateStatus(selectedInscription.id, 'pending_review')}
-                      className="w-full mt-2 bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700"
-                    >
-                      {t('deliberation.resetToPendingButton')}
-                    </button>
-                  )}
-                </div>
+                )}
 
                 <div className="pt-4 border-t">
                   <Link
@@ -868,12 +874,16 @@ function DeliberationContent() {
 
 export default function DeliberationPage() {
   return (
-    <Suspense fallback={
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
-      </div>
-    }>
-      <DeliberationContent />
-    </Suspense>
+    <RequireAccess ecran="deliberation">
+      {(readOnly) => (
+        <Suspense fallback={
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#689e4e]"></div>
+          </div>
+        }>
+          <DeliberationContent readOnly={readOnly} />
+        </Suspense>
+      )}
+    </RequireAccess>
   )
 }

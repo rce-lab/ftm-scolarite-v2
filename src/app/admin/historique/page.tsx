@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const ROWS_PER_PAGE = 30
@@ -25,7 +26,7 @@ interface ArchiveRow {
   code_inscription: string | null
 }
 
-export default function HistoriquePage() {
+function HistoriqueContent({ readOnly }: { readOnly: boolean }) {
   const { t } = useTranslation()
 
   const [rows, setRows] = useState<ArchiveRow[]>([])
@@ -503,13 +504,15 @@ export default function HistoriquePage() {
               <div key={eleveId} className="border border-amber-200 bg-amber-50 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
                   <h3 className="font-semibold text-gray-800">{t('historique.groupLabel').replace('{n}', String(index + 1))}</h3>
-                  <button
-                    onClick={() => handleConfirmSame(eleveId, groupRows)}
-                    disabled={processingKey === eleveId}
-                    className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e] disabled:opacity-50"
-                  >
-                    {t('historique.confirmSameButton')}
-                  </button>
+                  {!readOnly && (
+                    <button
+                      onClick={() => handleConfirmSame(eleveId, groupRows)}
+                      disabled={processingKey === eleveId}
+                      className="px-3 py-1.5 bg-[#689e4e] text-white rounded text-sm hover:bg-[#527d3e] disabled:opacity-50"
+                    >
+                      {t('historique.confirmSameButton')}
+                    </button>
+                  )}
                 </div>
 
                 <div className="overflow-x-auto">
@@ -533,13 +536,15 @@ export default function HistoriquePage() {
                           <td className="px-3 py-2 whitespace-nowrap">{r.age ?? '—'}</td>
                           <td className="px-3 py-2 whitespace-nowrap">{r.email || '—'}</td>
                           <td className="px-3 py-2 whitespace-nowrap">
-                            <button
-                              onClick={() => handleSeparate(r)}
-                              disabled={processingKey === r.id}
-                              className="px-2 py-1 border border-[#b03c2d] text-[#b03c2d] rounded text-sm hover:bg-red-50 disabled:opacity-50"
-                            >
-                              {t('historique.separateButton')}
-                            </button>
+                            {!readOnly && (
+                              <button
+                                onClick={() => handleSeparate(r)}
+                                disabled={processingKey === r.id}
+                                className="px-2 py-1 border border-[#b03c2d] text-[#b03c2d] rounded text-sm hover:bg-red-50 disabled:opacity-50"
+                              >
+                                {t('historique.separateButton')}
+                              </button>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -552,5 +557,13 @@ export default function HistoriquePage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function HistoriquePage() {
+  return (
+    <RequireAccess ecran="historique">
+      {(readOnly) => <HistoriqueContent readOnly={readOnly} />}
+    </RequireAccess>
   )
 }

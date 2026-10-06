@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
 const CHAMPS_CONFIG = [
   { key: 'montant_inscription', labelKey: 'settings.registrationFeeLabel', type: 'number' },
@@ -32,7 +33,7 @@ const emptyForm: FormState = {
   adresse_association: ''
 }
 
-export default function ParametresPage() {
+function ParametresContent({ readOnly }: { readOnly: boolean }) {
   const { t } = useTranslation()
   const [form, setForm] = useState<FormState>(emptyForm)
   const [loading, setLoading] = useState(true)
@@ -178,7 +179,8 @@ export default function ParametresPage() {
                 value={form[champ.key]}
                 onChange={(e) => updateField(champ.key, e.target.value)}
                 rows={3}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
+                disabled={readOnly}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] disabled:bg-gray-100 disabled:text-gray-500"
               />
             ) : (
               <input
@@ -186,7 +188,8 @@ export default function ParametresPage() {
                 value={form[champ.key]}
                 onChange={(e) => updateField(champ.key, e.target.value)}
                 placeholder={'placeholderKey' in champ ? t(champ.placeholderKey) : undefined}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
+                disabled={readOnly}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] disabled:bg-gray-100 disabled:text-gray-500"
               />
             )}
           </div>
@@ -204,15 +207,17 @@ export default function ParametresPage() {
           </div>
         )}
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
-          >
-            {saving ? t('settings.savingButton') : t('settings.saveButton')}
-          </button>
-        </div>
+        {!readOnly && (
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium disabled:opacity-50"
+            >
+              {saving ? t('settings.savingButton') : t('settings.saveButton')}
+            </button>
+          </div>
+        )}
       </form>
 
       <SectionDivider />
@@ -231,15 +236,17 @@ export default function ParametresPage() {
               className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#689e4e]/15 text-[#527d3e] rounded-full text-sm font-medium"
             >
               {pays}
-              <button
-                type="button"
-                onClick={() => removePays(pays)}
-                disabled={savingPays}
-                aria-label={t('settings.removeCountryLabel')}
-                className="text-[#527d3e] hover:text-red-600 disabled:opacity-50"
-              >
-                ×
-              </button>
+              {!readOnly && (
+                <button
+                  type="button"
+                  onClick={() => removePays(pays)}
+                  disabled={savingPays}
+                  aria-label={t('settings.removeCountryLabel')}
+                  className="text-[#527d3e] hover:text-red-600 disabled:opacity-50"
+                >
+                  ×
+                </button>
+              )}
             </span>
           ))}
           {paysList.length === 0 && (
@@ -253,6 +260,7 @@ export default function ParametresPage() {
           </div>
         )}
 
+        {!readOnly && (
         <div className="flex gap-2">
           <input
             type="text"
@@ -270,7 +278,16 @@ export default function ParametresPage() {
             {t('settings.addCountryButton')}
           </button>
         </div>
+        )}
       </div>
     </div>
+  )
+}
+
+export default function ParametresPage() {
+  return (
+    <RequireAccess ecran="settings">
+      {(readOnly) => <ParametresContent readOnly={readOnly} />}
+    </RequireAccess>
   )
 }

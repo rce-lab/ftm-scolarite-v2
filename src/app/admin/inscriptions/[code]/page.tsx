@@ -9,8 +9,9 @@ import { useParams, useRouter } from 'next/navigation'
 import { calculerStatistiquesDetaillees } from '@/app/public/inscription/data/niveauCalcul'
 import Link from 'next/link'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
-export default function InscriptionDetailPage() {
+function InscriptionDetailContent({ readOnly }: { readOnly: boolean }) {
   const { t } = useTranslation()
   const params = useParams()
   const router = useRouter()
@@ -240,19 +241,22 @@ export default function InscriptionDetailPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e]"
+                disabled={readOnly}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#689e4e] focus:border-[#689e4e] disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder={t('inscriptionsDetail.adminNotesPlaceholder')}
               />
             </div>
 
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={handleSave}
-                className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium"
-              >
-                {t('inscriptionsDetail.saveButton')}
-              </button>
-            </div>
+            {!readOnly && (
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={handleSave}
+                  className="px-6 py-2 bg-[#689e4e] text-white rounded-lg hover:bg-[#527d3e] font-medium"
+                >
+                  {t('inscriptionsDetail.saveButton')}
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Statistiques détaillées */}
@@ -420,5 +424,13 @@ export default function InscriptionDetailPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function InscriptionDetailPage() {
+  return (
+    <RequireAccess ecran="inscriptions">
+      {(readOnly) => <InscriptionDetailContent readOnly={readOnly} />}
+    </RequireAccess>
   )
 }

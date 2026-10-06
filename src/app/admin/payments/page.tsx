@@ -7,6 +7,7 @@ import { getConfig } from '@/lib/config'
 import { sendPaymentConfirmationAction } from '@/app/actions/emailActions'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
 const MODES_PAIEMENT = [
   { value: 'virement', labelKey: 'payments.modeTransfer' },
@@ -14,7 +15,7 @@ const MODES_PAIEMENT = [
   { value: 'autre', labelKey: 'payments.modeOther' }
 ] as const
 
-export default function PaymentsPage() {
+function PaymentsContent({ readOnly }: { readOnly: boolean }) {
   const { t } = useTranslation()
   const [tab, setTab] = useState<'attente' | 'historique'>('attente')
   const [enAttente, setEnAttente] = useState<any[]>([])
@@ -166,12 +167,14 @@ export default function PaymentsPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-base">{inscription.email_contact}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-base">{montantAttendu}€</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => ouvrirConfirmation(inscription)}
-                      className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
-                    >
-                      {t('payments.markPaidButton')}
-                    </button>
+                    {!readOnly && (
+                      <button
+                        onClick={() => ouvrirConfirmation(inscription)}
+                        className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
+                      >
+                        {t('payments.markPaidButton')}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -285,5 +288,13 @@ export default function PaymentsPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function PaymentsPage() {
+  return (
+    <RequireAccess ecran="payments">
+      {(readOnly) => <PaymentsContent readOnly={readOnly} />}
+    </RequireAccess>
   )
 }

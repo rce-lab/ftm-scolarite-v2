@@ -6,87 +6,70 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
+import { usePermissions } from '@/lib/usePermissions'
+import type { Ecran } from '@/lib/permissions'
 import logo from '../app/public/logo FTM officiel 2024.jpeg'
 
 interface NavEntry {
   key: string
   href: string
-  roles: string[] | null // null = actif pour tous les rôles
+  ecran: Ecran
 }
 
+// Un seul écran par entrée : le niveau d'accès (full/view/null) vient de
+// src/lib/permissions.ts via usePermissions(), plus de rôles codés en dur ici.
 const NAV_ENTRIES: NavEntry[] = [
-  { key: 'internalNav.dashboard', href: '/admin', roles: null },
-  { key: 'internalNav.inscriptions', href: '/admin/inscriptions', roles: null },
-  { key: 'internalNav.deliberation', href: '/teacher/deliberation', roles: null },
-  { key: 'internalNav.classes', href: '/teacher/classes', roles: ['responsable_scolarite', 'responsable_administratif', 'organisation_it'] },
-  { key: 'internalNav.enseignants', href: '/admin/enseignants', roles: null },
-  { key: 'internalNav.payments', href: '/admin/payments', roles: ['comptable', 'responsable_administratif', 'organisation_it'] },
-  { key: 'internalNav.settings', href: '/admin/parametres', roles: ['organisation_it'] },
-  { key: 'internalNav.reports', href: '/admin/rapports', roles: null },
-  { key: 'internalNav.historique', href: '/admin/historique', roles: null }
+  { key: 'internalNav.dashboard', href: '/admin', ecran: 'dashboard' },
+  { key: 'internalNav.inscriptions', href: '/admin/inscriptions', ecran: 'inscriptions' },
+  { key: 'internalNav.deliberation', href: '/teacher/deliberation', ecran: 'deliberation' },
+  { key: 'internalNav.classes', href: '/teacher/classes', ecran: 'classes' },
+  { key: 'internalNav.enseignants', href: '/admin/enseignants', ecran: 'enseignants' },
+  { key: 'internalNav.payments', href: '/admin/payments', ecran: 'payments' },
+  { key: 'internalNav.settings', href: '/admin/parametres', ecran: 'settings' },
+  { key: 'internalNav.reports', href: '/admin/rapports', ecran: 'reports' },
+  { key: 'internalNav.historique', href: '/admin/historique', ecran: 'historique' }
 ]
 
 export default function InternalNav() {
   const router = useRouter()
   const { t, language, setLanguage } = useTranslation()
+  const { role, niveau } = usePermissions()
   const [email, setEmail] = useState<string | null>(null)
-  const [role, setRole] = useState<string | null>(null)
 
+  // L'email reste chargé ici (affichage seul) ; le rôle et les niveaux d'accès
+  // viennent tous les deux de usePermissions(), seule source de vérité.
   useEffect(() => {
-    loadUtilisateur()
+    supabase.auth.getUser().then(({ data: { user } }) => setEmail(user?.email || null))
   }, [])
-
-  const loadUtilisateur = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-
-      setEmail(user.email || null)
-
-      const { data, error } = await supabase
-        .from('utilisateurs')
-        .select('role')
-        .eq('auth_user_id', user.id)
-        .single()
-
-      if (error) throw error
-      setRole(data?.role || null)
-    } catch (error) {
-      console.error('Erreur:', error)
-    }
-  }
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/login')
   }
 
-  const estActif = (entry: NavEntry) => !entry.roles || (role !== null && entry.roles.includes(role))
-
   return (
     <nav className="bg-[#689e4e] text-white px-4 py-3">
       <div className="container mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div className="flex flex-wrap items-center gap-1">
           <Image src={logo} alt={t('internalNav.logoAlt')} className="h-7 w-auto mr-2" />
-          {NAV_ENTRIES.map((entry) => (
-            estActif(entry) ? (
+          {NAV_ENTRIES.map((entry) => {
+            const niveauEcran = niveau(entry.ecran)
+            // null = entrée masquée (plus de grisé) ; 'view' reste cliquable mais
+            // porte un marqueur "lecture seule" traduit à côté du libellé.
+            if (niveauEcran === null) return null
+            return (
               <Link
                 key={entry.href}
                 href={entry.href}
                 className="px-3 py-1.5 rounded text-sm hover:bg-white/10"
               >
                 {t(entry.key)}
+                {niveauEcran === 'view' && (
+                  <span className="ml-1 text-white/70 text-xs">{t('access.readOnlyNavMarker')}</span>
+                )}
               </Link>
-            ) : (
-              <span
-                key={entry.href}
-                className="px-3 py-1.5 rounded text-sm text-white/40 cursor-not-allowed"
-                title={t('internalNav.accessDeniedTooltip')}
-              >
-                {t(entry.key)}
-              </span>
             )
-          ))}
+          })}
         </div>
 
         <div className="flex items-center gap-3 text-sm">

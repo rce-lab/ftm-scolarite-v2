@@ -8,8 +8,9 @@ import { getConfig } from '@/lib/config'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
 import { genererRapportPdf } from '@/lib/pdf/rapportPdf'
+import RequireAccess from '@/components/RequireAccess'
 
-export default function RapportClassesPage() {
+function RapportClassesContent() {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [classes, setClasses] = useState<any[]>([])
@@ -171,5 +172,15 @@ export default function RapportClassesPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Rapport en lecture seule par nature (export CSV/PDF) : toujours 'full' pour tout
+// rôle qui y a accès (jamais 'view' dans ROLE_PERMISSIONS).
+export default function RapportClassesPage() {
+  return (
+    <RequireAccess ecran="reports">
+      {() => <RapportClassesContent />}
+    </RequireAccess>
   )
 }

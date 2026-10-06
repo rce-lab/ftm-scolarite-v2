@@ -8,6 +8,7 @@ import { getConfig } from '@/lib/config'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
 import { genererRapportPdf } from '@/lib/pdf/rapportPdf'
+import RequireAccess from '@/components/RequireAccess'
 
 // Une "année scolaire" (ex. "2026-2027") n'est pas une colonne de `paiements` —
 // elle se déduit de la date du paiement (date_paiement, ou created_at à défaut)
@@ -28,7 +29,7 @@ function dateEffective(p: any): Date {
   return new Date(p.date_paiement || p.created_at)
 }
 
-export default function RapportPaiementsPage() {
+function RapportPaiementsContent() {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [paiements, setPaiements] = useState<any[]>([])
@@ -210,5 +211,15 @@ export default function RapportPaiementsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Rapport en lecture seule par nature (export CSV/PDF) : toujours 'full' pour tout
+// rôle qui y a accès (jamais 'view' dans ROLE_PERMISSIONS).
+export default function RapportPaiementsPage() {
+  return (
+    <RequireAccess ecran="reports">
+      {() => <RapportPaiementsContent />}
+    </RequireAccess>
   )
 }

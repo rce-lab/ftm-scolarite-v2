@@ -32,7 +32,8 @@ const SECTION_TITLES = {
   deliberation: 'Délibération (conseil des enseignants)',
   classes: 'Gestion des classes',
   reports: 'Rapports',
-  emailAdminNotification: 'Email de notification interne (nouvelle inscription)'
+  emailAdminNotification: 'Email de notification interne (nouvelle inscription)',
+  access: "Contrôle d'accès par rôle (RequireAccess, InternalNav)"
 }
 
 const SECTION_HEADER_RE = /^ {2}([A-Za-z0-9_]+):\s*\{\s*$/

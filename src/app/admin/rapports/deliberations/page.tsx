@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
 import { genererRapportSectionsPdf, SectionRapportPdf } from '@/lib/pdf/rapportPdf'
+import RequireAccess from '@/components/RequireAccess'
 
 interface LigneDeliberation {
   id: string
@@ -51,7 +52,7 @@ const niveauxDifferents = (niveauEleve: string, niveauClasse: string): boolean =
   return !niveauxClasse.includes(niveauEleve.toUpperCase().trim())
 }
 
-export default function RapportDeliberationsPage() {
+function RapportDeliberationsContent() {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [dateSeance, setDateSeance] = useState(aujourdhuiLocal())
@@ -442,5 +443,15 @@ export default function RapportDeliberationsPage() {
         </>
       )}
     </div>
+  )
+}
+
+// Rapport en lecture seule par nature (export CSV/PDF) : toujours 'full' pour tout
+// rôle qui y a accès (jamais 'view' dans ROLE_PERMISSIONS).
+export default function RapportDeliberationsPage() {
+  return (
+    <RequireAccess ecran="reports">
+      {() => <RapportDeliberationsContent />}
+    </RequireAccess>
   )
 }

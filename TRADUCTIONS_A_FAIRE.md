@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-06 — 15 sections, 507 entrées.
+Généré le 2026-10-06 — 16 sections, 512 entrées.
 
 ---
 
@@ -589,3 +589,13 @@ Généré le 2026-10-06 — 15 sections, 507 entrées.
 | emailAdminNotification.suggestedLevelLabel | Niveau suggéré | Lentam-pahaizana voatolotra |
 | emailAdminNotification.viewDetailsButton | 👁️ Voir les détails de l'inscription | 👁️ Jereo ny antsipirian'ny fisoratana anarana |
 | emailAdminNotification.autoNotice | Cette notification a été envoyée automatiquement par le système d'inscription FTM. | Nalefan'ny rafi-pisoratana anaran'ny FTM ho azy ity fampahafantarana ity. |
+
+## Contrôle d'accès par rôle (RequireAccess, InternalNav)
+
+| Clé | Français | Malgache |
+|---|---|---|
+| access.deniedTitle | Accès non autorisé | Tsy manana alalana hiditra |
+| access.deniedMessage | Vous n'avez pas les droits nécessaires pour accéder à cet écran. Contactez un administrateur si vous pensez qu'il s'agit d'une erreur. | Tsy manana ny alalana ilaina hidirana eto ianao. Mifandraisa amin'ny mpitantana raha heverinao fa hadisoana ity. |
+| access.readOnlyBanner | Lecture seule : vous pouvez consulter cet écran, mais pas le modifier. | Famakiana fotsiny : azonao jerena ity pejy ity, saingy tsy azo ovaina. |
+| access.readOnlyNavMarker | (lecture seule) | (famakiana fotsiny) |
+| access.readOnlyActionTooltip | Action non disponible en lecture seule | Tsy azo atao ity hetsika ity amin'ny famakiana fotsiny |

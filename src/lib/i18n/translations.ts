@@ -641,5 +641,15 @@ export const translations = {
     suggestedLevelLabel: { fr: 'Niveau suggéré', mg: 'Lentam-pahaizana voatolotra' },
     viewDetailsButton: { fr: "👁️ Voir les détails de l'inscription", mg: "👁️ Jereo ny antsipirian'ny fisoratana anarana" },
     autoNotice: { fr: "Cette notification a été envoyée automatiquement par le système d'inscription FTM.", mg: "Nalefan'ny rafi-pisoratana anaran'ny FTM ho azy ity fampahafantarana ity." }
+  },
+
+  // Contrôle d'accès par rôle (src/lib/permissions.ts, RequireAccess, InternalNav).
+  // Traductions malgaches en brouillon, non encore validées par un locuteur natif.
+  access: {
+    deniedTitle: { fr: 'Accès non autorisé', mg: 'Tsy manana alalana hiditra' },
+    deniedMessage: { fr: "Vous n'avez pas les droits nécessaires pour accéder à cet écran. Contactez un administrateur si vous pensez qu'il s'agit d'une erreur.", mg: "Tsy manana ny alalana ilaina hidirana eto ianao. Mifandraisa amin'ny mpitantana raha heverinao fa hadisoana ity." },
+    readOnlyBanner: { fr: 'Lecture seule : vous pouvez consulter cet écran, mais pas le modifier.', mg: 'Famakiana fotsiny : azonao jerena ity pejy ity, saingy tsy azo ovaina.' },
+    readOnlyNavMarker: { fr: '(lecture seule)', mg: '(famakiana fotsiny)' },
+    readOnlyActionTooltip: { fr: 'Action non disponible en lecture seule', mg: "Tsy azo atao ity hetsika ity amin'ny famakiana fotsiny" }
   }
 } as const

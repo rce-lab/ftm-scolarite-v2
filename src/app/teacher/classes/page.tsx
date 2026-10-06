@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { translations } from '@/lib/i18n/translations'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const COULEURS = [
@@ -63,7 +64,7 @@ const emptyForm = {
   pays: 'France'
 }
 
-export default function TeacherClassesPage() {
+function TeacherClassesContent({ readOnly }: { readOnly: boolean }) {
   const { t, language } = useTranslation()
   const [classes, setClasses] = useState<any[]>([])
   const [comptesVisio, setComptesVisio] = useState<any[]>([])
@@ -318,7 +319,10 @@ export default function TeacherClassesPage() {
         </h1>
       </div>
 
-      {/* Formulaire de création */}
+      {/* Formulaire de création/édition : masqué en lecture seule plutôt que désactivé
+          champ par champ (nombreux champs, dont la sélection multiple d'enseignants) —
+          la liste des classes ci-dessous reste consultable dans tous les cas. */}
+      {!readOnly && (
       <div className="bg-white rounded shadow p-6">
         <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
           <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
@@ -529,6 +533,7 @@ export default function TeacherClassesPage() {
           </div>
         </form>
       </div>
+      )}
 
       <SectionDivider />
 
@@ -589,13 +594,15 @@ export default function TeacherClassesPage() {
                     : '—'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-base">
-                  <button
-                    type="button"
-                    onClick={() => commencerEdition(classe)}
-                    className="text-[#689e4e] hover:text-[#527d3e] font-medium"
-                  >
-                    {EDIT_TEXTS.editButton[language]}
-                  </button>
+                  {!readOnly && (
+                    <button
+                      type="button"
+                      onClick={() => commencerEdition(classe)}
+                      className="text-[#689e4e] hover:text-[#527d3e] font-medium"
+                    >
+                      {EDIT_TEXTS.editButton[language]}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -610,5 +617,13 @@ export default function TeacherClassesPage() {
         </table>
       </div>
     </div>
+  )
+}
+
+export default function TeacherClassesPage() {
+  return (
+    <RequireAccess ecran="classes">
+      {(readOnly) => <TeacherClassesContent readOnly={readOnly} />}
+    </RequireAccess>
   )
 }

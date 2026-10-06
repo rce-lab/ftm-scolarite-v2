@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import SectionDivider from '@/components/SectionDivider'
+import RequireAccess from '@/components/RequireAccess'
 
 // Textes ajoutés pour l'édition — translations.ts hors périmètre pour cette tâche.
 // editButton/cancelButton/saveEditButton/savingEditButton/tableActions réutilisent des
@@ -30,7 +31,7 @@ const emptyForm = {
   remarques: ''
 }
 
-export default function EnseignantsPage() {
+function EnseignantsContent({ readOnly }: { readOnly: boolean }) {
   const { t, language } = useTranslation()
   const [enseignants, setEnseignants] = useState<any[]>([])
   const [classesDisponibles, setClassesDisponibles] = useState<any[]>([])
@@ -179,7 +180,8 @@ export default function EnseignantsPage() {
         </h1>
       </div>
 
-      {/* Formulaire d'ajout */}
+      {/* Formulaire d'ajout/édition : masqué en lecture seule (la liste reste visible). */}
+      {!readOnly && (
       <div className="bg-white rounded shadow p-6">
         <h2 className="text-lg font-bold mb-4 flex items-center gap-3">
           <span className="w-1 self-stretch bg-[#689e4e] rounded-sm"></span>
@@ -290,6 +292,7 @@ export default function EnseignantsPage() {
           </div>
         </form>
       </div>
+      )}
 
       <SectionDivider />
 
@@ -327,13 +330,15 @@ export default function EnseignantsPage() {
                 </td>
                 <td className="px-6 py-4 text-base max-w-xs">{enseignant.remarques || '—'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <button
-                    type="button"
-                    onClick={() => commencerEdition(enseignant)}
-                    className="text-[#689e4e] hover:text-[#527d3e] font-medium"
-                  >
-                    {EDIT_TEXTS.editButton[language]}
-                  </button>
+                  {!readOnly && (
+                    <button
+                      type="button"
+                      onClick={() => commencerEdition(enseignant)}
+                      className="text-[#689e4e] hover:text-[#527d3e] font-medium"
+                    >
+                      {EDIT_TEXTS.editButton[language]}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -348,5 +353,13 @@ export default function EnseignantsPage() {
         </table>
       </div>
     </div>
+  )
+}
+
+export default function EnseignantsPage() {
+  return (
+    <RequireAccess ecran="enseignants">
+      {(readOnly) => <EnseignantsContent readOnly={readOnly} />}
+    </RequireAccess>
   )
 }

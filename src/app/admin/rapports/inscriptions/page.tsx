@@ -9,11 +9,12 @@ import { getStatutLabel } from '@/lib/statuts'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import { downloadCSV } from '@/lib/csv'
 import { genererRapportPdf } from '@/lib/pdf/rapportPdf'
+import RequireAccess from '@/components/RequireAccess'
 
 const NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 const STATUTS = ['pending_review', 'approved', 'rejected']
 
-export default function RapportInscriptionsPage() {
+function RapportInscriptionsContent() {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [inscriptions, setInscriptions] = useState<any[]>([])
@@ -213,5 +214,15 @@ export default function RapportInscriptionsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Rapport en lecture seule par nature (export CSV/PDF) : toujours 'full' pour tout
+// rôle qui y a accès (jamais 'view' dans ROLE_PERMISSIONS).
+export default function RapportInscriptionsPage() {
+  return (
+    <RequireAccess ecran="reports">
+      {() => <RapportInscriptionsContent />}
+    </RequireAccess>
   )
 }
