@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-06 — 15 sections, 503 entrées.
+Généré le 2026-10-06 — 15 sections, 507 entrées.
 
 ---
 
@@ -546,7 +546,9 @@ Généré le 2026-10-06 — 15 sections, 503 entrées.
 | reports.paymentStatusPending | En attente | Miandry |
 | reports.paymentStatusPaid | Payé | Voaloa |
 | reports.deliberationsTitle | Délibérations du jour | Fanapahan-kevitry ny andro |
+| reports.deliberationsCardDescription | Inscrits et réinscrits traités lors d'une séance du conseil des enseignants, avec niveau et classe attribuée. | Ireo voasoratra sy nisoratra indray nodinihina nandritra ny fivorian'ny filankevitry ny mpampianatra, miaraka amin'ny lentam-pahaizana sy ny kilasy nomena. |
 | reports.filterSessionDate | Date de séance | Datin'ny fivoriana |
+| reports.sessionDateHint | Dossiers mis à jour ce jour-là, de 00:00 à 23:59 (heure locale : {fuseau}). | Antontan-taratasy novaina tamin'io andro io, 00:00 ka hatramin'ny 23:59 (ora eo an-toerana : {fuseau}). |
 | reports.sessionLabel | Séance du {date} | Fivoriana tamin'ny {date} |
 | reports.blockNew | Nouveaux inscrits | Mpianatra vaovao voasoratra |
 | reports.blockReinscription | Réinscrits | Nisoratra anarana indray |
@@ -562,6 +564,7 @@ Généré le 2026-10-06 — 15 sections, 503 entrées.
 | reports.colAge | Âge | Taona |
 | reports.colRetainedLevel | Niveau retenu | Lentam-pahaizana voatana |
 | reports.colRemark | Remarque | Fanamarihana |
+| reports.remarkLevelGap | Niveau de l'élève ({eleve}) différent du niveau de la classe ({classe}) | Tsy mitovy ny lentam-pahaizan'ny mpianatra ({eleve}) sy ny an'ny kilasy ({classe}) |
 | reports.remarkPendingDecision | Décision en attente | Miandry fanapahan-kevitra |
 | reports.statusApproved | Validé | Voamarina |
 | reports.statusRejected | Rejeté | Nolavina |
@@ -570,6 +573,7 @@ Généré le 2026-10-06 — 15 sections, 503 entrées.
 | reports.legendPending | En bleu : dossier en attente de décision | Manga : antontan-taratasy miandry fanapahan-kevitra |
 | reports.resetSortButton | Réinitialiser le tri | Averina ny filaharana voalohany |
 | reports.sortColumnHint | Cliquer pour trier (croissant / décroissant) | Tsindrio raha handahatra (miakatra / midina) |
+| reports.legendLevelChanged | En ambre : niveau retenu différent du niveau de la classe | Volomboasary : lentam-pahaizana voatana tsy mitovy amin'ny an'ny kilasy |
 
 ## Email de notification interne (nouvelle inscription)
 

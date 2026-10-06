@@ -599,15 +599,9 @@ export const translations = {
 
     // Rapport « Délibérations du jour » — mg proposé à valider (sauf Matricule/Âge/statuts, repris de clés validées)
     deliberationsTitle: { fr: 'Délibérations du jour', mg: 'Fanapahan-kevitry ny andro' },
-    deliberationsCardDescription: {
-      fr: "Inscrits et réinscrits traités lors d'une séance du conseil des enseignants, avec niveau et classe attribuée.",
-      mg: "Ireo voasoratra sy nisoratra indray nodinihina nandritra ny fivorian'ny filankevitry ny mpampianatra, miaraka amin'ny lentam-pahaizana sy ny kilasy nomena."
-    },
+    deliberationsCardDescription: { fr: "Inscrits et réinscrits traités lors d'une séance du conseil des enseignants, avec niveau et classe attribuée.", mg: "Ireo voasoratra sy nisoratra indray nodinihina nandritra ny fivorian'ny filankevitry ny mpampianatra, miaraka amin'ny lentam-pahaizana sy ny kilasy nomena." },
     filterSessionDate: { fr: 'Date de séance', mg: "Datin'ny fivoriana" },
-    sessionDateHint: {
-      fr: 'Dossiers mis à jour ce jour-là, de 00:00 à 23:59 (heure locale : {fuseau}).',
-      mg: "Antontan-taratasy novaina tamin'io andro io, 00:00 ka hatramin'ny 23:59 (ora eo an-toerana : {fuseau})."
-    },
+    sessionDateHint: { fr: 'Dossiers mis à jour ce jour-là, de 00:00 à 23:59 (heure locale : {fuseau}).', mg: "Antontan-taratasy novaina tamin'io andro io, 00:00 ka hatramin'ny 23:59 (ora eo an-toerana : {fuseau})." },
     sessionLabel: { fr: 'Séance du {date}', mg: "Fivoriana tamin'ny {date}" },
     blockNew: { fr: 'Nouveaux inscrits', mg: 'Mpianatra vaovao voasoratra' },
     blockReinscription: { fr: 'Réinscrits', mg: 'Nisoratra anarana indray' },
@@ -623,10 +617,7 @@ export const translations = {
     colAge: { fr: 'Âge', mg: 'Taona' },
     colRetainedLevel: { fr: 'Niveau retenu', mg: 'Lentam-pahaizana voatana' },
     colRemark: { fr: 'Remarque', mg: 'Fanamarihana' },
-    remarkLevelGap: {
-      fr: "Niveau de l'élève ({eleve}) différent du niveau de la classe ({classe})",
-      mg: "Tsy mitovy ny lentam-pahaizan'ny mpianatra ({eleve}) sy ny an'ny kilasy ({classe})"
-    },
+    remarkLevelGap: { fr: "Niveau de l'élève ({eleve}) différent du niveau de la classe ({classe})", mg: "Tsy mitovy ny lentam-pahaizan'ny mpianatra ({eleve}) sy ny an'ny kilasy ({classe})" },
     remarkPendingDecision: { fr: 'Décision en attente', mg: 'Miandry fanapahan-kevitra' },
     statusApproved: { fr: 'Validé', mg: 'Voamarina' },
     statusRejected: { fr: 'Rejeté', mg: 'Nolavina' },
@@ -636,10 +627,7 @@ export const translations = {
     // Tri des tableaux du rapport Délibérations — mg proposé à valider
     resetSortButton: { fr: 'Réinitialiser le tri', mg: 'Averina ny filaharana voalohany' },
     sortColumnHint: { fr: 'Cliquer pour trier (croissant / décroissant)', mg: 'Tsindrio raha handahatra (miakatra / midina)' },
-    legendLevelChanged: {
-      fr: 'En ambre : niveau retenu différent du niveau suggéré',
-      mg: "Volomboasary : lentam-pahaizana voatana tsy mitovy amin'ny voatolotra"
-    }
+    legendLevelChanged: { fr: 'En ambre : niveau retenu différent du niveau de la classe', mg: "Volomboasary : lentam-pahaizana voatana tsy mitovy amin'ny an'ny kilasy" }
   },
 
   emailAdminNotification: {

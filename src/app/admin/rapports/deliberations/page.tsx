@@ -147,9 +147,9 @@ export default function RapportDeliberationsPage() {
 
   const enAttente = (l: LigneDeliberation) => l.status === 'pending_review'
   const niveauEleve = (l: LigneDeliberation) => l.niveauRetenu || l.niveauSuggere
+  // Écart niveau élève / niveau de la classe : signalé discrètement (cellule Niveau
+  // retenu en ambre + ⚠), plus listé dans « Points à confirmer » ni en remarque
   const ecartNiveauClasse = (l: LigneDeliberation) => !!l.classe && niveauxDifferents(niveauEleve(l), l.niveauClasse)
-  const niveauModifie = (l: LigneDeliberation) =>
-    !!l.niveauRetenu && !!l.niveauSuggere && l.niveauRetenu.toUpperCase() !== l.niveauSuggere.toUpperCase()
 
   const libelleStatut = (status: string): string => {
     switch (status) {
@@ -161,14 +161,7 @@ export default function RapportDeliberationsPage() {
     }
   }
 
-  const remarque = (l: LigneDeliberation): string => {
-    const remarques: string[] = []
-    if (ecartNiveauClasse(l)) {
-      remarques.push(t('reports.remarkLevelGap').replace('{eleve}', niveauEleve(l)).replace('{classe}', l.niveauClasse))
-    }
-    if (enAttente(l)) remarques.push(t('reports.remarkPendingDecision'))
-    return remarques.join(' ; ')
-  }
+  const remarque = (l: LigneDeliberation): string => (enAttente(l) ? t('reports.remarkPendingDecision') : '')
 
   const parNom = (a: LigneDeliberation, b: LigneDeliberation) =>
     a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' }) || a.prenom.localeCompare(b.prenom, 'fr', { sensitivity: 'base' })
@@ -196,14 +189,14 @@ export default function RapportDeliberationsPage() {
   // Insensible à la casse et aux accents ; numeric : tri naturel des codes (C02 avant C10)
   const comparer = (a: string, b: string) => a.localeCompare(b, 'fr', { sensitivity: 'base', numeric: true })
 
-  // Tri par défaut : enseignant titulaire → code classe → prénom → nom ; dossiers sans
+  // Tri par défaut : enseignant titulaire → code classe → nom → prénom de l'élève ; dossiers sans
   // classe attribuée (en attente) en dernier
   const triParDefaut = (a: LigneDeliberation, b: LigneDeliberation) =>
     (a.classe ? 0 : 1) - (b.classe ? 0 : 1) ||
     comparer(a.titulaire, b.titulaire) ||
     comparer(a.codeClasse, b.codeClasse) ||
-    comparer(a.prenom, b.prenom) ||
-    comparer(a.nom, b.nom)
+    comparer(a.nom, b.nom) ||
+    comparer(a.prenom, b.prenom)
 
   // Tri par colonne (valeurs telles qu'affichées) ; cellules vides toujours en dernier,
   // départage par le tri par défaut pour un ordre stable
@@ -239,11 +232,8 @@ export default function RapportDeliberationsPage() {
     { cle: 'reinscrits', titre: t('reports.blockReinscription'), lignes: lignesDuBloc('reinscrits', true) }
   ]
 
-  // Points à confirmer : écarts de niveau élève/classe, puis dossiers en attente
-  const pointsAConfirmer = [
-    ...lignes.filter(ecartNiveauClasse).sort(parNom),
-    ...lignes.filter((l) => enAttente(l) && !ecartNiveauClasse(l)).sort(parNom)
-  ]
+  // Points à confirmer : dossiers en attente uniquement
+  const pointsAConfirmer = lignes.filter(enAttente).sort(parNom)
   const colonnesPoints = [
     t('reports.colBlock'), t('reports.colMatricule'), t('reports.colName'), t('reports.colFirstName'),
     t('reports.colAssignedClass'), t('reports.colTeachers'), t('reports.colRemark')
@@ -272,7 +262,7 @@ export default function RapportDeliberationsPage() {
       lignes: bloc.lignes.map(ligneDe),
       lignesSurlignees: bloc.lignes.map((l, idx) => (enAttente(l) ? idx : -1)).filter((idx) => idx >= 0),
       cellulesSurlignees: bloc.lignes
-        .map((l, idx): [number, number] | null => (niveauModifie(l) ? [idx, INDEX_NIVEAU_RETENU] : null))
+        .map((l, idx): [number, number] | null => (ecartNiveauClasse(l) ? [idx, INDEX_NIVEAU_RETENU] : null))
         .filter((c): c is [number, number] => c !== null),
       messageVide: t('reports.noData')
     }))
@@ -407,7 +397,16 @@ export default function RapportDeliberationsPage() {
                         <td className="px-3 py-2 whitespace-nowrap">{l.prenom}</td>
                         <td className="px-3 py-2 whitespace-nowrap">{l.age ?? '—'}</td>
                         <td className="px-3 py-2 whitespace-nowrap">{l.niveauSuggere || '—'}</td>
-                        <td className={`px-3 py-2 whitespace-nowrap ${niveauModifie(l) ? 'bg-amber-200 font-medium' : ''}`}>{l.niveauRetenu || '—'}</td>
+                        {ecartNiveauClasse(l) ? (
+                          <td
+                            className="px-3 py-2 whitespace-nowrap bg-amber-200 font-medium"
+                            title={t('reports.remarkLevelGap').replace('{eleve}', niveauEleve(l)).replace('{classe}', l.niveauClasse)}
+                          >
+                            {l.niveauRetenu || '—'} <span className="text-amber-700">⚠</span>
+                          </td>
+                        ) : (
+                          <td className="px-3 py-2 whitespace-nowrap">{l.niveauRetenu || '—'}</td>
+                        )}
                         <td className="px-3 py-2 whitespace-nowrap">{l.classe || '—'}</td>
                         <td className="px-3 py-2 whitespace-nowrap">{l.enseignants || '—'}</td>
                         <td className="px-3 py-2 whitespace-nowrap">{libelleStatut(l.status)}</td>
