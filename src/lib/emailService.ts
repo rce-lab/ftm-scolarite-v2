@@ -290,32 +290,61 @@ export async function sendDecisionEmail(
   }
 }
 
-// Fonction pour envoyer la confirmation de paiement
+// Confirmation d'enregistrement du paiement — ce n'est pas encore le reçu. Copie
+// limitée aux deux personnes en charge des paiements (pas ADMINS_EN_COPIE_CANDIDATS).
+const COPIE_CONFIRMATION_PAIEMENT = [
+  't.rakotomavo@free.fr',
+  'sonya.rakotonirina@gmail.com'
+]
+
+const LIBELLES_MODE_PAIEMENT: Record<string, string> = {
+  virement: 'Virement',
+  especes: 'Espèces',
+  autre: 'Autre'
+}
+
+// datePaiement au format yyyy-mm-dd (saisie de l'opérateur) -> jj/mm/aaaa, sans
+// passer par Date (évite tout décalage d'un jour lié au fuseau du serveur)
+function formaterDatePaiement(datePaiement: string): string {
+  const [annee, mois, jour] = datePaiement.slice(0, 10).split('-')
+  return jour && mois && annee ? `${jour}/${mois}/${annee}` : datePaiement
+}
+
 export async function sendPaymentConfirmation(
   studentEmail: string,
   studentName: string,
   studentCode: string,
-  amount: number
+  amount: number,
+  mode: string,
+  datePaiement: string
 ) {
   try {
     await transporter.sendMail({
       from: FROM_ADDRESS,
       to: studentEmail,
-      cc: ADMINS_EN_COPIE_CANDIDATS,
-      subject: 'Confirmation de paiement - FTM Malagasy',
+      cc: COPIE_CONFIRMATION_PAIEMENT,
+      subject: `Paiement enregistré - ${studentCode} - FTM Malagasy`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Paiement confirmé</h2>
+          <h2>Paiement enregistré</h2>
           <p>Bonjour ${studentName},</p>
-          <p>Votre paiement de ${amount}€ pour l'inscription ${studentCode} a bien été enregistré.</p>
-          <p>Votre inscription est maintenant complète.</p>
+          <p>Nous vous confirmons l'enregistrement de votre paiement :</p>
+          <ul>
+            <li>Code étudiant : <strong>${studentCode}</strong></li>
+            <li>Date de paiement : ${formaterDatePaiement(datePaiement)}</li>
+            <li>Montant : ${amount} €</li>
+            <li>Mode de paiement : ${LIBELLES_MODE_PAIEMENT[mode] || mode}</li>
+          </ul>
+          <p>Ce message n'est pas un reçu : celui-ci vous sera transmis séparément.</p>
+          <p>Cordialement,<br><strong>L'équipe FTM Malagasy</strong></p>
         </div>
       `
     })
-    
+
     return { success: true }
   } catch (error) {
     console.error('Erreur envoi email paiement:', error)
-    return { success: false, error }
+    // Message seul : l'objet Error ne traverse pas proprement la frontière server action
+    return { success: false, error: error instanceof Error ? error.message : String(error) }
   }
 }

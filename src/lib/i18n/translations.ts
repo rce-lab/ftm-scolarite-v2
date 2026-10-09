@@ -265,7 +265,24 @@ export const translations = {
     cancelButton: { fr: 'Annuler', mg: 'Foano' },
     savingButton: { fr: 'Enregistrement...', mg: 'Eo am-pitahirizana...' },
     confirmButton: { fr: 'Confirmer le paiement', mg: 'Manamarina ny fandoavam-bola' },
-    saveErrorAlert: { fr: "Erreur lors de l'enregistrement du paiement : {message}", mg: 'Hadisoana teo am-pitahirizana ny fandoavam-bola : {message}' }
+    saveErrorAlert: { fr: "Erreur lors de l'enregistrement du paiement : {message}", mg: 'Hadisoana teo am-pitahirizana ny fandoavam-bola : {message}' },
+    // Date de paiement, rang fratrie, erreurs et renvoi de confirmation — mg proposé à valider
+    paymentDateLabel: { fr: 'Date de paiement', mg: 'Daty nandoavana' },
+    siblingRankLabel: { fr: 'Rang dans la fratrie', mg: "Laharana eo amin'ny mpiray tampo" },
+    siblingRank1: { fr: '1er élève', mg: 'Mpianatra voalohany' },
+    siblingRank2: { fr: '2e élève de la fratrie', mg: "Mpianatra faharoa amin'ny mpiray tampo" },
+    siblingRank3Plus: { fr: '3e élève et suivants', mg: 'Mpianatra fahatelo sy ny manaraka' },
+    errorDateRequired: { fr: 'La date de paiement est obligatoire.', mg: 'Tsy maintsy ampidirina ny daty nandoavana.' },
+    errorFutureDate: { fr: 'La date de paiement ne peut pas être dans le futur.', mg: "Tsy azo atao amin'ny ho avy ny daty nandoavana." },
+    errorInvalidAmount: { fr: 'Le montant est invalide : il doit être supérieur à 0.', mg: 'Tsy mety ny vola : tsy maintsy mihoatra ny 0.' },
+    errorAlreadyPaid: { fr: 'Ce dossier est déjà marqué comme payé. La liste a été rechargée.', mg: 'Efa voamarika ho voaloa ity antontan-taratasy ity. Novaozina ny lisitra.' },
+    savedAndEmailSent: { fr: 'Paiement de {nom} enregistré, confirmation envoyée par email.', mg: "Voatahiry ny fandoavam-bolan'i {nom}, nalefa tamin'ny mailaka ny fanamarinana." },
+    emailFailedWarning: { fr: "Paiement de {nom} enregistré, mais l'email de confirmation n'a pas pu être envoyé. Utilisez « Renvoyer la confirmation » dans l'onglet Historique.", mg: "Voatahiry ny fandoavam-bolan'i {nom}, saingy tsy lasa ny mailaka fanamarinana. Ampiasao ny « Alefaso indray ny fanamarinana » ao amin'ny tabilao Fisesin'ny fandoavam-bola." },
+    resendConfirmationButton: { fr: 'Renvoyer la confirmation', mg: 'Alefaso indray ny fanamarinana' },
+    resendingButton: { fr: 'Envoi...', mg: 'Eo am-pandefasana...' },
+    resendSuccess: { fr: 'Confirmation renvoyée à {nom}.', mg: "Nalefa indray tany amin'i {nom} ny fanamarinana." },
+    resendFailed: { fr: "Échec du renvoi de la confirmation à {nom}. Réessayez plus tard.", mg: "Tsy lasa ny fanamarinana nalefa indray tany amin'i {nom}. Andramo indray rehefa afaka kelikely." },
+    dismissButton: { fr: 'Fermer', mg: 'Hidio' }
   },
 
   // Traductions malgaches des clés countriesTitle/noCountriesYet/removeCountryLabel/

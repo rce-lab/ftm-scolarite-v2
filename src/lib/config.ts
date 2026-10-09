@@ -3,6 +3,9 @@ import { supabase } from './supabase/client'
 export interface Config {
   email_communication: string
   montant_inscription: number
+  // Tarifs fratrie (2e élève, 3e et suivants) — défauts 25 / 20 € si absents de la table
+  montant_fratrie_2?: number
+  montant_fratrie_3_et_plus?: number
   rib_banque: string
   annee_scolaire_courante: string
   prefixe_code_etudiant: string
@@ -18,6 +21,8 @@ let cachedConfig: Config | null = null
 function getDefaultConfig(): Config {
   return {
     montant_inscription: 30,
+    montant_fratrie_2: 25,
+    montant_fratrie_3_et_plus: 20,
     annee_scolaire_courante: '2026-2027',
     prefixe_code_etudiant: 'FTM-26',
     email_communication: 'scolarite.ftm@gmail.com',

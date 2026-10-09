@@ -26,7 +26,9 @@ export async function sendPaymentConfirmationAction(
   studentEmail: string,
   studentName: string,
   studentCode: string,
-  amount: number
+  amount: number,
+  mode: string,
+  datePaiement: string
 ) {
-  return sendPaymentConfirmation(studentEmail, studentName, studentCode, amount)
+  return sendPaymentConfirmation(studentEmail, studentName, studentCode, amount, mode, datePaiement)
 }
