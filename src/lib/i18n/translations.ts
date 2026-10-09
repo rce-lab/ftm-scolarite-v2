@@ -248,7 +248,8 @@ export const translations = {
     tableEmail: { fr: 'Email', mg: 'Mailaka' },
     tableExpectedAmount: { fr: 'Montant attendu', mg: 'Vola andrasana' },
     tableAction: { fr: 'Action', mg: 'Hetsika' },
-    markPaidButton: { fr: 'Marquer payé', mg: 'Mariho hoe efa voaloa' },
+    // FR changé en « Enregistrer le paiement » le 2026-10-09 — mg (« Marquer payé ») à revoir/valider
+    markPaidButton: { fr: 'Enregistrer le paiement', mg: 'Mariho hoe efa voaloa' },
     noPendingPayments: { fr: 'Aucun paiement en attente.', mg: 'Tsy misy fandoavam-bola miandry.' },
     historyTableCandidate: { fr: 'Candidat', mg: 'Mpandray anjara' },
     historyTableCode: { fr: 'Code', mg: 'Kaody' },

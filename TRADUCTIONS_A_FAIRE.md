@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-08 — 16 sections, 528 entrées.
+Généré le 2026-10-09 — 16 sections, 528 entrées.
 
 ---
 
@@ -242,7 +242,7 @@ Généré le 2026-10-08 — 16 sections, 528 entrées.
 | payments.tableEmail | Email | Mailaka |
 | payments.tableExpectedAmount | Montant attendu | Vola andrasana |
 | payments.tableAction | Action | Hetsika |
-| payments.markPaidButton | Marquer payé | Mariho hoe efa voaloa |
+| payments.markPaidButton | Enregistrer le paiement | Mariho hoe efa voaloa |
 | payments.noPendingPayments | Aucun paiement en attente. | Tsy misy fandoavam-bola miandry. |
 | payments.historyTableCandidate | Candidat | Mpandray anjara |
 | payments.historyTableCode | Code | Kaody |
