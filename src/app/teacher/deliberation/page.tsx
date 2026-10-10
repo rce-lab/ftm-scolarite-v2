@@ -10,7 +10,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import SectionDivider from '@/components/SectionDivider'
 import GrilleCompetencesModal from '@/components/GrilleCompetencesModal'
 import RequireAccess from '@/components/RequireAccess'
-import { sendDecisionEmailAction } from '@/app/actions/emailActions'
+import { sendDecisionEmailAction, sendTeacherAssignmentEmailAction } from '@/app/actions/emailActions'
 
 // Libellés des jours de préférence du candidat (inscriptions.jours_preference).
 const JOUR_KEYS: Record<string, string> = {
@@ -355,11 +355,38 @@ function DeliberationContent({ readOnly }: { readOnly: boolean }) {
         'approved',
         classeSelectionnee
       )
-      if (emailResult.success) {
-        alert(t('deliberation.statusUpdateAlert').replace('{status}', 'approved'))
-      } else {
-        alert(t('deliberation.emailFailedAlert'))
+      const messages = [
+        emailResult.success
+          ? t('deliberation.statusUpdateAlert').replace('{status}', 'approved')
+          : t('deliberation.emailFailedAlert')
+      ]
+
+      // Information des enseignants de la classe : uniquement à une nouvelle
+      // approbation ou à un changement de classe (pas de double envoi). Un échec
+      // n'annule jamais l'approbation, déjà enregistrée : simple avertissement.
+      const dejaNotifie =
+        selectedInscription.status === 'approved' && selectedInscription.classe_id === selectedClasseId
+      if (!dejaNotifie) {
+        try {
+          const { data: session } = await supabase.auth.getSession()
+          const info = await sendTeacherAssignmentEmailAction(
+            selectedInscription.id,
+            session.session?.access_token || ''
+          )
+          if (!info.success) {
+            console.error('Erreur information enseignants:', info.error)
+            messages.push(t('deliberation.teacherEmailFailedAlert'))
+          } else if (info.aucunEnseignant) {
+            messages.push(t('deliberation.teacherEmailNoTeacherAlert'))
+          } else if (info.sansEmail.length > 0) {
+            messages.push(t('deliberation.teacherEmailMissingAlert').replace('{noms}', info.sansEmail.join(', ')))
+          }
+        } catch (erreurInfo) {
+          console.error('Erreur information enseignants:', erreurInfo)
+          messages.push(t('deliberation.teacherEmailFailedAlert'))
+        }
       }
+      alert(messages.join('\n\n'))
 
       loadInscriptions()
       loadAllStatuses()

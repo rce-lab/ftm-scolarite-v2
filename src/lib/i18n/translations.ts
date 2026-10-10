@@ -376,6 +376,10 @@ export const translations = {
     modalSendingButton: { fr: 'Envoi en cours...', mg: 'Mandefa...' },
     modalCancelButton: { fr: 'Annuler', mg: 'Aoka ihany' },
     emailFailedAlert: { fr: "Le statut a été mis à jour, mais l'email n'a pas pu être envoyé au candidat. Merci de le contacter manuellement.", mg: "Voaova ny sata, saingy tsy voalefa tany amin'ny kandidà ny mailaka. Mifandraisa aminy manokana azafady." },
+    // Information des enseignants de la classe attribuée — propositions mg à valider
+    teacherEmailFailedAlert: { fr: "Attention : l'email d'information n'a pas pu être envoyé aux enseignants de la classe. Merci de les prévenir manuellement.", mg: "Fampitandremana : tsy voalefa tany amin'ireo mpampianatra ao amin'ny kilasy ny mailaka fampahafantarana. Ampahafantaro manokana izy ireo azafady." },
+    teacherEmailNoTeacherAlert: { fr: "Attention : aucun enseignant n'est lié à cette classe, aucun email d'information n'a été envoyé.", mg: "Fampitandremana : tsy misy mpampianatra mifandray amin'ity kilasy ity, tsy nisy mailaka fampahafantarana nalefa." },
+    teacherEmailMissingAlert: { fr: "Attention : enseignant(s) sans adresse email, non prévenu(s) : {noms}", mg: "Fampitandremana : mpampianatra tsy manana adiresy mailaka, tsy nampahafantarina : {noms}" },
 
     // Badge "Réinscription" + encart historique élève — propositions mg à valider, cf. résumé de tâche
     reinscriptionBadge: { fr: 'Réinscription', mg: 'Fisoratana indray' },

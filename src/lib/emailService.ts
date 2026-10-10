@@ -333,3 +333,87 @@ export async function sendPaymentReceipt(
     return { success: false, error: error instanceof Error ? error.message : String(error) }
   }
 }
+
+// Échappement HTML : nom et prénom proviennent du formulaire public d'inscription.
+function echapperHtml(valeur: string): string {
+  return valeur
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+export interface AffectationEnseignantData {
+  nom: string
+  prenom: string
+  matricule: string
+  niveau: string
+  isReinscription: boolean
+  classe: { code: string; nom: string; jour: string; heure: string }
+}
+
+// Information des enseignants d'une classe après approbation d'une inscription.
+// Pas de copie admin. Appelé uniquement par l'action serveur
+// sendTeacherAssignmentEmailAction (src/app/actions/emailActions.ts), qui relit
+// toutes les données en base — aucun paramètre ici ne provient du navigateur.
+export async function sendTeacherAssignmentEmail(
+  destinataires: string[],
+  data: AffectationEnseignantData
+) {
+  try {
+    const e = (v: string) => echapperHtml(v || '—')
+    const typeInscription = data.isReinscription ? 'réinscription' : 'nouvelle inscription'
+    const nomComplet = `${data.prenom} ${data.nom}`.trim()
+
+    await transporter.sendMail({
+      from: FROM_ADDRESS,
+      to: destinataires,
+      subject: `Nouvel élève dans votre classe ${data.classe.code || data.classe.nom} - FTM Malagasy`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #2563eb; margin-bottom: 10px;">FTM Malagasy</h1>
+            <p style="color: #6b7280;">Apprentissage de la langue malagasy</p>
+          </div>
+
+          <h2 style="color: #1f2937;">Bonjour,</h2>
+          <p style="color: #4b5563; line-height: 1.6;">
+            Suite à la délibération, un élève a été affecté à votre classe (${typeInscription}).
+          </p>
+
+          <div style="background: #f8fafc; padding: 20px; margin: 25px 0; border-radius: 8px; border-left: 4px solid #3b82f6;">
+            <h3 style="color: #1e40af; margin-top: 0;">Élève</h3>
+            <p><strong>Nom :</strong> ${e(data.nom)}</p>
+            <p><strong>Prénom :</strong> ${e(data.prenom)}</p>
+            <p><strong>Matricule FTM :</strong> <span style="font-family: monospace; background: #e0e7ff; padding: 2px 6px; border-radius: 4px;">${e(data.matricule)}</span></p>
+            <p><strong>Niveau retenu :</strong> ${e(data.niveau)}</p>
+            <p><strong>Type :</strong> ${data.isReinscription ? 'Réinscription' : 'Nouvelle inscription'}</p>
+          </div>
+
+          <div style="background: #f8fafc; padding: 20px; margin: 25px 0; border-radius: 8px; border-left: 4px solid #10b981;">
+            <h3 style="color: #065f46; margin-top: 0;">Classe</h3>
+            <p><strong>Code :</strong> ${e(data.classe.code)}</p>
+            <p><strong>Nom :</strong> ${e(data.classe.nom)}</p>
+            <p><strong>Jour :</strong> ${e(data.classe.jour)}</p>
+            <p><strong>Heure :</strong> ${e(data.classe.heure)}</p>
+          </div>
+
+          <p style="color: #374151; margin-top: 30px;">
+            Cordialement,<br>
+            <strong>L'équipe FTM Malagasy</strong>
+          </p>
+        </div>
+      `,
+      text: `Bonjour,\n\nSuite à la délibération, un élève a été affecté à votre classe (${typeInscription}).\n\n` +
+        `Élève : ${nomComplet}\nMatricule FTM : ${data.matricule || '—'}\nNiveau retenu : ${data.niveau || '—'}\n\n` +
+        `Classe : ${data.classe.code || '—'} - ${data.classe.nom || '—'}\nJour : ${data.classe.jour || '—'}\nHeure : ${data.classe.heure || '—'}\n\n` +
+        `Cordialement,\nL'équipe FTM Malagasy`
+    })
+
+    return { success: true }
+  } catch (error) {
+    console.error('Erreur envoi email enseignants:', error)
+    return { success: false, error: error instanceof Error ? error.message : String(error) }
+  }
+}
