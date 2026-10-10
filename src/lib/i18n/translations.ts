@@ -277,12 +277,16 @@ export const translations = {
     errorFutureDate: { fr: 'La date de paiement ne peut pas être dans le futur.', mg: "Tsy azo atao amin'ny ho avy ny daty nandoavana." },
     errorInvalidAmount: { fr: 'Le montant est invalide : il doit être supérieur à 0.', mg: 'Tsy mety ny vola : tsy maintsy mihoatra ny 0.' },
     errorAlreadyPaid: { fr: 'Ce dossier est déjà marqué comme payé. La liste a été rechargée.', mg: 'Efa voamarika ho voaloa ity antontan-taratasy ity. Novaozina ny lisitra.' },
-    savedAndEmailSent: { fr: 'Paiement de {nom} enregistré, confirmation envoyée par email.', mg: "Voatahiry ny fandoavam-bolan'i {nom}, nalefa tamin'ny mailaka ny fanamarinana." },
-    emailFailedWarning: { fr: "Paiement de {nom} enregistré, mais l'email de confirmation n'a pas pu être envoyé. Utilisez « Renvoyer la confirmation » dans l'onglet Historique.", mg: "Voatahiry ny fandoavam-bolan'i {nom}, saingy tsy lasa ny mailaka fanamarinana. Ampiasao ny « Alefaso indray ny fanamarinana » ao amin'ny tabilao Fisesin'ny fandoavam-bola." },
-    resendConfirmationButton: { fr: 'Renvoyer la confirmation', mg: 'Alefaso indray ny fanamarinana' },
+    // Reçu PDF (remplace l'email de confirmation, 2026-10-09) — mg proposé à valider (« rosia » = reçu)
+    savedAndEmailSent: { fr: 'Paiement de {nom} enregistré, reçu envoyé par email.', mg: "Voatahiry ny fandoavam-bolan'i {nom}, nalefa tamin'ny mailaka ny rosia." },
+    emailFailedWarning: { fr: "Paiement de {nom} enregistré, mais le reçu n'a pas pu être envoyé par email. Utilisez « Renvoyer le reçu » dans l'onglet Historique.", mg: "Voatahiry ny fandoavam-bolan'i {nom}, saingy tsy lasa tamin'ny mailaka ny rosia. Ampiasao ny « Alefaso indray ny rosia » ao amin'ny tabilao Fisesin'ny fandoavam-bola." },
+    resendReceiptButton: { fr: 'Renvoyer le reçu', mg: 'Alefaso indray ny rosia' },
     resendingButton: { fr: 'Envoi...', mg: 'Eo am-pandefasana...' },
-    resendSuccess: { fr: 'Confirmation renvoyée à {nom}.', mg: "Nalefa indray tany amin'i {nom} ny fanamarinana." },
-    resendFailed: { fr: "Échec du renvoi de la confirmation à {nom}. Réessayez plus tard.", mg: "Tsy lasa ny fanamarinana nalefa indray tany amin'i {nom}. Andramo indray rehefa afaka kelikely." },
+    resendSuccess: { fr: 'Reçu renvoyé à {nom}.', mg: "Nalefa indray tany amin'i {nom} ny rosia." },
+    resendFailed: { fr: "Échec du renvoi du reçu à {nom}. Réessayez plus tard.", mg: "Tsy lasa ny rosia nalefa indray tany amin'i {nom}. Andramo indray rehefa afaka kelikely." },
+    downloadReceiptButton: { fr: 'Télécharger le reçu', mg: 'Alaivo ny rosia' },
+    downloadingReceiptButton: { fr: 'Génération...', mg: 'Eo am-panamboarana...' },
+    downloadReceiptFailed: { fr: 'Impossible de générer le reçu : {message}', mg: 'Tsy vita ny famoronana ny rosia : {message}' },
     dismissButton: { fr: 'Fermer', mg: 'Hidio' }
   },
 

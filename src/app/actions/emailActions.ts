@@ -2,8 +2,7 @@
 
 import {
   sendInscriptionNotification,
-  sendDecisionEmail,
-  sendPaymentConfirmation
+  sendDecisionEmail
 } from '@/lib/emailService'
 
 export async function sendInscriptionNotificationAction(
@@ -22,13 +21,6 @@ export async function sendDecisionEmailAction(
   return sendDecisionEmail(inscription, status, classe, motifRejet)
 }
 
-export async function sendPaymentConfirmationAction(
-  studentEmail: string,
-  studentName: string,
-  studentCode: string,
-  amount: number,
-  mode: string,
-  datePaiement: string
-) {
-  return sendPaymentConfirmation(studentEmail, studentName, studentCode, amount, mode, datePaiement)
-}
+// sendPaymentConfirmationAction supprimée (2026-10-09) : elle acceptait montant, nom et
+// code depuis le navigateur. Remplacée par envoyerRecuPaiementAction
+// (src/app/actions/recuActions.ts), qui relit tout en base avec le jeton de l'utilisateur.

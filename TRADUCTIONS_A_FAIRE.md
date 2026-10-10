@@ -4,7 +4,7 @@
 
 Ce document recense uniquement les traductions français/malgache **internes** (admin, enseignants, connexion) définies dans `src/lib/i18n/translations.ts`. Il ne couvre **pas** les traductions français/anglais du formulaire public candidat (`src/lib/i18n/publicTranslations.ts`), qui n'ont jamais eu besoin de validation par un locuteur natif.
 
-Généré le 2026-10-09 — 16 sections, 528 entrées.
+Généré le 2026-10-09 — 16 sections, 531 entrées.
 
 ---
 
@@ -269,12 +269,15 @@ Généré le 2026-10-09 — 16 sections, 528 entrées.
 | payments.errorFutureDate | La date de paiement ne peut pas être dans le futur. | Tsy azo atao amin'ny ho avy ny daty nandoavana. |
 | payments.errorInvalidAmount | Le montant est invalide : il doit être supérieur à 0. | Tsy mety ny vola : tsy maintsy mihoatra ny 0. |
 | payments.errorAlreadyPaid | Ce dossier est déjà marqué comme payé. La liste a été rechargée. | Efa voamarika ho voaloa ity antontan-taratasy ity. Novaozina ny lisitra. |
-| payments.savedAndEmailSent | Paiement de {nom} enregistré, confirmation envoyée par email. | Voatahiry ny fandoavam-bolan'i {nom}, nalefa tamin'ny mailaka ny fanamarinana. |
-| payments.emailFailedWarning | Paiement de {nom} enregistré, mais l'email de confirmation n'a pas pu être envoyé. Utilisez « Renvoyer la confirmation » dans l'onglet Historique. | Voatahiry ny fandoavam-bolan'i {nom}, saingy tsy lasa ny mailaka fanamarinana. Ampiasao ny « Alefaso indray ny fanamarinana » ao amin'ny tabilao Fisesin'ny fandoavam-bola. |
-| payments.resendConfirmationButton | Renvoyer la confirmation | Alefaso indray ny fanamarinana |
+| payments.savedAndEmailSent | Paiement de {nom} enregistré, reçu envoyé par email. | Voatahiry ny fandoavam-bolan'i {nom}, nalefa tamin'ny mailaka ny rosia. |
+| payments.emailFailedWarning | Paiement de {nom} enregistré, mais le reçu n'a pas pu être envoyé par email. Utilisez « Renvoyer le reçu » dans l'onglet Historique. | Voatahiry ny fandoavam-bolan'i {nom}, saingy tsy lasa tamin'ny mailaka ny rosia. Ampiasao ny « Alefaso indray ny rosia » ao amin'ny tabilao Fisesin'ny fandoavam-bola. |
+| payments.resendReceiptButton | Renvoyer le reçu | Alefaso indray ny rosia |
 | payments.resendingButton | Envoi... | Eo am-pandefasana... |
-| payments.resendSuccess | Confirmation renvoyée à {nom}. | Nalefa indray tany amin'i {nom} ny fanamarinana. |
-| payments.resendFailed | Échec du renvoi de la confirmation à {nom}. Réessayez plus tard. | Tsy lasa ny fanamarinana nalefa indray tany amin'i {nom}. Andramo indray rehefa afaka kelikely. |
+| payments.resendSuccess | Reçu renvoyé à {nom}. | Nalefa indray tany amin'i {nom} ny rosia. |
+| payments.resendFailed | Échec du renvoi du reçu à {nom}. Réessayez plus tard. | Tsy lasa ny rosia nalefa indray tany amin'i {nom}. Andramo indray rehefa afaka kelikely. |
+| payments.downloadReceiptButton | Télécharger le reçu | Alaivo ny rosia |
+| payments.downloadingReceiptButton | Génération... | Eo am-panamboarana... |
+| payments.downloadReceiptFailed | Impossible de générer le reçu : {message} | Tsy vita ny famoronana ny rosia : {message} |
 | payments.dismissButton | Fermer | Hidio |
 
 ## Paramètres

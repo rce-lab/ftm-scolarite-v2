@@ -290,61 +290,46 @@ export async function sendDecisionEmail(
   }
 }
 
-// Confirmation d'enregistrement du paiement — ce n'est pas encore le reçu. Copie
-// limitée aux deux personnes en charge des paiements (pas ADMINS_EN_COPIE_CANDIDATS).
-const COPIE_CONFIRMATION_PAIEMENT = [
+// Reçu de paiement (PDF signé en pièce jointe). Copie limitée aux deux personnes en
+// charge des paiements (pas ADMINS_EN_COPIE_CANDIDATS). Appelé uniquement par l'action
+// serveur src/app/actions/recuActions.ts, qui relit toutes les données en base —
+// aucun paramètre ici ne provient directement du navigateur.
+const COPIE_RECU_PAIEMENT = [
   't.rakotomavo@free.fr',
   'sonya.rakotonirina@gmail.com'
 ]
 
-const LIBELLES_MODE_PAIEMENT: Record<string, string> = {
-  virement: 'Virement',
-  especes: 'Espèces',
-  autre: 'Autre'
-}
-
-// datePaiement au format yyyy-mm-dd (saisie de l'opérateur) -> jj/mm/aaaa, sans
-// passer par Date (évite tout décalage d'un jour lié au fuseau du serveur)
-function formaterDatePaiement(datePaiement: string): string {
-  const [annee, mois, jour] = datePaiement.slice(0, 10).split('-')
-  return jour && mois && annee ? `${jour}/${mois}/${annee}` : datePaiement
-}
-
-export async function sendPaymentConfirmation(
+export async function sendPaymentReceipt(
   studentEmail: string,
   studentName: string,
   studentCode: string,
-  amount: number,
-  mode: string,
-  datePaiement: string
+  numeroRecu: string,
+  pdf: Uint8Array,
+  nomFichier: string
 ) {
   try {
     await transporter.sendMail({
       from: FROM_ADDRESS,
       to: studentEmail,
-      cc: COPIE_CONFIRMATION_PAIEMENT,
-      subject: `Paiement enregistré - ${studentCode} - FTM Malagasy`,
+      cc: COPIE_RECU_PAIEMENT,
+      subject: `Reçu de paiement n° ${numeroRecu} - ${studentCode} - FTM Malagasy`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Paiement enregistré</h2>
+          <h2>Reçu de paiement</h2>
           <p>Bonjour ${studentName},</p>
-          <p>Nous vous confirmons l'enregistrement de votre paiement :</p>
-          <ul>
-            <li>Code étudiant : <strong>${studentCode}</strong></li>
-            <li>Date de paiement : ${formaterDatePaiement(datePaiement)}</li>
-            <li>Montant : ${amount} €</li>
-            <li>Mode de paiement : ${LIBELLES_MODE_PAIEMENT[mode] || mode}</li>
-          </ul>
-          <p>Ce message n'est pas un reçu : celui-ci vous sera transmis séparément.</p>
+          <p>Nous vous remercions pour votre paiement des droits d'inscription (code étudiant <strong>${studentCode}</strong>).</p>
+          <p>Vous trouverez ci-joint votre reçu n° ${numeroRecu}, au format PDF.</p>
           <p>Cordialement,<br><strong>L'équipe FTM Malagasy</strong></p>
         </div>
-      `
+      `,
+      attachments: [
+        { filename: nomFichier, content: Buffer.from(pdf), contentType: 'application/pdf' }
+      ]
     })
 
     return { success: true }
   } catch (error) {
-    console.error('Erreur envoi email paiement:', error)
-    // Message seul : l'objet Error ne traverse pas proprement la frontière server action
+    console.error('Erreur envoi reçu paiement:', error)
     return { success: false, error: error instanceof Error ? error.message : String(error) }
   }
 }

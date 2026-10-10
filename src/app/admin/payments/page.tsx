@@ -4,7 +4,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { getConfig } from '@/lib/config'
-import { sendPaymentConfirmationAction } from '@/app/actions/emailActions'
+import { envoyerRecuPaiementAction, telechargerRecuPaiementAction } from '@/app/actions/recuActions'
+import { datePaiementIso, formaterDateFr } from '@/lib/datePaiement'
 import { useTranslation } from '@/lib/i18n/LanguageContext'
 import SectionDivider from '@/components/SectionDivider'
 import RequireAccess from '@/components/RequireAccess'
@@ -29,24 +30,6 @@ const aujourdhuiLocal = (): string => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-// date_paiement est un timestamptz. Une date saisie par l'opérateur est stockée à
-// minuit UTC : la convertir en heure locale la ferait reculer d'un jour à l'ouest de
-// Greenwich (Québec). On garde donc la date telle quelle dans ce cas ; les anciens
-// paiements horodatés avec now() restent convertis en date locale.
-const datePaiementIso = (valeur: string | null | undefined): string => {
-  if (!valeur) return ''
-  const minuitUtc = valeur.match(/^(\d{4}-\d{2}-\d{2})(?:[T ]00:00:00(?:\.0+)?(?:Z|\+00(?::?00)?))?$/)
-  if (minuitUtc) return minuitUtc[1]
-  const d = new Date(valeur)
-  if (isNaN(d.getTime())) return ''
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
-
-const afficherDate = (iso: string): string => {
-  const [annee, mois, jour] = iso.split('-')
-  return iso ? `${jour}/${mois}/${annee}` : '—'
-}
-
 interface Bandeau {
   type: 'erreur' | 'avertissement' | 'succes'
   texte: string
@@ -69,9 +52,10 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
   const [traitement, setTraitement] = useState(false)
 
   const [bandeau, setBandeau] = useState<Bandeau | null>(null)
-  // Inscriptions dont l'email de confirmation a échoué pendant cette session
+  // Paiements dont l'envoi du reçu a échoué pendant cette session
   const [echecsEnvoi, setEchecsEnvoi] = useState<Set<string>>(new Set())
   const [renvoiEnCours, setRenvoiEnCours] = useState<string | null>(null)
+  const [telechargementEnCours, setTelechargementEnCours] = useState<string | null>(null)
 
   useEffect(() => {
     init()
@@ -137,34 +121,52 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
     setMontant(tarifs[valeur].toString())
   }
 
-  const envoyerConfirmation = async (
-    inscriptionId: string,
-    destinataire: { email_contact: string; prenom: string; nom: string; student_code: string },
-    montantPaye: number,
-    modePaye: string,
-    dateIso: string
-  ): Promise<boolean> => {
+  // Jeton d'accès de l'utilisateur connecté, transmis aux actions serveur du reçu :
+  // elles relisent paiement et inscription en base avec ce jeton (RLS + contrôle du rôle)
+  const jetonAcces = async (): Promise<string> => {
+    const { data } = await supabase.auth.getSession()
+    return data.session?.access_token || ''
+  }
+
+  const envoyerRecu = async (paiementId: string): Promise<boolean> => {
     let succes = false
     try {
-      const resultat = await sendPaymentConfirmationAction(
-        destinataire.email_contact,
-        `${destinataire.prenom} ${destinataire.nom}`,
-        destinataire.student_code,
-        montantPaye,
-        modePaye,
-        dateIso
-      )
-      succes = !!resultat?.success
+      const resultat = await envoyerRecuPaiementAction(paiementId, await jetonAcces())
+      succes = resultat.success
+      if (!resultat.success) console.error('Erreur envoi reçu:', resultat.error)
     } catch (err) {
-      console.error('Erreur envoi email paiement:', err)
+      console.error('Erreur envoi reçu:', err)
     }
     setEchecsEnvoi((courants) => {
       const suivants = new Set(courants)
-      if (succes) suivants.delete(inscriptionId)
-      else suivants.add(inscriptionId)
+      if (succes) suivants.delete(paiementId)
+      else suivants.add(paiementId)
       return suivants
     })
     return succes
+  }
+
+  const telechargerRecu = async (paiement: any) => {
+    if (telechargementEnCours) return
+    setTelechargementEnCours(paiement.id)
+    try {
+      const resultat = await telechargerRecuPaiementAction(paiement.id, await jetonAcces())
+      if (!resultat.success) throw new Error(resultat.error)
+      const octets = Uint8Array.from(atob(resultat.pdfBase64), (c) => c.charCodeAt(0))
+      const url = URL.createObjectURL(new Blob([octets], { type: 'application/pdf' }))
+      const lien = document.createElement('a')
+      lien.href = url
+      lien.download = resultat.nomFichier
+      document.body.appendChild(lien)
+      lien.click()
+      document.body.removeChild(lien)
+      URL.revokeObjectURL(url)
+    } catch (err: any) {
+      console.error('Erreur téléchargement reçu:', err)
+      setBandeau({ type: 'erreur', texte: t('payments.downloadReceiptFailed').replace('{message}', err?.message || 'Inconnue') })
+    } finally {
+      setTelechargementEnCours(null)
+    }
   }
 
   // Messages d'erreur de marquer_inscription_payee rendus lisibles ; le message
@@ -213,8 +215,16 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
       fermerConfirmation()
       await Promise.all([loadEnAttente(), loadHistorique()])
 
-      // Le paiement est enregistré quoi qu'il arrive à l'email
-      const envoye = await envoyerConfirmation(inscription.id, inscription, montantNum, mode, datePaiement)
+      // Le paiement est enregistré quoi qu'il arrive au reçu. Le rpc ne renvoie pas
+      // l'id du paiement créé : on relit le plus récent de cette inscription.
+      const { data: dernier } = await supabase
+        .from('paiements')
+        .select('id')
+        .eq('inscription_id', inscription.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      const envoye = dernier ? await envoyerRecu(dernier.id) : false
       const nom = `${inscription.prenom} ${inscription.nom}`
       setBandeau(
         envoye
@@ -229,16 +239,10 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
     }
   }
 
-  const renvoyerConfirmation = async (paiement: any) => {
+  const renvoyerRecu = async (paiement: any) => {
     if (!paiement.inscriptions || renvoiEnCours) return
     setRenvoiEnCours(paiement.id)
-    const envoye = await envoyerConfirmation(
-      paiement.inscription_id,
-      paiement.inscriptions,
-      Number(paiement.montant),
-      paiement.mode || '',
-      datePaiementIso(paiement.date_paiement || paiement.created_at)
-    )
+    const envoye = await envoyerRecu(paiement.id)
     const nom = `${paiement.inscriptions.prenom} ${paiement.inscriptions.nom}`
     setBandeau(
       envoye
@@ -360,7 +364,7 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {historique.map((paiement) => {
-                const echec = echecsEnvoi.has(paiement.inscription_id)
+                const echec = echecsEnvoi.has(paiement.id)
                 return (
                   <tr key={paiement.id} className={echec ? 'bg-amber-50' : 'hover:bg-gray-50'}>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -371,14 +375,21 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base">{paiement.montant}€</td>
                     <td className="px-6 py-4 whitespace-nowrap text-base">
-                      {afficherDate(datePaiementIso(paiement.date_paiement || paiement.created_at))}
+                      {formaterDateFr(datePaiementIso(paiement.date_paiement || paiement.created_at))}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base capitalize">{paiement.mode || '—'}</td>
                     {!readOnly && (
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                        <button
+                          onClick={() => telechargerRecu(paiement)}
+                          disabled={!!telechargementEnCours}
+                          className="px-3 py-1 rounded text-sm border border-[#689e4e] text-[#527d3e] hover:bg-[#689e4e]/10 disabled:opacity-50"
+                        >
+                          {telechargementEnCours === paiement.id ? t('payments.downloadingReceiptButton') : t('payments.downloadReceiptButton')}
+                        </button>
                         {paiement.inscriptions?.email_contact && (
                           <button
-                            onClick={() => renvoyerConfirmation(paiement)}
+                            onClick={() => renvoyerRecu(paiement)}
                             disabled={!!renvoiEnCours}
                             className={`px-3 py-1 rounded text-sm disabled:opacity-50 ${
                               echec
@@ -386,7 +397,7 @@ function PaymentsContent({ readOnly }: { readOnly: boolean }) {
                                 : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
                             }`}
                           >
-                            {renvoiEnCours === paiement.id ? t('payments.resendingButton') : t('payments.resendConfirmationButton')}
+                            {renvoiEnCours === paiement.id ? t('payments.resendingButton') : t('payments.resendReceiptButton')}
                           </button>
                         )}
                       </td>
